@@ -27,7 +27,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useSignOut, useUser } from "@/hooks/use-auth";
+import { useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
 import { toast } from "sonner";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
 import { cn } from "@/lib/utils";

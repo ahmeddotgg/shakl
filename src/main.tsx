@@ -1,12 +1,12 @@
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
-import { ThemeProvider } from "./components/shared/theme-provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Router } from "@tanstack/react-router";
-import { useSession } from "./hooks/use-auth";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "@/components/shared/theme-provider";
+import { useSession } from "@/modules/auth/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
+import { routeTree } from "./routeTree.gen";
 import "./index.css";
 
 function AppRouter() {
