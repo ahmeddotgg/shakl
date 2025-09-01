@@ -50,7 +50,7 @@ export const Item = ({ product }: { product: Product }) => {
                 "fill-red-600 stroke-red-500 size-5",
                 wishlistItems.some((item) => item.id === product.id)
                   ? "fill-red-700 stroke-red-700"
-                  : "stroke-white fill-none"
+                  : "stroke-primary fill-none"
               )}
             />
           </Button>
