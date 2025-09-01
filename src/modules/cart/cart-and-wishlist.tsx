@@ -46,7 +46,7 @@ export const CartAndWishlist = () => {
             <SheetTitle className="pb-4 border-b">
               {activeTab === "cart"
                 ? `Your Cart (${cartItems.length})`
-                : `Your Wishlist (${cartItems.length})`}
+                : `Your Wishlist (${wishlistItems.length})`}
             </SheetTitle>
 
             <ScrollArea className="flex-1 h-[70vh]">
@@ -66,7 +66,7 @@ export const CartAndWishlist = () => {
                   {cartItems.length > 0 ? (
                     <>
                       {cartItems.map((product) => (
-                        <Item key={product.id} product={product} />
+                        <Item type="cart" key={product.id} product={product} />
                       ))}
 
                       <Button
@@ -90,7 +90,11 @@ export const CartAndWishlist = () => {
                 <TabsContent value="wishlist">
                   {wishlistItems.length > 0 ? (
                     wishlistItems.map((product) => (
-                      <Item key={product.id} product={product} />
+                      <Item
+                        type="wishlist"
+                        key={product.id}
+                        product={product}
+                      />
                     ))
                   ) : (
                     <p className="flex flex-col justify-center items-center gap-2 mt-10 font-semibold text-muted-foreground text-lg">
