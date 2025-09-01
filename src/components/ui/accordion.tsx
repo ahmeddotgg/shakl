@@ -34,7 +34,8 @@ function AccordionTrigger({
         data-slot="accordion-trigger"
         className={cn(
           "justify-between! py-7 focus-visible:border-ring rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 w-full font-semibold! text-lg! [&[data-state=open]>svg]:rotate-180 transition-all disabled:pointer-events-none",
-          className
+          className,
+          "px-3!"
         )}
         {...props}
       >

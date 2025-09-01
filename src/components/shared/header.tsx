@@ -8,9 +8,9 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Button, buttonVariants } from "../ui/button";
-import { Menu } from "lucide-react";
+import { LogOut, Menu, Settings, User } from "lucide-react";
 import { Link, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import {
   NavigationMenu,
@@ -31,6 +31,7 @@ import { useSignOut, useUser } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 export const Header = () => {
   const isMobile = useIsMobile();
@@ -59,22 +60,19 @@ export const Header = () => {
 
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: signOut } = useSignOut();
-  const { navigate } = useRouter();
-
   const { data: user } = useUser();
+  const isMobile = useIsMobile();
+  const router = useRouter();
 
-  const handleSignOut = () => {
-    signOut(undefined, {
-      onSuccess: () => {
-        toast.success("Logged out successfully");
-        navigate({ href: "/" });
-      },
-      onError: (err) => {
-        console.error("Sign in failed:", err.message);
-      },
+  useEffect(() => {
+    if (!isMobile) {
+      setIsOpen(!open);
+    }
+    const unsub = router.subscribe("onResolved", () => {
+      setIsOpen(false);
     });
-  };
+    return unsub;
+  }, [isMobile, router]);
 
   return (
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
@@ -111,13 +109,16 @@ const MobileHeader = () => {
                 <AccordionItem value="item-1">
                   <AccordionTrigger
                     className={cn(
-                      buttonVariants({ variant: "ghost", size: "lg" })
+                      buttonVariants({
+                        variant: "ghost",
+                        size: "lg",
+                      })
                     )}
                   >
                     Account
                   </AccordionTrigger>
-                  <AccordionContent>
-                    <Button onClick={handleSignOut}>Logout</Button>
+                  <AccordionContent className="p-4 w-full">
+                    <AcccountLinks />
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -147,21 +148,7 @@ const MobileHeader = () => {
 };
 
 export function DesktopHeader() {
-  const { mutate: signOut } = useSignOut();
   const { data: user } = useUser();
-  const { navigate } = useRouter();
-
-  const handleSignOut = () => {
-    signOut(undefined, {
-      onSuccess: () => {
-        toast.success("Logged out successfully");
-        navigate({ href: "/" });
-      },
-      onError: (err) => {
-        console.error("Sign in failed:", err.message);
-      },
-    });
-  };
 
   return (
     <NavigationMenu viewport={false}>
@@ -179,17 +166,14 @@ export function DesktopHeader() {
         {user ? (
           <NavigationMenuItem>
             <NavigationMenuTrigger>Account</NavigationMenuTrigger>
-            <NavigationMenuContent className="space-y-2 p-4">
+            <NavigationMenuContent className="space-y-4 p-4">
               {user && (
-                <h4 className="font-semibold capitalize">
+                <h4 className="px-4 font-semibold capitalize">
                   Welcome {user.user_metadata?.name || "Guest"} 👋
                 </h4>
               )}
-              <ul className="gap-4 grid w-[200px]">
-                <Button variant="outline" onClick={handleSignOut}>
-                  Logout
-                </Button>
-              </ul>
+              <Separator />
+              <AcccountLinks />
             </NavigationMenuContent>
           </NavigationMenuItem>
         ) : (
@@ -216,3 +200,60 @@ export function DesktopHeader() {
     </NavigationMenu>
   );
 }
+
+const AcccountLinks = () => {
+  const { mutate: signOut } = useSignOut();
+  const { navigate } = useRouter();
+
+  const handleSignOut = () => {
+    signOut(undefined, {
+      onSuccess: () => {
+        toast.success("Logged out successfully");
+        navigate({ href: "/" });
+      },
+      onError: (err) => {
+        console.error("Sign in failed:", err.message);
+      },
+    });
+  };
+
+  return (
+    <div className="space-y-3 w-full [&>*>svg]:size-5! [&>*]:font-semibold! [&>*]:text-muted-foreground">
+      <Link
+        className={buttonVariants({
+          className: "w-full justify-start cursor-pointer text-base!",
+          variant: "ghost",
+          size: "lg",
+        })}
+        to="/"
+      >
+        <User />
+        Profile
+      </Link>
+
+      <Link
+        className={buttonVariants({
+          className: "w-full justify-start cursor-pointer text-base!",
+          variant: "ghost",
+          size: "lg",
+        })}
+        to="/"
+      >
+        <Settings />
+        Account Settings
+      </Link>
+
+      <button
+        className={buttonVariants({
+          className: "w-full justify-start cursor-pointer text-base!",
+          variant: "ghost",
+          size: "lg",
+        })}
+        onClick={handleSignOut}
+      >
+        <LogOut />
+        Logout
+      </button>
+    </div>
+  );
+};
