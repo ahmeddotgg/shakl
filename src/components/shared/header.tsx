@@ -117,7 +117,7 @@ const MobileHeader = () => {
                     Account
                   </AccordionTrigger>
                   <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                    <Button onClick={handleSignOut}>Logout</Button>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -185,7 +185,11 @@ export function DesktopHeader() {
                   Welcome {user.user_metadata?.name || "Guest"} 👋
                 </h4>
               )}
-              <ul className="gap-4 grid w-[200px]"></ul>
+              <ul className="gap-4 grid w-[200px]">
+                <Button variant="outline" onClick={handleSignOut}>
+                  Logout
+                </Button>
+              </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
         ) : (
