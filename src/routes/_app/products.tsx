@@ -1,11 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useCart } from "@/modules/cart/hooks/use-cart";
-import { useWishlist } from "@/modules/cart/hooks/use-wishlist";
-import type { Product } from "@/modules/cart/item";
 import { useProducts } from "@/modules/products/hooks/use-products";
+import { Item } from "@/modules/products/item";
 import { createFileRoute } from "@tanstack/react-router";
-import { Heart } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/products")({
@@ -14,12 +9,6 @@ export const Route = createFileRoute("/_app/products")({
 
 function RouteComponent() {
   const { data: products, isPending, isError } = useProducts();
-  const { addItem: addToCart, items: cartItems } = useCart();
-  const {
-    addItem: addToWishlist,
-    items: wishlistItems,
-    removeItem: removeFromWishlist,
-  } = useWishlist();
 
   if (isError && !isPending) toast.error("Failed to load products");
   if (isPending) {
@@ -30,47 +19,10 @@ function RouteComponent() {
     );
   }
 
-  const handleAddToWishlist = (product: Product) => {
-    if (wishlistItems.some((item) => item.id === product.id)) {
-      removeFromWishlist(product.id);
-    } else {
-      addToWishlist(product);
-    }
-  };
-
   return (
     <div className="container">
       {products?.map((product) => (
-        <div key={product.id} className="mb-4 p-4 border rounded-md">
-          <div>
-            <h2 className="font-semibold text-xl">{product.title}</h2>
-            <p className="text-muted-foreground">{product.description}</p>
-            <p className="mt-2 font-bold">${product.price.toFixed(2)}</p>
-            <Button
-              onClick={() => addToCart(product)}
-              disabled={cartItems.some((item) => item.id === product.id)}>
-              Add to cart
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => handleAddToWishlist(product)}>
-              <Heart
-                className={cn(
-                  "fill-red-600 stroke-red-500 size-5",
-                  wishlistItems.some((item) => item.id === product.id)
-                    ? "fill-red-700 stroke-red-700"
-                    : "stroke-white fill-none"
-                )}
-              />
-            </Button>
-          </div>
-          <img
-            src={product.thumbnail}
-            alt={product.description}
-            className="rounded-xl"
-          />
-        </div>
+        <Item key={product.id} product={product} />
       ))}
     </div>
   );
