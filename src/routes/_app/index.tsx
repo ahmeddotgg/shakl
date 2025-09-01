@@ -26,16 +26,14 @@ function RouteComponent() {
               <>
                 <Link
                   to="/register"
-                  className={cn(buttonVariants({ size: "lg" }), "px-12")}
-                >
+                  className={cn(buttonVariants({ size: "lg" }), "px-12")}>
                   Register
                 </Link>
                 <Link
                   to="/login"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" })
-                  )}
-                >
+                  )}>
                   Login
                 </Link>
               </>

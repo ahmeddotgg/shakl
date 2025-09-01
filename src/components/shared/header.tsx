@@ -94,14 +94,12 @@ const MobileHeader = () => {
           <div className="[&>a]:block space-y-4 [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 py-2 [&>a]:rounded-lg font-semibold text-lg">
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/"
-            >
+              to="/">
               Home
             </Link>
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/products"
-            >
+              to="/products">
               Products
             </Link>
             {user ? (
@@ -113,8 +111,7 @@ const MobileHeader = () => {
                         variant: "ghost",
                         size: "lg",
                       })
-                    )}
-                  >
+                    )}>
                     Account
                   </AccordionTrigger>
                   <AccordionContent className="p-4 w-full">
@@ -126,14 +123,12 @@ const MobileHeader = () => {
               <>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/login"
-                >
+                  to="/login">
                   Login
                 </Link>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/register"
-                >
+                  to="/register">
                   Register
                 </Link>
               </>
@@ -181,16 +176,14 @@ export function DesktopHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}
-              >
+                className={navigationMenuTriggerStyle()}>
                 <Link to="/login">Login</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}
-              >
+                className={navigationMenuTriggerStyle()}>
                 <Link to="/register">Register</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
@@ -225,8 +218,7 @@ const AcccountLinks = () => {
           variant: "ghost",
           size: "lg",
         })}
-        to="/"
-      >
+        to="/">
         <User />
         Profile
       </Link>
@@ -237,8 +229,7 @@ const AcccountLinks = () => {
           variant: "ghost",
           size: "lg",
         })}
-        to="/"
-      >
+        to="/">
         <Settings />
         Account Settings
       </Link>
@@ -249,8 +240,7 @@ const AcccountLinks = () => {
           variant: "ghost",
           size: "lg",
         })}
-        onClick={handleSignOut}
-      >
+        onClick={handleSignOut}>
         <LogOut />
         Logout
       </button>
