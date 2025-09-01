@@ -40,7 +40,7 @@ export const LoginForm = () => {
         navigate({ href: "/" });
       },
       onError: (err) => {
-        console.error("Sign in failed:", err.message);
+        toast.error(err.message || "Something went wrong");
       },
     });
   }
