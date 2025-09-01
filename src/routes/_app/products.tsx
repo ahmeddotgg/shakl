@@ -1,3 +1,4 @@
+import { useProducts } from "@/hooks/use-products";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/products")({
@@ -5,5 +6,10 @@ export const Route = createFileRoute("/_app/products")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_app/products"!</div>;
+  const { data: products, isPending } = useProducts();
+
+  if (isPending) return <div>Loading...</div>;
+  return (
+    <div className="container">{products?.map((product) => product.title)}</div>
+  );
 }
