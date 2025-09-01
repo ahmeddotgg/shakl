@@ -3,14 +3,13 @@ import { persist } from "zustand/middleware";
 import { toast } from "sonner";
 import type { Product } from "../item";
 
-type CartStore = {
+type WishlistStore = {
   items: Product[];
   addItem: (item: Product) => void;
   removeItem: (id: number) => void;
-  clearCart: () => void;
 };
 
-export const useCart = create<CartStore>()(
+export const useWishlist = create<WishlistStore>()(
   persist(
     (set) => ({
       items: [],
@@ -20,7 +19,7 @@ export const useCart = create<CartStore>()(
           if (state.items.find((i) => i.id === item.id)) {
             return state;
           }
-          toast.info("Item added to cart", {
+          toast.success("Item added to wishlist", {
             position: "bottom-right",
             richColors: false,
           });
@@ -31,11 +30,9 @@ export const useCart = create<CartStore>()(
         set((state) => ({
           items: state.items.filter((item) => item.id !== id),
         })),
-
-      clearCart: () => set({ items: [] }),
     }),
     {
-      name: "cart-storage",
+      name: "wishlist-storage",
     }
   )
 );
