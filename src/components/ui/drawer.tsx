@@ -63,8 +63,7 @@ function DrawerContent({
           "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm",
           className
         )}
-        {...props}
-      >
+        {...props}>
         <div className="hidden group-data-[vaul-drawer-direction=bottom]/drawer-content:block bg-muted mx-auto mt-4 rounded-full w-[100px] h-2 shrink-0" />
         {children}
       </DrawerPrimitive.Content>

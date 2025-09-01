@@ -68,8 +68,7 @@ function SheetContent({
             "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t",
           className
         )}
-        {...props}
-      >
+        {...props}>
         {children}
       </SheetPrimitive.Content>
     </SheetPortal>
@@ -108,12 +107,10 @@ function SheetTitle({
         className
       )}
       data-slot="sheet-title"
-      {...props}
-    >
+      {...props}>
       {children}
       <SheetPrimitive.Close
-        className={cn(buttonVariants({ size: "icon", variant: "ghost" }))}
-      >
+        className={cn(buttonVariants({ size: "icon", variant: "ghost" }))}>
         <XIcon className="size-6" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>

@@ -16,8 +16,7 @@ function Switch({
         "peer inline-flex items-center data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:opacity-50 shadow-xs border border-transparent focus-visible:border-ring rounded-full outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 w-8 h-[1.15rem] transition-all disabled:cursor-not-allowed shrink-0",
         className
       )}
-      {...props}
-    >
+      {...props}>
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(

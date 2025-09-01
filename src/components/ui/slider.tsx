@@ -34,14 +34,12 @@ function Slider({
         "relative flex data-[orientation=vertical]:flex-col items-center data-[disabled]:opacity-50 w-full data-[orientation=vertical]:w-auto data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 touch-none select-none",
         className
       )}
-      {...props}
-    >
+      {...props}>
       <SliderPrimitive.Track
         data-slot="slider-track"
         className={cn(
           "relative bg-muted rounded-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-1.5 data-[orientation=horizontal]:h-1.5 data-[orientation=vertical]:h-full overflow-hidden grow"
-        )}
-      >
+        )}>
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(

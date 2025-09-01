@@ -58,8 +58,7 @@ function ChartContainer({
           "flex justify-center [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden aspect-video text-xs",
           className
         )}
-        {...props}
-      >
+        {...props}>
         <ChartStyle id={chartId} config={config} />
         <RechartsPrimitive.ResponsiveContainer>
           {children}
@@ -175,8 +174,7 @@ function ChartTooltipContent({
       className={cn(
         "items-start gap-1.5 grid bg-background shadow-xl px-2.5 py-1.5 border border-border/50 rounded-lg min-w-[8rem] text-xs",
         className
-      )}
-    >
+      )}>
       {!nestLabel ? tooltipLabel : null}
       <div className="gap-1.5 grid">
         {payload.map((item, index) => {
@@ -190,8 +188,7 @@ function ChartTooltipContent({
               className={cn(
                 "flex flex-wrap items-stretch gap-2 w-full [&>svg]:w-2.5 [&>svg]:h-2.5 [&>svg]:text-muted-foreground",
                 indicator === "dot" && "items-center"
-              )}
-            >
+              )}>
               {formatter && item?.value !== undefined && item.name ? (
                 formatter(item.value, item.name, item, index, item.payload)
               ) : (
@@ -224,8 +221,7 @@ function ChartTooltipContent({
                     className={cn(
                       "flex flex-1 justify-between leading-none",
                       nestLabel ? "items-end" : "items-center"
-                    )}
-                  >
+                    )}>
                     <div className="gap-1.5 grid">
                       {nestLabel ? tooltipLabel : null}
                       <span className="text-muted-foreground">
@@ -273,8 +269,7 @@ function ChartLegendContent({
         "flex justify-center items-center gap-4",
         verticalAlign === "top" ? "pb-3" : "pt-3",
         className
-      )}
-    >
+      )}>
       {payload.map((item) => {
         const key = `${nameKey || item.dataKey || "value"}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
@@ -284,8 +279,7 @@ function ChartLegendContent({
             key={item.value}
             className={cn(
               "flex items-center gap-1.5 [&>svg]:w-3 [&>svg]:h-3 [&>svg]:text-muted-foreground"
-            )}
-          >
+            )}>
             {itemConfig?.icon && !hideIcon ? (
               <itemConfig.icon />
             ) : (

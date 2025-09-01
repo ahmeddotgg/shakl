@@ -15,8 +15,7 @@ function Progress({
         "relative bg-primary/20 rounded-full w-full h-2 overflow-hidden",
         className
       )}
-      {...props}
-    >
+      {...props}>
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
         className="flex-1 bg-primary w-full h-full transition-all"

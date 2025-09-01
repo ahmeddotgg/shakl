@@ -123,8 +123,7 @@ function MenubarCheckboxItem({
         className
       )}
       checked={checked}
-      {...props}
-    >
+      {...props}>
       <span className="left-2 absolute flex justify-center items-center size-3.5 pointer-events-none">
         <MenubarPrimitive.ItemIndicator>
           <CheckIcon className="size-4" />
@@ -147,8 +146,7 @@ function MenubarRadioItem({
         "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
-      {...props}
-    >
+      {...props}>
       <span className="left-2 absolute flex justify-center items-center size-3.5 pointer-events-none">
         <MenubarPrimitive.ItemIndicator>
           <CircleIcon className="fill-current size-2" />
@@ -230,8 +228,7 @@ function MenubarSubTrigger({
         "flex items-center data-[state=open]:bg-accent focus:bg-accent px-2 py-1.5 data-[inset]:pl-8 rounded-sm outline-none text-sm data-[state=open]:text-accent-foreground focus:text-accent-foreground cursor-default select-none",
         className
       )}
-      {...props}
-    >
+      {...props}>
       {children}
       <ChevronRightIcon className="ml-auto w-4 h-4" />
     </MenubarPrimitive.SubTrigger>

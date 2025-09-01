@@ -142,8 +142,7 @@ function SidebarProvider({
             "group/sidebar-wrapper flex has-data-[variant=inset]:bg-sidebar w-full min-h-svh",
             className
           )}
-          {...props}
-        >
+          {...props}>
           {children}
         </div>
       </TooltipProvider>
@@ -173,8 +172,7 @@ function Sidebar({
           "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
           className
         )}
-        {...props}
-      >
+        {...props}>
         {children}
       </div>
     );
@@ -193,8 +191,7 @@ function Sidebar({
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
-          side={side}
-        >
+          side={side}>
           <SheetHeader className="sr-only">
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
@@ -212,8 +209,7 @@ function Sidebar({
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
       data-side={side}
-      data-slot="sidebar"
-    >
+      data-slot="sidebar">
       {/* This is what handles the sidebar gap on desktop */}
       <div
         data-slot="sidebar-gap"
@@ -239,13 +235,11 @@ function Sidebar({
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
           className
         )}
-        {...props}
-      >
+        {...props}>
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="flex flex-col bg-sidebar group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:rounded-lg w-full h-full"
-        >
+          className="flex flex-col bg-sidebar group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:rounded-lg w-full h-full">
           {children}
         </div>
       </div>
@@ -271,8 +265,7 @@ function SidebarTrigger({
         onClick?.(event);
         toggleSidebar();
       }}
-      {...props}
-    >
+      {...props}>
       <PanelLeftIcon />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
@@ -616,8 +609,7 @@ function SidebarMenuSkeleton({
       data-slot="sidebar-menu-skeleton"
       data-sidebar="menu-skeleton"
       className={cn("flex items-center gap-2 px-2 rounded-md h-8", className)}
-      {...props}
-    >
+      {...props}>
       {showIcon && (
         <Skeleton
           className="rounded-md size-4"
