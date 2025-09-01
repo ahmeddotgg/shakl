@@ -22,18 +22,22 @@ export const Item = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div key={product.id} className="mb-4 p-4 border rounded-md">
-      <img
-        src={product.thumbnail}
-        alt={product.description}
-        className="rounded-xl"
-      />
+    <div
+      key={product.id}
+      className="flex flex-col gap-4 p-4 border rounded-xl h-full">
+      <div className="rounded-2xl w-full aspect-[4/3] overflow-hidden">
+        <img
+          src={product.thumbnail}
+          alt={product.description}
+          className="w-full h-full object-cover"
+        />
+      </div>
       <div>
         <h2 className="font-semibold text-xl">{product.title}</h2>
         <p className="text-muted-foreground line-clamp-1">
           {product.description}
         </p>
-        <p className="mt-2 font-bold">${product.price.toFixed(2)}</p>
+        <p className="my-2 font-bold">${product.price.toFixed(2)}</p>
         <div className="flex gap-2">
           <Button
             onClick={() => addToCart(product)}

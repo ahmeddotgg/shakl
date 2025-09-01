@@ -20,7 +20,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="container">
+    <div className="gap-4 grid grid-cols-1 min-[530px]:grid-cols-2 lg:grid-cols-3 auto-rows-fr container">
       {products?.map((product) => (
         <Item key={product.id} product={product} />
       ))}
