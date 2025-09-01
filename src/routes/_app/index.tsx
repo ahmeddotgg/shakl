@@ -1,5 +1,4 @@
 import { buttonVariants } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -8,7 +7,7 @@ export const Route = createFileRoute("/_app/")({
 });
 
 function RouteComponent() {
-  const { data: user } = useUser();
+  const user = true;
 
   return (
     <div>
@@ -23,9 +22,7 @@ function RouteComponent() {
           </p>
 
           <div className="flex min-[390px]:flex-row flex-col justify-center md:justify-start gap-4">
-            {user ? (
-              <p>{user && user.email}</p>
-            ) : (
+            {user ? null : (
               <>
                 <Link
                   to="/register"
