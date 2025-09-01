@@ -23,7 +23,6 @@ export const CartAndWishlist = () => {
 
   return (
     <>
-      {/* Nav Buttons */}
       <Button variant="ghost" size="icon" onClick={() => openSheet("cart")}>
         <ShoppingBag className="size-5" />
       </Button>
@@ -31,7 +30,6 @@ export const CartAndWishlist = () => {
         <Heart className="size-5" />
       </Button>
 
-      {/* Shared Drawer */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent side="right">
           <SheetHeader>
@@ -41,13 +39,12 @@ export const CartAndWishlist = () => {
                 : `Your Wishlist (${items})`}
             </SheetTitle>
 
-            {/* Tabs for navigation */}
             <Tabs
               className="py-2"
               value={activeTab}
               onValueChange={(val) => setActiveTab(val as "cart" | "wishlist")}
             >
-              <TabsList className="grid grid-cols-2 mb-4 w-full">
+              <TabsList className="grid grid-cols-2 w-full">
                 <TabsTrigger value="cart">Cart</TabsTrigger>
                 <TabsTrigger value="wishlist">Wishlist</TabsTrigger>
               </TabsList>
