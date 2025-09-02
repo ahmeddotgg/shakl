@@ -1,11 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/modules/products/services";
+import { getProductById, getProducts } from "@/modules/products/services";
 
-const PRODUCTS_KEY = ["products"];
-
-export function useProducts() {
-  return useQuery({
-    queryKey: PRODUCTS_KEY,
+export function getProductsQueryOptions() {
+  return {
+    queryKey: ["products"],
     queryFn: getProducts,
-  });
+  };
+}
+
+export function getProductQueryOptions(id: string) {
+  return {
+    queryKey: ["products", { id }],
+    queryFn: () => getProductById(id),
+  };
 }

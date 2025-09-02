@@ -9,22 +9,23 @@ import { Toaster } from "@/components/ui/sonner";
 import { routeTree } from "./routeTree.gen";
 import "./index.css";
 
-function AppRouter() {
+const rootElement = document.getElementById("root")!;
+const queryClient = new QueryClient();
+
+function App() {
   const { data: session } = useSession();
   const router = createRouter({
     routeTree,
-    context: { auth: null },
+    context: { auth: null, queryClient },
     defaultPreload: "intent",
     scrollRestoration: true,
     defaultStructuralSharing: true,
     defaultPreloadStaleTime: 0,
   });
-
-  return <RouterProvider router={router} context={{ auth: session }} />;
+  return (
+    <RouterProvider router={router} context={{ auth: session, queryClient }} />
+  );
 }
-
-const rootElement = document.getElementById("root")!;
-const queryClient = new QueryClient();
 
 declare module "@tanstack/react-router" {
   interface Register {
@@ -38,7 +39,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <QueryClientProvider client={queryClient}>
-          <AppRouter />
+          <App />
           <Toaster richColors position="top-center" closeButton />
         </QueryClientProvider>
       </ThemeProvider>

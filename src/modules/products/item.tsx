@@ -4,6 +4,7 @@ import { useCart } from "../cart/hooks/use-cart";
 import { useWishlist } from "../cart/hooks/use-wishlist";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 
 export const Item = ({ product }: { product: Product }) => {
   const { addItem: addToCart, items: cartItems } = useCart();
@@ -22,7 +23,8 @@ export const Item = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div
+    <Link
+      to={`/products/${product.id}`}
       key={product.id}
       className="flex flex-col gap-4 p-4 border rounded-xl h-full">
       <div className="rounded-2xl w-full aspect-[4/3] overflow-hidden">
@@ -60,6 +62,6 @@ export const Item = ({ product }: { product: Product }) => {
           </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

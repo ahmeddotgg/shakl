@@ -14,7 +14,9 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AppProductsRouteImport } from './routes/_app/products'
+import { Route as AppProductsIndexRouteImport } from './routes/_app/products/index'
+import { Route as AppProductsNotFoundRouteImport } from './routes/_app/products/not-found'
+import { Route as AppProductsIdRouteImport } from './routes/_app/products/$id'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
@@ -39,46 +41,76 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AppProductsRoute = AppProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
+const AppProductsIndexRoute = AppProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProductsNotFoundRoute = AppProductsNotFoundRouteImport.update({
+  id: '/products/not-found',
+  path: '/products/not-found',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppProductsIdRoute = AppProductsIdRouteImport.update({
+  id: '/products/$id',
+  path: '/products/$id',
   getParentRoute: () => AppRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/products': typeof AppProductsRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/': typeof AppIndexRoute
+  '/products/$id': typeof AppProductsIdRoute
+  '/products/not-found': typeof AppProductsNotFoundRoute
+  '/products': typeof AppProductsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/products': typeof AppProductsRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/': typeof AppIndexRoute
+  '/products/$id': typeof AppProductsIdRoute
+  '/products/not-found': typeof AppProductsNotFoundRoute
+  '/products': typeof AppProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_app/products': typeof AppProductsRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/products/$id': typeof AppProductsIdRoute
+  '/_app/products/not-found': typeof AppProductsNotFoundRoute
+  '/_app/products/': typeof AppProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/products' | '/login' | '/register' | '/'
+  fullPaths:
+    | '/login'
+    | '/register'
+    | '/'
+    | '/products/$id'
+    | '/products/not-found'
+    | '/products'
   fileRoutesByTo: FileRoutesByTo
-  to: '/products' | '/login' | '/register' | '/'
+  to:
+    | '/login'
+    | '/register'
+    | '/'
+    | '/products/$id'
+    | '/products/not-found'
+    | '/products'
   id:
     | '__root__'
     | '/_app'
     | '/_auth'
-    | '/_app/products'
     | '/_auth/login'
     | '/_auth/register'
     | '/_app/'
+    | '/_app/products/$id'
+    | '/_app/products/not-found'
+    | '/_app/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -123,24 +155,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_app/products': {
-      id: '/_app/products'
+    '/_app/products/': {
+      id: '/_app/products/'
       path: '/products'
       fullPath: '/products'
-      preLoaderRoute: typeof AppProductsRouteImport
+      preLoaderRoute: typeof AppProductsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/products/not-found': {
+      id: '/_app/products/not-found'
+      path: '/products/not-found'
+      fullPath: '/products/not-found'
+      preLoaderRoute: typeof AppProductsNotFoundRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/products/$id': {
+      id: '/_app/products/$id'
+      path: '/products/$id'
+      fullPath: '/products/$id'
+      preLoaderRoute: typeof AppProductsIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
 }
 
 interface AppRouteRouteChildren {
-  AppProductsRoute: typeof AppProductsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppProductsIdRoute: typeof AppProductsIdRoute
+  AppProductsNotFoundRoute: typeof AppProductsNotFoundRoute
+  AppProductsIndexRoute: typeof AppProductsIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppProductsRoute: AppProductsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppProductsIdRoute: AppProductsIdRoute,
+  AppProductsNotFoundRoute: AppProductsNotFoundRoute,
+  AppProductsIndexRoute: AppProductsIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
