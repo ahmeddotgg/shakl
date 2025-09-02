@@ -23,19 +23,30 @@ export const Item = ({ product }: { product: Product }) => {
   };
 
   return (
-    <Link
-      to={`/products/${product.id}`}
+    <div
       key={product.id}
       className="flex flex-col gap-4 p-4 border rounded-xl h-full">
-      <div className="rounded-2xl w-full aspect-[4/3] overflow-hidden">
+      <Link
+        to="/products/$id"
+        params={{
+          id: product.id,
+        }}
+        className="rounded-2xl w-full aspect-[4/3] overflow-hidden">
         <img
           src={product.thumbnail}
           alt={product.description}
           className="w-full h-full object-cover"
         />
-      </div>
+      </Link>
       <div>
-        <h2 className="font-semibold text-xl">{product.title}</h2>
+        <Link
+          to="/products/$id"
+          params={{
+            id: product.id,
+          }}
+          className="font-semibold text-xl">
+          {product.title}
+        </Link>
         <p className="text-muted-foreground line-clamp-1">
           {product.description}
         </p>
@@ -55,13 +66,13 @@ export const Item = ({ product }: { product: Product }) => {
               className={cn(
                 "fill-red-600 stroke-red-500 size-5",
                 wishlistItems.some((item) => item.id === product.id)
-                  ? "fill-red-700 stroke-red-700"
+                  ? "fill-red-400 stroke-red-400"
                   : "stroke-primary fill-none"
               )}
             />
           </Button>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
