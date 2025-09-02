@@ -17,6 +17,7 @@ import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthenticatedDashboardRouteRouteImport } from './routes/_authenticated/dashboard/route'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as AppProductsIndexRouteImport } from './routes/_app/products/index'
+import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard/new'
 import { Route as AppProductsNotFoundRouteImport } from './routes/_app/products/not-found'
 import { Route as AppProductsIdRouteImport } from './routes/_app/products/$id'
 
@@ -61,6 +62,12 @@ const AppProductsIndexRoute = AppProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AuthenticatedDashboardNewRoute =
+  AuthenticatedDashboardNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
 const AppProductsNotFoundRoute = AppProductsNotFoundRouteImport.update({
   id: '/products/not-found',
   path: '/products/not-found',
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/products/$id': typeof AppProductsIdRoute
   '/products/not-found': typeof AppProductsNotFoundRoute
+  '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/products': typeof AppProductsIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/products/$id': typeof AppProductsIdRoute
   '/products/not-found': typeof AppProductsNotFoundRoute
+  '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/products': typeof AppProductsIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
@@ -103,6 +112,7 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/products/$id': typeof AppProductsIdRoute
   '/_app/products/not-found': typeof AppProductsNotFoundRoute
+  '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_app/products/': typeof AppProductsIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/products/$id'
     | '/products/not-found'
+    | '/dashboard/new'
     | '/products'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/products/$id'
     | '/products/not-found'
+    | '/dashboard/new'
     | '/products'
     | '/dashboard'
   id:
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/products/$id'
     | '/_app/products/not-found'
+    | '/_authenticated/dashboard/new'
     | '/_app/products/'
     | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProductsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_authenticated/dashboard/new': {
+      id: '/_authenticated/dashboard/new'
+      path: '/new'
+      fullPath: '/dashboard/new'
+      preLoaderRoute: typeof AuthenticatedDashboardNewRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
+    }
     '/_app/products/not-found': {
       id: '/_app/products/not-found'
       path: '/products/not-found'
@@ -256,11 +276,13 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface AuthenticatedDashboardRouteRouteChildren {
+  AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
 
 const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRouteChildren =
   {
+    AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   }
 

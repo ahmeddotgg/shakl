@@ -1,5 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/modules/auth/hooks/use-auth";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/")({
@@ -7,7 +8,7 @@ export const Route = createFileRoute("/_app/")({
 });
 
 function RouteComponent() {
-  const user = true;
+  const { data: user } = useSession();
 
   return (
     <div>
@@ -22,7 +23,13 @@ function RouteComponent() {
           </p>
 
           <div className="flex min-[390px]:flex-row flex-col justify-center md:justify-start gap-4">
-            {user ? null : (
+            {user ? (
+              <Link
+                to="/dashboard"
+                className={cn(buttonVariants({ size: "lg" }), "px-12")}>
+                Dashboard
+              </Link>
+            ) : (
               <>
                 <Link
                   search={{ redirect: "/" }}
