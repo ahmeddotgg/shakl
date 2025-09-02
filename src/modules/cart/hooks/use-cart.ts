@@ -6,7 +6,7 @@ import type { Product } from "../item";
 type CartStore = {
   items: Product[];
   addItem: (item: Product) => void;
-  removeItem: (id: number) => void;
+  removeItem: (id: string) => void;
   clearCart: () => void;
 };
 

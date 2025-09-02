@@ -6,7 +6,7 @@ import type { Product } from "../item";
 type WishlistStore = {
   items: Product[];
   addItem: (item: Product) => void;
-  removeItem: (id: number) => void;
+  removeItem: (id: string) => void;
 };
 
 export const useWishlist = create<WishlistStore>()(
