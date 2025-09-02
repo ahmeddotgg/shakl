@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSignIn } from "@/modules/auth/hooks/use-auth";
 import { toast } from "sonner";
+import { Route } from "@/routes/auth/login";
 
 const loginSchema = z.object({
   email: z.email(),
@@ -23,7 +24,7 @@ const loginSchema = z.object({
 
 export const LoginForm = () => {
   const { mutate, isPending } = useSignIn();
-  const { navigate } = useRouter();
+  const { redirect } = Route.useSearch();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -35,9 +36,9 @@ export const LoginForm = () => {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     mutate(values, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success("Logged in successfully");
-        navigate({ href: "/" });
+        window.location.href = redirect;
       },
       onError: (err) => {
         toast.error(err.message || "Something went wrong");
@@ -54,7 +55,10 @@ export const LoginForm = () => {
         </h2>
         <p className="text-muted-foreground text-sm">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600">
+          <Link
+            to="/auth/register"
+            search={{ redirect: "/" }}
+            className="text-blue-600">
             Register
           </Link>
         </p>

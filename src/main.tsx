@@ -1,7 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import type { Router } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { useSession } from "@/modules/auth/hooks/use-auth";
@@ -22,7 +21,11 @@ const router = createRouter({
 });
 
 function App() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  if (status === "pending") {
+    return <div>Loading...</div>;
+  }
 
   return (
     <RouterProvider router={router} context={{ auth: session, queryClient }} />

@@ -25,11 +25,13 @@ function RouteComponent() {
             {user ? null : (
               <>
                 <Link
+                  search={{ redirect: "/" }}
                   to="/auth/register"
                   className={cn(buttonVariants({ size: "lg" }), "px-12")}>
                   Register
                 </Link>
                 <Link
+                  search={{ redirect: "/" }}
                   to="/auth/login"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" })
