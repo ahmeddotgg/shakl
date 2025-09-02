@@ -6,17 +6,9 @@ import {
   IconLogout,
   IconNotification,
   IconUserCircle,
-  IconHelp,
-  IconSearch,
   IconSettings,
   IconCirclePlusFilled,
-  IconMail,
   type Icon,
-  IconUsers,
-  IconFolder,
-  IconChartBar,
-  IconListDetails,
-  IconDashboard,
 } from "@tabler/icons-react";
 
 import {
