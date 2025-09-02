@@ -123,12 +123,12 @@ const MobileHeader = () => {
               <>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/login">
+                  to="/auth/login">
                   Login
                 </Link>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/register">
+                  to="/auth/register">
                   Register
                 </Link>
               </>
@@ -177,14 +177,14 @@ export function DesktopHeader() {
               <NavigationMenuLink
                 asChild
                 className={navigationMenuTriggerStyle()}>
-                <Link to="/login">Login</Link>
+                <Link to="/auth/login">Login</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
                 className={navigationMenuTriggerStyle()}>
-                <Link to="/register">Register</Link>
+                <Link to="/auth/register">Register</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </>

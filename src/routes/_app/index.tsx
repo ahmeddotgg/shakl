@@ -25,12 +25,12 @@ function RouteComponent() {
             {user ? null : (
               <>
                 <Link
-                  to="/register"
+                  to="/auth/register"
                   className={cn(buttonVariants({ size: "lg" }), "px-12")}>
                   Register
                 </Link>
                 <Link
-                  to="/login"
+                  to="/auth/login"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" })
                   )}>
