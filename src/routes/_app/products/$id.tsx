@@ -17,5 +17,17 @@ function RouteComponent() {
   const id = Route.useParams().id;
   const { data: product } = useSuspenseQuery(getProductQueryOptions(id));
 
-  return <div className="container">{product?.title}</div>;
+  return (
+    <div className="container flex gap-4">
+      <img
+        src={product.thumbnail}
+        alt={product.description}
+        className="rounded-2xl max-w-md"
+      />
+      <div className="space-y-3">
+        <h1 className="font-bold text-2xl">{product?.title}</h1>
+        <p className="text-sm text-muted-foreground">{product.description}</p>
+      </div>
+    </div>
+  );
 }

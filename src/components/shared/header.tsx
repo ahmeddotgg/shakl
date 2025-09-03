@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { IconDashboard } from "@tabler/icons-react";
 
 export const Header = () => {
   const isMobile = useIsMobile();
@@ -94,12 +95,14 @@ const MobileHeader = () => {
           <div className="[&>a]:block space-y-4 [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 py-2 [&>a]:rounded-lg font-semibold text-lg">
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/">
+              to="/"
+            >
               Home
             </Link>
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/products">
+              to="/products"
+            >
               Products
             </Link>
             {user ? (
@@ -111,7 +114,8 @@ const MobileHeader = () => {
                         variant: "ghost",
                         size: "lg",
                       })
-                    )}>
+                    )}
+                  >
                     Account
                   </AccordionTrigger>
                   <AccordionContent className="p-4 w-full">
@@ -124,13 +128,15 @@ const MobileHeader = () => {
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
                   to="/auth/login"
-                  search={{ redirect: "/" }}>
+                  search={{ redirect: "/" }}
+                >
                   Login
                 </Link>
                 <Link
                   search={{ redirect: "/" }}
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/register">
+                  to="/auth/register"
+                >
                   Register
                 </Link>
               </>
@@ -163,7 +169,7 @@ export function DesktopHeader() {
         {user ? (
           <NavigationMenuItem>
             <NavigationMenuTrigger>Account</NavigationMenuTrigger>
-            <NavigationMenuContent className="space-y-4 p-4">
+            <NavigationMenuContent className="space-y-2 p-4">
               {user && (
                 <h4 className="px-4 font-semibold capitalize">
                   Welcome {user.user_metadata?.name || "Guest"} 👋
@@ -178,7 +184,8 @@ export function DesktopHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}>
+                className={navigationMenuTriggerStyle()}
+              >
                 <Link to="/auth/login" search={{ redirect: "/" }}>
                   Login
                 </Link>
@@ -187,7 +194,8 @@ export function DesktopHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}>
+                className={navigationMenuTriggerStyle()}
+              >
                 <Link search={{ redirect: "/" }} to="/auth/register">
                   Register
                 </Link>
@@ -217,14 +225,26 @@ const AcccountLinks = () => {
   };
 
   return (
-    <div className="space-y-3 w-full [&>*>svg]:size-5! [&>*]:font-semibold! [&>*]:text-muted-foreground">
+    <div className="space-y-2 w-full [&>*>svg]:size-5! [&>*]:font-semibold! [&>*]:text-muted-foreground">
+      <Link
+        to="/dashboard"
+        className={buttonVariants({
+          className: "w-full justify-start cursor-pointer text-base!",
+          variant: "ghost",
+          size: "lg",
+        })}
+      >
+        <IconDashboard />
+        Dashboard
+      </Link>
       <Link
         className={buttonVariants({
           className: "w-full justify-start cursor-pointer text-base!",
           variant: "ghost",
           size: "lg",
         })}
-        to="/">
+        to="/"
+      >
         <User />
         Profile
       </Link>
@@ -235,7 +255,8 @@ const AcccountLinks = () => {
           variant: "ghost",
           size: "lg",
         })}
-        to="/">
+        to="/"
+      >
         <Settings />
         Account Settings
       </Link>
@@ -246,7 +267,8 @@ const AcccountLinks = () => {
           variant: "ghost",
           size: "lg",
         })}
-        onClick={handleSignOut}>
+        onClick={handleSignOut}
+      >
         <LogOut />
         Logout
       </button>

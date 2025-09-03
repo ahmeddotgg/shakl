@@ -76,9 +76,10 @@ export function NavMain() {
               className={cn(
                 "bg-primary hover:bg-primary/90 active:bg-primary/90 w-full min-w-8 text-primary-foreground hover:text-primary-foreground active:text-primary-foreground duration-200 ease-linear",
                 buttonVariants()
-              )}>
+              )}
+            >
               <IconCirclePlusFilled />
-              <span>Quick Create</span>
+              <span>Create Product</span>
             </Link>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -133,7 +134,8 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
               <Avatar className="grayscale rounded-lg w-8 h-8">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
@@ -151,7 +153,8 @@ export function NavUser({
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
-            sideOffset={4}>
+            sideOffset={4}
+          >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
                 <Avatar className="rounded-lg w-8 h-8">
