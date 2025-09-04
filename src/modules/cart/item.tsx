@@ -1,12 +1,9 @@
-import { type Database } from "@/lib/types";
 import { CircleX } from "lucide-react";
 import { useWishlist } from "./hooks/use-wishlist";
 import { useCart } from "./hooks/use-cart";
 
-export type Product = Database["public"]["Tables"]["products"]["Row"];
-
 interface Props {
-  product: Product;
+  product: any;
   type: "cart" | "wishlist";
 }
 

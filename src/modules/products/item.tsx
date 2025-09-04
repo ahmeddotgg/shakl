@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
-import type { Product } from "../cart/item";
 import { useCart } from "../cart/hooks/use-cart";
 import { useWishlist } from "../cart/hooks/use-wishlist";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
+import type { Database } from "@/lib/types";
+
+export type Product = Database["public"]["Tables"]["products"]["Row"];
 
 export const Item = ({ product }: { product: Product }) => {
   const { addItem: addToCart, items: cartItems } = useCart();
@@ -33,7 +35,7 @@ export const Item = ({ product }: { product: Product }) => {
         }}
         className="rounded-2xl w-full aspect-[4/3] overflow-hidden">
         <img
-          src={product.thumbnail}
+          src={product.thumbnail_url}
           alt={product.description}
           className="w-full h-full object-cover"
         />

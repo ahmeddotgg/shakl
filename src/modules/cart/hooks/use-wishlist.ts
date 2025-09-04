@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
-import type { Product } from "../item";
+import type { Database } from "@/lib/types";
+
+export type Product = Database["public"]["Tables"]["products"]["Row"];
 
 type WishlistStore = {
   items: Product[];

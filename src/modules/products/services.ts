@@ -1,7 +1,5 @@
 import { supabase } from "@/lib/supabase-client";
-import type { Database } from "@/lib/types";
-
-export type ProductPayload = Database["public"]["Tables"]["products"]["Insert"];
+import type { NewProductInsert } from "./create-form";
 
 export async function getProducts() {
   const { data, error } = await supabase.from("products").select("*");
@@ -19,7 +17,7 @@ export async function getProductById(id: string) {
   return data;
 }
 
-export async function createProduct(payload: ProductPayload) {
+export async function createProduct(payload: NewProductInsert) {
   const { data, error } = await supabase
     .from("products")
     .insert(payload)
@@ -28,4 +26,36 @@ export async function createProduct(payload: ProductPayload) {
   if (error) throw new Error(error.message);
 
   return data[0];
+}
+
+export async function getCategories() {
+  const { data, error } = await supabase.from("product_categories").select("*");
+  if (error) throw error;
+  return data;
+}
+
+export async function getFileTypes() {
+  const { data, error } = await supabase.from("file_types").select("*");
+  if (error) throw error;
+  return data;
+}
+
+export async function imageUpload(file: File) {
+  const fileName = `${Date.now()}-${file.name}`;
+
+  const { error } = await supabase.storage
+    .from("images")
+    .upload(`${fileName}`, file);
+
+  if (error) throw error;
+
+  const { data: publicUrlData } = supabase.storage
+    .from("images")
+    .getPublicUrl(fileName);
+
+  if (!publicUrlData?.publicUrl) {
+    throw new Error("Failed to get public URL");
+  }
+
+  return publicUrlData.publicUrl;
 }

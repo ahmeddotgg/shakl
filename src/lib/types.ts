@@ -14,79 +14,212 @@ export type Database = {
   }
   public: {
     Tables: {
-      categories: {
+      file_types: {
         Row: {
-          created_at: string
+          created_at: string | null
+          extension: string
           id: string
+          mime_type: string | null
           name: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          extension: string
           id?: string
+          mime_type?: string | null
           name: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          extension?: string
+          id?: string
+          mime_type?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_id: string | null
+          price: number
+          product_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          price: number
+          product_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          price?: number
+          product_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string | null
+          id: string
+          status: string | null
+          total_amount: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          total_amount: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          total_amount?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      product_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
           id?: string
           name?: string
+          slug?: string
         }
         Relationships: []
       }
       products: {
         Row: {
           category_id: string
-          created_at: string
+          created_at: string | null
+          created_by: string | null
           description: string
-          download_count: number
-          file_type: Database["public"]["Enums"]["file_type_enum"]
+          download_count: number | null
+          file_type_id: string
           file_url: string
           id: string
           images: string[]
           price: number
-          seller_id: string
-          slug: string | null
-          thumbnail: string
+          thumbnail_url: string
           title: string
+          updated_at: string | null
         }
         Insert: {
-          category_id?: string
-          created_at?: string
+          category_id: string
+          created_at?: string | null
+          created_by?: string | null
           description: string
-          download_count?: number
-          file_type: Database["public"]["Enums"]["file_type_enum"]
+          download_count?: number | null
+          file_type_id: string
           file_url: string
           id?: string
-          images: string[]
+          images?: string[]
           price: number
-          seller_id: string
-          slug?: string | null
-          thumbnail: string
+          thumbnail_url: string
           title: string
+          updated_at?: string | null
         }
         Update: {
           category_id?: string
-          created_at?: string
+          created_at?: string | null
+          created_by?: string | null
           description?: string
-          download_count?: number
-          file_type?: Database["public"]["Enums"]["file_type_enum"]
+          download_count?: number | null
+          file_type_id?: string
           file_url?: string
           id?: string
           images?: string[]
           price?: number
-          seller_id?: string
-          slug?: string | null
-          thumbnail?: string
+          thumbnail_url?: string
           title?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "products_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "categories"
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_file_type_id_fkey"
+            columns: ["file_type_id"]
+            isOneToOne: false
+            referencedRelation: "file_types"
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_preferences: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          display_name: string | null
+          email_notifications: boolean | null
+          id: string
+          theme: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          email_notifications?: boolean | null
+          id?: string
+          theme?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          email_notifications?: boolean | null
+          id?: string
+          theme?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
@@ -96,21 +229,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      file_type_enum:
-        | "pdf"
-        | "zip"
-        | "mp3"
-        | "mp4"
-        | "jpg"
-        | "png"
-        | "svg"
-        | "gif"
-        | "txt"
-        | "docx"
-        | "xlsx"
-        | "fig"
-        | "psd"
-        | "ai"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -237,23 +356,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      file_type_enum: [
-        "pdf",
-        "zip",
-        "mp3",
-        "mp4",
-        "jpg",
-        "png",
-        "svg",
-        "gif",
-        "txt",
-        "docx",
-        "xlsx",
-        "fig",
-        "psd",
-        "ai",
-      ],
-    },
+    Enums: {},
   },
 } as const

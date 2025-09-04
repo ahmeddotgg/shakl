@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSignUp } from "@/modules/auth/hooks/use-auth";
 import { toast } from "sonner";
-import { Route } from "@/routes/auth/register";
 
 const registerSchema = z.object({
   name: z
@@ -28,7 +27,6 @@ const registerSchema = z.object({
 
 export const RegisterForm = () => {
   const { mutate, isPending } = useSignUp();
-  const { redirect } = Route.useSearch();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -43,7 +41,6 @@ export const RegisterForm = () => {
     mutate(values, {
       onSuccess: () => {
         toast.success("Verification email sent. Please check your inbox.");
-        window.location.href = redirect;
       },
       onError: (err) => {
         toast.error(err.message || "Something went wrong");
