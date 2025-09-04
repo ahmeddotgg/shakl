@@ -1,9 +1,12 @@
 import { CircleX } from "lucide-react";
 import { useWishlist } from "./hooks/use-wishlist";
 import { useCart } from "./hooks/use-cart";
+import type { Database } from "@/lib/types";
+
+export type Product = Database["public"]["Tables"]["products"]["Row"];
 
 interface Props {
-  product: any;
+  product: Product;
   type: "cart" | "wishlist";
 }
 
@@ -22,7 +25,7 @@ export const Item = ({ product, type }: Props) => {
   return (
     <div className="relative flex gap-2 bg-secondary/60 p-2 rounded-2xl">
       <img
-        src={product.thumbnail}
+        src={product.thumbnail_url}
         alt={product.description}
         className="rounded-xl size-24 object-cover"
       />
