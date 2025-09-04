@@ -7,35 +7,57 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Button, buttonVariants } from "../ui/button";
-import { LogOut, Menu, Settings, User } from "lucide-react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Button } from "../ui/button";
+import { Menu, User2 } from "lucide-react";
+import { Link, Navigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
-import { toast } from "sonner";
+
+import { useSession, useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { IconDashboard } from "@tabler/icons-react";
+import {
+  IconCreditCard,
+  IconLogout,
+  IconNotification,
+  IconUserCircle,
+} from "@tabler/icons-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { toast } from "sonner";
 
 export const Header = () => {
   const isMobile = useIsMobile();
+  const { data: session, isLoading } = useSession();
+  const { mutate: signOut } = useSignOut();
+
+  const handleSignOut = () => {
+    if (!session) return;
+
+    signOut(undefined, {
+      onSuccess: () => {
+        toast.success("Logged out successfully");
+        Navigate({ to: "/" });
+      },
+      onError: (err) => {
+        console.error("Sign out failed:", err.message);
+      },
+    });
+  };
 
   return (
     <header className="items-center grid grid-cols-2 min-[640px]:grid-cols-3 py-4 container">
@@ -51,6 +73,57 @@ export const Header = () => {
         ) : (
           <>
             <CartAndWishlist />
+            {isLoading ? null : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <User2 className="size-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="max-w-[180px]">
+                  <DropdownMenuLabel className="p-0 font-normal">
+                    <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
+                      <Avatar className="rounded-lg w-8 h-8">
+                        <AvatarImage src="wffwfg" alt="gregreg" />
+                        <AvatarFallback className="rounded-lg">
+                          CN
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 grid text-sm text-left leading-tight">
+                        <span className="font-medium truncate capitalize">
+                          {session?.user?.user_metadata.name}
+                        </span>
+                        <span className="text-muted-foreground text-xs truncate">
+                          {session?.user?.email}
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <IconUserCircle />
+                      Account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <IconCreditCard />
+                      Billing
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <IconNotification />
+                      Notifications
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleSignOut}>
+                    <IconLogout />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
             <ThemeToggle />
           </>
         )}
@@ -95,48 +168,26 @@ const MobileHeader = () => {
           <div className="[&>a]:block space-y-4 [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 py-2 [&>a]:rounded-lg font-semibold text-lg">
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/"
-            >
+              to="/">
               Home
             </Link>
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/products"
-            >
+              to="/products">
               Products
             </Link>
-            {user ? (
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger
-                    className={cn(
-                      buttonVariants({
-                        variant: "ghost",
-                        size: "lg",
-                      })
-                    )}
-                  >
-                    Account
-                  </AccordionTrigger>
-                  <AccordionContent className="p-4 w-full">
-                    <AcccountLinks />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            ) : (
+            {user ? null : (
               <>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
                   to="/auth/login"
-                  search={{ redirect: "/" }}
-                >
+                  search={{ redirect: "/" }}>
                   Login
                 </Link>
                 <Link
                   search={{ redirect: "/" }}
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/register"
-                >
+                  to="/auth/register">
                   Register
                 </Link>
               </>
@@ -166,26 +217,12 @@ export function DesktopHeader() {
             <Link to="/products">Products</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
-        {user ? (
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Account</NavigationMenuTrigger>
-            <NavigationMenuContent className="space-y-2 p-4">
-              {user && (
-                <h4 className="px-4 font-semibold capitalize">
-                  Welcome {user.user_metadata?.name || "Guest"} 👋
-                </h4>
-              )}
-              <Separator />
-              <AcccountLinks />
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        ) : (
+        {user ? null : (
           <>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}
-              >
+                className={navigationMenuTriggerStyle()}>
                 <Link to="/auth/login" search={{ redirect: "/" }}>
                   Login
                 </Link>
@@ -194,8 +231,7 @@ export function DesktopHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}
-              >
+                className={navigationMenuTriggerStyle()}>
                 <Link search={{ redirect: "/" }} to="/auth/register">
                   Register
                 </Link>
@@ -207,71 +243,3 @@ export function DesktopHeader() {
     </NavigationMenu>
   );
 }
-
-const AcccountLinks = () => {
-  const { mutate: signOut } = useSignOut();
-  const { navigate } = useRouter();
-
-  const handleSignOut = () => {
-    signOut(undefined, {
-      onSuccess: () => {
-        toast.success("Logged out successfully");
-        navigate({ href: "/" });
-      },
-      onError: (err) => {
-        console.error("Sign in failed:", err.message);
-      },
-    });
-  };
-
-  return (
-    <div className="space-y-2 w-full [&>*>svg]:size-5! [&>*]:font-semibold! [&>*]:text-muted-foreground">
-      <Link
-        to="/dashboard"
-        className={buttonVariants({
-          className: "w-full justify-start cursor-pointer text-base!",
-          variant: "ghost",
-          size: "lg",
-        })}
-      >
-        <IconDashboard />
-        Dashboard
-      </Link>
-      <Link
-        className={buttonVariants({
-          className: "w-full justify-start cursor-pointer text-base!",
-          variant: "ghost",
-          size: "lg",
-        })}
-        to="/"
-      >
-        <User />
-        Profile
-      </Link>
-
-      <Link
-        className={buttonVariants({
-          className: "w-full justify-start cursor-pointer text-base!",
-          variant: "ghost",
-          size: "lg",
-        })}
-        to="/"
-      >
-        <Settings />
-        Account Settings
-      </Link>
-
-      <button
-        className={buttonVariants({
-          className: "w-full justify-start cursor-pointer text-base!",
-          variant: "ghost",
-          size: "lg",
-        })}
-        onClick={handleSignOut}
-      >
-        <LogOut />
-        Logout
-      </button>
-    </div>
-  );
-};
