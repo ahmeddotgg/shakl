@@ -34,6 +34,16 @@ export async function getCategories() {
   return data;
 }
 
+export async function getCategoryById(id: string) {
+  const { data, error } = await supabase
+    .from("product_categories")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 export async function getFileTypes() {
   const { data, error } = await supabase.from("file_types").select("*");
   if (error) throw error;

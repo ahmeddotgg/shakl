@@ -1,5 +1,6 @@
 import {
   getCategories,
+  getCategoryById,
   getFileTypes,
   getProductById,
   getProducts,
@@ -39,5 +40,12 @@ export const useFileTypes = () => {
   return useQuery({
     queryKey: ["file_types"],
     queryFn: getFileTypes,
+  });
+};
+
+export const useProductCategoryById = (id: string) => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategoryById(id),
   });
 };

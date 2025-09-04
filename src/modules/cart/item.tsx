@@ -33,7 +33,7 @@ export const Item = ({ product, type }: Props) => {
       <button
         onClick={() => handleRemoveItem(type)}
         className="top-0 right-0 absolute hover:bg-destructive rounded-full cursor-pointer">
-        <CircleX className="size-4" />
+        <CircleX className="size-5" />
       </button>
 
       <h2 className="text-xs min-[325px]:text-sm">{product.title}</h2>
