@@ -40,7 +40,7 @@ function RouteComponent() {
   }));
 
   return (
-    <div className="gap-8 lg:grid grid-cols-2 py-16 container">
+    <div className="gap-8 lg:grid grid-cols-2 container">
       <ImageCarousel_Basic
         images={images}
         imageFit="contain"

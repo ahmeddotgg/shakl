@@ -6,9 +6,7 @@ import {
   IconLogout,
   IconNotification,
   IconUserCircle,
-  IconSettings,
   IconCirclePlusFilled,
-  type Icon,
 } from "@tabler/icons-react";
 
 import {

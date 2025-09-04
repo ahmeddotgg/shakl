@@ -40,9 +40,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { toast } from "sonner";
 
-export const Header = () => {
-  const isMobile = useIsMobile();
-  const { data: session, isLoading } = useSession();
+const ProfleMenu = () => {
+  const { data: session } = useSession();
   const { mutate: signOut } = useSignOut();
 
   const handleSignOut = () => {
@@ -59,6 +58,60 @@ export const Header = () => {
     });
   };
 
+  if (!session) return;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <User2 className="size-5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="max-w-[180px]">
+        <DropdownMenuLabel className="p-0 font-normal">
+          <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
+            <Avatar className="rounded-lg w-8 h-8">
+              <AvatarImage src="wffwfg" alt="gregreg" />
+              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 grid text-sm text-left leading-tight">
+              <span className="font-medium truncate capitalize">
+                {session?.user?.user_metadata.name}
+              </span>
+              <span className="text-muted-foreground text-xs truncate">
+                {session?.user?.email}
+              </span>
+            </div>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <IconUserCircle />
+            Account
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <IconCreditCard />
+            Billing
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <IconNotification />
+            Notifications
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer" onClick={handleSignOut}>
+          <IconLogout />
+          Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export const Header = () => {
+  const isMobile = useIsMobile();
+
   return (
     <header className="items-center grid grid-cols-2 min-[640px]:grid-cols-3 py-4 container">
       <img alt="Logo" className="size-8" src="/logoipsum.svg" />
@@ -68,62 +121,13 @@ export const Header = () => {
         {isMobile ? (
           <>
             <CartAndWishlist />
+            <ProfleMenu />
             <MobileHeader />
           </>
         ) : (
           <>
             <CartAndWishlist />
-            {isLoading ? null : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <User2 className="size-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="max-w-[180px]">
-                  <DropdownMenuLabel className="p-0 font-normal">
-                    <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
-                      <Avatar className="rounded-lg w-8 h-8">
-                        <AvatarImage src="wffwfg" alt="gregreg" />
-                        <AvatarFallback className="rounded-lg">
-                          CN
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 grid text-sm text-left leading-tight">
-                        <span className="font-medium truncate capitalize">
-                          {session?.user?.user_metadata.name}
-                        </span>
-                        <span className="text-muted-foreground text-xs truncate">
-                          {session?.user?.email}
-                        </span>
-                      </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <IconUserCircle />
-                      Account
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <IconCreditCard />
-                      Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <IconNotification />
-                      Notifications
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={handleSignOut}>
-                    <IconLogout />
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            <ProfleMenu />
             <ThemeToggle />
           </>
         )}
@@ -180,12 +184,10 @@ const MobileHeader = () => {
               <>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/login"
-                  search={{ redirect: "/" }}>
+                  to="/auth/login">
                   Login
                 </Link>
                 <Link
-                  search={{ redirect: "/" }}
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
                   to="/auth/register">
                   Register
@@ -223,18 +225,14 @@ export function DesktopHeader() {
               <NavigationMenuLink
                 asChild
                 className={navigationMenuTriggerStyle()}>
-                <Link to="/auth/login" search={{ redirect: "/" }}>
-                  Login
-                </Link>
+                <Link to="/auth/login">Login</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
                 className={navigationMenuTriggerStyle()}>
-                <Link search={{ redirect: "/" }} to="/auth/register">
-                  Register
-                </Link>
+                <Link to="/auth/register">Register</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </>

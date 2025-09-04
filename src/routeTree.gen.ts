@@ -17,6 +17,8 @@ import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as DashboardNewRouteImport } from './routes/dashboard/new'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AppUnauthorizedRouteImport } from './routes/_app/unauthorized'
+import { Route as AppUnauthenticatedRouteImport } from './routes/_app/unauthenticated'
 import { Route as AppProductsIndexRouteImport } from './routes/_app/products/index'
 import { Route as AppProductsNotFoundRouteImport } from './routes/_app/products/not-found'
 import { Route as AppProductsIdRouteImport } from './routes/_app/products/$id'
@@ -60,6 +62,16 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AppUnauthorizedRoute = AppUnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppUnauthenticatedRoute = AppUnauthenticatedRouteImport.update({
+  id: '/unauthenticated',
+  path: '/unauthenticated',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppProductsIndexRoute = AppProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -79,6 +91,8 @@ const AppProductsIdRoute = AppProductsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/unauthenticated': typeof AppUnauthenticatedRoute
+  '/unauthorized': typeof AppUnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/new': typeof DashboardNewRoute
@@ -90,6 +104,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
+  '/unauthenticated': typeof AppUnauthenticatedRoute
+  '/unauthorized': typeof AppUnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/new': typeof DashboardNewRoute
@@ -104,6 +120,8 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/_app/unauthenticated': typeof AppUnauthenticatedRoute
+  '/_app/unauthorized': typeof AppUnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/new': typeof DashboardNewRoute
@@ -118,6 +136,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/auth'
     | '/dashboard'
+    | '/unauthenticated'
+    | '/unauthorized'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/new'
@@ -129,6 +149,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/unauthenticated'
+    | '/unauthorized'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/new'
@@ -142,6 +164,8 @@ export interface FileRouteTypes {
     | '/_app'
     | '/auth'
     | '/dashboard'
+    | '/_app/unauthenticated'
+    | '/_app/unauthorized'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/new'
@@ -216,6 +240,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_app/unauthorized': {
+      id: '/_app/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof AppUnauthorizedRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/unauthenticated': {
+      id: '/_app/unauthenticated'
+      path: '/unauthenticated'
+      fullPath: '/unauthenticated'
+      preLoaderRoute: typeof AppUnauthenticatedRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/products/': {
       id: '/_app/products/'
       path: '/products'
@@ -241,6 +279,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteRouteChildren {
+  AppUnauthenticatedRoute: typeof AppUnauthenticatedRoute
+  AppUnauthorizedRoute: typeof AppUnauthorizedRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProductsIdRoute: typeof AppProductsIdRoute
   AppProductsNotFoundRoute: typeof AppProductsNotFoundRoute
@@ -248,6 +288,8 @@ interface AppRouteRouteChildren {
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppUnauthenticatedRoute: AppUnauthenticatedRoute,
+  AppUnauthorizedRoute: AppUnauthorizedRoute,
   AppIndexRoute: AppIndexRoute,
   AppProductsIdRoute: AppProductsIdRoute,
   AppProductsNotFoundRoute: AppProductsNotFoundRoute,

@@ -7,11 +7,11 @@ export const Route = createFileRoute("/_app")({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-col min-h-svh">
+    <>
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 pt-10 min-h-0">
         <Outlet />
       </main>
-    </div>
+    </>
   );
 }

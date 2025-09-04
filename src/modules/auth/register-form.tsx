@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSignUp } from "@/modules/auth/hooks/use-auth";
@@ -27,6 +27,7 @@ const registerSchema = z.object({
 
 export const RegisterForm = () => {
   const { mutate, isPending } = useSignUp();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -39,8 +40,9 @@ export const RegisterForm = () => {
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     mutate(values, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success("Verification email sent. Please check your inbox.");
+        await navigate({ to: "/" });
       },
       onError: (err) => {
         toast.error(err.message || "Something went wrong");
@@ -57,10 +59,7 @@ export const RegisterForm = () => {
         </h2>
         <p className="text-muted-foreground text-sm">
           Already have an account?{" "}
-          <Link
-            to="/auth/login"
-            search={{ redirect: "/" }}
-            className="text-blue-600">
+          <Link to="/auth/login" className="text-blue-600">
             Login
           </Link>
         </p>
