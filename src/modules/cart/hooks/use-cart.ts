@@ -12,7 +12,7 @@ type CartStore = {
 
 export const useCart = create<CartStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       items: [],
 
       addItem: (item) =>
