@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { routeTree } from "./routeTree.gen";
 import { useSession } from "./modules/auth/hooks/use-auth";
 import "./index.css";
+import { Loading } from "./components/shared/loading";
 
 const rootElement = document.getElementById("root")!;
 const queryClient = new QueryClient();
@@ -29,7 +30,9 @@ declare module "@tanstack/react-router" {
 }
 
 function App() {
-  const { data: session } = useSession();
+  const { data: session, isPending, isLoading } = useSession();
+
+  if (isPending || isLoading) return <Loading />;
 
   return (
     <RouterProvider router={router} context={{ queryClient, auth: session }} />

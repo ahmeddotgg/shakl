@@ -8,6 +8,13 @@ export const Route = createFileRoute("/_app/products/")({
   loader: ({ context: { queryClient } }) => {
     return queryClient.ensureQueryData(getProductsQueryOptions());
   },
+  head: () => ({
+    meta: [
+      {
+        title: "Products | Shakl",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

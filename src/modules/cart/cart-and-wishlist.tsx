@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -19,9 +19,12 @@ import { useCart } from "./hooks/use-cart";
 import { Item } from "./item";
 import { useWishlist } from "./hooks/use-wishlist";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { calculateTotal } from "@/lib/utils";
+import { Link, useRouter } from "@tanstack/react-router";
 
 export const CartAndWishlist = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"cart" | "wishlist">("cart");
   const { items: cartItems, clearCart } = useCart();
   const { items: wishlistItems } = useWishlist();
@@ -51,7 +54,7 @@ export const CartAndWishlist = () => {
 
             <ScrollArea className="flex-1 h-[70vh]">
               <Tabs
-                className="flex-1 py-2"
+                className="flex-1 px-1 py-2"
                 value={activeTab}
                 onValueChange={(val) =>
                   setActiveTab(val as "cart" | "wishlist")
@@ -107,7 +110,26 @@ export const CartAndWishlist = () => {
             </ScrollArea>
 
             <SheetDescription className="sr-only" />
-            <SheetFooter className="mt-0">heyy</SheetFooter>
+            {activeTab === "cart" && (
+              <SheetFooter className="mt-0">
+                <p className="flex justify-between items-center">
+                  Cart Total:
+                  <span className="font-semibold text-lg">
+                    ${calculateTotal(cartItems)}
+                  </span>
+                </p>
+                <Link
+                  to="/checkout"
+                  className={buttonVariants()}
+                  onClick={() =>
+                    router.subscribe("onResolved", () => {
+                      setIsOpen(false);
+                    })
+                  }>
+                  Checkout
+                </Link>
+              </SheetFooter>
+            )}
           </SheetHeader>
         </SheetContent>
       </Sheet>

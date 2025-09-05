@@ -81,21 +81,18 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
-          status: string | null
           total_amount: number
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
-          status?: string | null
           total_amount: number
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
-          status?: string | null
           total_amount?: number
           user_id?: string | null
         }
@@ -226,7 +223,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_download_count: {
+        Args: { product_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

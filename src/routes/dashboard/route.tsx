@@ -1,10 +1,20 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardHeader } from "@/modules/dashboard/header";
 import { AppSidebar } from "@/modules/dashboard/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
+  beforeLoad: ({ context: { auth }, location }) => {
+    if (!auth?.user) {
+      throw redirect({
+        to: "/unauthenticated",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
 });
 
 function RouteComponent() {

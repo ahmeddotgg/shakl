@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSignIn } from "@/modules/auth/hooks/use-auth";
 import { toast } from "sonner";
+import { Route } from "@/routes/auth/login";
 
 const loginSchema = z.object({
   email: z.email(),
@@ -23,6 +24,8 @@ const loginSchema = z.object({
 
 export const LoginForm = () => {
   const { mutate, isPending } = useSignIn();
+  const { redirect } = Route.useSearch();
+  const navigate = useNavigate({ from: "/" });
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -32,10 +35,13 @@ export const LoginForm = () => {
     },
   });
 
+  console.log(redirect);
+
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     mutate(values, {
       onSuccess: async () => {
-        toast.success("Logged in successfully");
+        toast.success("Logged in successfully, you are being redirected");
+        navigate({ to: redirect, reloadDocument: true });
       },
       onError: (err) => {
         toast.error(err.message || "Something went wrong");

@@ -9,7 +9,7 @@ import {
 } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { Menu, User2 } from "lucide-react";
-import { Link, Navigate, useRouter } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import {
@@ -43,6 +43,7 @@ import { toast } from "sonner";
 const ProfleMenu = () => {
   const { data: session } = useSession();
   const { mutate: signOut } = useSignOut();
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     if (!session) return;
@@ -50,7 +51,7 @@ const ProfleMenu = () => {
     signOut(undefined, {
       onSuccess: () => {
         toast.success("Logged out successfully");
-        Navigate({ to: "/" });
+        navigate({ to: "/" });
       },
       onError: (err) => {
         console.error("Sign out failed:", err.message);

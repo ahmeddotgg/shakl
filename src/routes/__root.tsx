@@ -1,4 +1,8 @@
-import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import {
+  HeadContent,
+  Outlet,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
 import type { Session } from "@supabase/supabase-js";
 
@@ -8,5 +12,22 @@ export interface Context {
 }
 
 export const Route = createRootRouteWithContext<Context>()({
-  component: () => <Outlet />,
+  component: () => (
+    <>
+      <HeadContent />
+      <Outlet />
+    </>
+  ),
+
+  head: () => ({
+    meta: [
+      {
+        name: "description",
+        content: "My App is a web application",
+      },
+      {
+        title: "Shakl",
+      },
+    ],
+  }),
 });
