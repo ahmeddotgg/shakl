@@ -31,8 +31,9 @@ import { useCallback, useRef } from "react";
 import type { FileUploadProps } from "@/components/ui/file-upload";
 import { imageUpload } from "./services";
 import { toast } from "sonner";
-import type { Database } from "@/lib/types";
 import { useUser } from "../auth/hooks/use-auth";
+import type { Database } from "@/lib/types";
+import type { ProductInsert } from "@/lib/supabase-client";
 
 export const createProductSchema = z.object({
   title: z
@@ -56,8 +57,6 @@ export const createProductSchema = z.object({
     .min(1, { message: "Please upload at least one image" }),
 });
 
-export type NewProductInsert =
-  Database["public"]["Tables"]["products"]["Insert"];
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 
 export function ProductForm() {
@@ -89,7 +88,7 @@ export function ProductForm() {
   });
 
   const handleSubmit = (data: CreateProductInput) => {
-    const newProduct: NewProductInsert = {
+    const newProduct: ProductInsert = {
       ...data,
       created_by: user?.id,
     };

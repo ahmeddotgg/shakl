@@ -1,9 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
-import type { Database } from "@/lib/types";
-
-export type Product = Database["public"]["Tables"]["products"]["Row"];
+import type { Product } from "@/lib/supabase-client";
 
 type WishlistStore = {
   items: Product[];

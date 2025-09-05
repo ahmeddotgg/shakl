@@ -7,7 +7,7 @@ import {
 } from "@/modules/products/services";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "@/modules/products/services";
-import type { NewProductInsert } from "../create-form";
+import type { ProductInsert } from "@/lib/supabase-client";
 
 export function getProductsQueryOptions() {
   return {
@@ -25,7 +25,7 @@ export function getProductQueryOptions(id: string) {
 
 export function useCreateProduct() {
   return useMutation({
-    mutationFn: (payload: NewProductInsert) => createProduct(payload),
+    mutationFn: (payload: ProductInsert) => createProduct(payload),
   });
 }
 

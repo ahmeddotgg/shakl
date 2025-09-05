@@ -4,9 +4,7 @@ import { useWishlist } from "../cart/hooks/use-wishlist";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import type { Database } from "@/lib/types";
-
-export type Product = Database["public"]["Tables"]["products"]["Row"];
+import type { Product } from "@/lib/supabase-client";
 
 export const Item = ({ product }: { product: Product }) => {
   const { addItem: addToCart, items: cartItems } = useCart();
