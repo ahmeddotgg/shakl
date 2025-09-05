@@ -32,7 +32,6 @@ import type { FileUploadProps } from "@/components/ui/file-upload";
 import { imageUpload } from "./services";
 import { toast } from "sonner";
 import { useUser } from "../auth/hooks/use-auth";
-import type { Database } from "@/lib/types";
 import type { ProductInsert } from "@/lib/supabase-client";
 
 export const createProductSchema = z.object({
