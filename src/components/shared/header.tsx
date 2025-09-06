@@ -116,6 +116,7 @@ export const Header = () => {
   return (
     <header className="items-center grid grid-cols-2 min-[640px]:grid-cols-3 py-4 container">
       <img alt="Logo" className="size-8" src="/logoipsum.svg" />
+
       {!isMobile && <DesktopHeader />}
 
       <div className="flex justify-self-end gap-1">
@@ -173,24 +174,28 @@ const MobileHeader = () => {
           <div className="[&>a]:block space-y-4 [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 py-2 [&>a]:rounded-lg font-semibold text-lg">
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/">
+              to="/"
+            >
               Home
             </Link>
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/products">
+              to="/products"
+            >
               Products
             </Link>
             {user ? null : (
               <>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/login">
+                  to="/auth/login"
+                >
                   Login
                 </Link>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/register">
+                  to="/auth/register"
+                >
                   Register
                 </Link>
               </>
@@ -225,14 +230,16 @@ export function DesktopHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}>
+                className={navigationMenuTriggerStyle()}
+              >
                 <Link to="/auth/login">Login</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink
                 asChild
-                className={navigationMenuTriggerStyle()}>
+                className={navigationMenuTriggerStyle()}
+              >
                 <Link to="/auth/register">Register</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
