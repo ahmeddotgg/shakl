@@ -1,7 +1,26 @@
 import { supabase, type ProductInsert } from "@/lib/supabase-client";
 
-export async function getProducts() {
-  const { data, error } = await supabase.from("products").select("*");
+export interface Filters {
+  categoryId?: string;
+  isFree?: boolean;
+  search?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: "price" | "created_at" | "name";
+  orderBy?: "asc" | "desc";
+  limit?: number;
+  offset?: number;
+}
+export async function getProducts(filter?: Filters) {
+  let query = supabase.from("products").select("*");
+
+  if (filter?.categoryId) {
+    query = query.eq("category_id", filter.categoryId);
+  }
+  if (filter?.isFree) {
+    query = query.eq("price", filter.isFree && 0);
+  }
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 }

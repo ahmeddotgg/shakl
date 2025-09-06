@@ -5,16 +5,18 @@ import {
   getFileTypes,
   getProductById,
   getProducts,
+  type Filters,
 } from "@/modules/products/services";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "@/modules/products/services";
 import type { ProductInsert } from "@/lib/supabase-client";
 import { toast } from "sonner";
 
-export function getProductsQueryOptions() {
+export function getProductsQueryOptions(filters?: Filters) {
   return {
-    queryKey: ["products"],
-    queryFn: getProducts,
+    queryKey: ["products", filters],
+    queryFn: () => getProducts(filters),
+    keepPreviousData: true as const,
   };
 }
 
