@@ -1,21 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
-import { addOrderItems, createOrder } from "../services";
-import { calculateTotal } from "@/lib/utils";
+import { createPaymentSession } from "../services";
 import type { Product } from "@/lib/supabase-client";
 
-export function useCheckout() {
+export function useCreatePaymentSession() {
   return useMutation({
     mutationFn: async ({
-      userId,
-      items,
+      amount,
+      products,
     }: {
-      userId: string;
-      items: Product[];
+      amount: number;
+      products: Product[];
     }) => {
-      const total = calculateTotal(items);
-      const orderId = await createOrder(userId, total);
-      await addOrderItems(orderId, items);
-      return orderId;
+      return createPaymentSession(amount, products);
+    },
+    onSuccess: (iframeUrl) => {
+      window.location.href = iframeUrl;
+    },
+    onError: (error) => {
+      console.error("Payment Error:", error);
+      alert("Payment initialization failed");
     },
   });
 }

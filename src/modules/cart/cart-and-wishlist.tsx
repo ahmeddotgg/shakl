@@ -58,7 +58,8 @@ export const CartAndWishlist = () => {
                 value={activeTab}
                 onValueChange={(val) =>
                   setActiveTab(val as "cart" | "wishlist")
-                }>
+                }
+              >
                 <TabsList className="grid grid-cols-2 w-full">
                   <TabsTrigger value="cart">Cart</TabsTrigger>
                   <TabsTrigger value="wishlist">Wishlist</TabsTrigger>
@@ -76,7 +77,8 @@ export const CartAndWishlist = () => {
                         size="sm"
                         variant="link"
                         className="text-muted-foreground text-xs"
-                        onClick={clearCart}>
+                        onClick={clearCart}
+                      >
                         <BrushCleaning />
                         Clear All
                       </Button>
@@ -112,22 +114,28 @@ export const CartAndWishlist = () => {
             <SheetDescription className="sr-only" />
             {activeTab === "cart" && (
               <SheetFooter className="mt-0">
-                <p className="flex justify-between items-center">
-                  Cart Total:
-                  <span className="font-semibold text-lg">
-                    ${calculateTotal(cartItems)}
-                  </span>
-                </p>
-                <Link
-                  to="/checkout"
-                  className={buttonVariants()}
-                  onClick={() =>
-                    router.subscribe("onResolved", () => {
-                      setIsOpen(false);
-                    })
-                  }>
-                  Checkout
-                </Link>
+                {cartItems.length === 0 ? null : (
+                  <>
+                    <p className="flex justify-between items-center">
+                      Cart Total:
+                      <span className="font-semibold text-lg">
+                        {calculateTotal(cartItems)}
+                      </span>
+                    </p>
+                    <Link
+                      to="/checkout"
+                      className={buttonVariants()}
+                      onClick={() =>
+                        router.subscribe("onResolved", () => {
+                          setIsOpen(false);
+                        })
+                      }
+                      disabled={cartItems.length === 0}
+                    >
+                      Checkout
+                    </Link>
+                  </>
+                )}
               </SheetFooter>
             )}
           </SheetHeader>

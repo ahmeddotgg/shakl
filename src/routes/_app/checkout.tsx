@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { calculateTotal } from "@/lib/utils";
-import { useUser } from "@/modules/auth/hooks/use-auth";
 import { useCart } from "@/modules/cart/hooks/use-cart";
 import { Item } from "@/modules/cart/item";
-import { useCheckout } from "@/modules/checkout/hooks/use-checkout";
+import { useCreatePaymentSession } from "@/modules/checkout/hooks/use-checkout";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Loader2, ShoppingBag } from "lucide-react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/checkout")({
   component: RouteComponent,
@@ -30,22 +28,15 @@ export const Route = createFileRoute("/_app/checkout")({
 });
 
 function RouteComponent() {
-  const { items: products, clearCart } = useCart();
-  const { data: user } = useUser();
-  const { mutate: createOrder, isPending } = useCheckout();
+  const { items: products } = useCart();
+  const { mutate: createPayment, isPending } = useCreatePaymentSession();
+  const total = calculateTotal(products);
 
-  const handleCheckout = async () => {
-    if (!user) return;
-
-    createOrder(
-      { userId: user?.id, items: products },
-      {
-        onSuccess: () => {
-          clearCart();
-          toast.success("Order created successfully!");
-        },
-      }
-    );
+  const handlePayment = () => {
+    createPayment({
+      amount: total,
+      products: products,
+    });
   };
 
   return (
@@ -75,8 +66,9 @@ function RouteComponent() {
         <Button
           size="lg"
           className="w-full"
-          onClick={handleCheckout}
-          disabled={isPending || !products.length}>
+          onClick={handlePayment}
+          disabled={isPending || !products.length}
+        >
           {isPending ? (
             <>
               <Loader2 className="size-5 animate-spin" />

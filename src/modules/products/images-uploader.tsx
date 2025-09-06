@@ -21,6 +21,7 @@ interface ImagesUploaderProps {
   multiable: boolean;
   onUpload: NonNullable<FileUploadProps["onUpload"]>;
   error?: any;
+  reset: boolean;
 }
 
 export function ImagesUploader({
@@ -28,8 +29,13 @@ export function ImagesUploader({
   multiable,
   onUpload,
   error,
+  reset,
 }: ImagesUploaderProps) {
   const [files, setFiles] = React.useState<File[]>([]);
+
+  React.useEffect(() => {
+    if (reset) setFiles([]);
+  }, [reset]);
 
   const onFileReject = React.useCallback((file: File, message: string) => {
     toast.error(message, {
@@ -49,7 +55,8 @@ export function ImagesUploader({
       className="flex-1"
       multiple={multiable}
       accept="image/*"
-      maxSize={5 * 1024 * 1024}>
+      maxSize={5 * 1024 * 1024}
+    >
       <FileUploadDropzone className={cn(error && "border-destructive")}>
         <div className="flex flex-col items-center gap-1 text-center">
           <div className="flex justify-center items-center p-2.5 border rounded-full">
@@ -85,7 +92,8 @@ export function ImagesUploader({
           data-slot="form-message"
           className={cn(
             "left-0 absolute text-destructive text-sm min-[520px]:text-sm line-clamp-1"
-          )}>
+          )}
+        >
           {error}
         </span>
       </FormDescription>

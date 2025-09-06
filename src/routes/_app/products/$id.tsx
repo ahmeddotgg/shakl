@@ -7,6 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/modules/cart/hooks/use-cart";
 import {
   getProductQueryOptions,
+  useFileTypeById,
   useProductCategoryById,
 } from "@/modules/products/hooks/use-products";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -27,8 +28,11 @@ export const Route = createFileRoute("/_app/products/$id")({
 function RouteComponent() {
   const id = Route.useParams().id;
   const { data: product } = useSuspenseQuery(getProductQueryOptions(id));
-  const { data: category, isPending } = useProductCategoryById(
+  const { data: category, isPending: loadingCategory } = useProductCategoryById(
     product.category_id
+  );
+  const { data: fileType, isPending: loadingFileType } = useFileTypeById(
+    product.file_type_id
   );
 
   const isMobile = useIsMobile();
@@ -49,22 +53,35 @@ function RouteComponent() {
       <div className="space-y-3">
         <h1 className="font-bold text-2xl">{product?.title}</h1>
         <p className="text-muted-foreground text-sm">{product.description}</p>
-        <Badge variant="secondary">
-          {isPending ? (
-            <div className="px-6">
-              <Loader className="size-[13px] animate-spin" />
-            </div>
-          ) : (
-            category?.name
-          )}
-        </Badge>
-
-        <h2 className="font-bold text-primary text-3xl">${product.price}</h2>
+        <div className="flex gap-2 items-center">
+          <Badge variant="secondary">
+            {loadingCategory ? (
+              <div className="px-6">
+                <Loader className="size-[13px] animate-spin" />
+              </div>
+            ) : (
+              category?.name
+            )}
+          </Badge>
+          <Badge variant="secondary">
+            {loadingFileType ? (
+              <div className="px-6">
+                <Loader className="size-[13px] animate-spin" />
+              </div>
+            ) : (
+              fileType?.name
+            )}
+          </Badge>
+        </div>
+        <h2 className="font-bold text-primary text-3xl">
+          {product.price === 0 ? "Free" : product.price}
+        </h2>
         <Button
           onClick={() => addToCart(product)}
           disabled={cartItems.some((item) => item.id === product.id)}
           className="w-full"
-          size="lg">
+          size="lg"
+        >
           <ShoppingBag className="size-5" /> Add to cart
         </Button>
       </div>

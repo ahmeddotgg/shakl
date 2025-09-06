@@ -43,6 +43,16 @@ export async function getCategoryById(id: string) {
   return data;
 }
 
+export async function getFiletypeById(id: string) {
+  const { data, error } = await supabase
+    .from("file_types")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 export async function getFileTypes() {
   const { data, error } = await supabase.from("file_types").select("*");
   if (error) throw error;

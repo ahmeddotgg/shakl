@@ -1,6 +1,7 @@
 import {
   getCategories,
   getCategoryById,
+  getFiletypeById,
   getFileTypes,
   getProductById,
   getProducts,
@@ -8,6 +9,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "@/modules/products/services";
 import type { ProductInsert } from "@/lib/supabase-client";
+import { toast } from "sonner";
 
 export function getProductsQueryOptions() {
   return {
@@ -18,7 +20,7 @@ export function getProductsQueryOptions() {
 
 export function getProductQueryOptions(id: string) {
   return {
-    queryKey: ["products", { id }],
+    queryKey: ["products", id],
     queryFn: () => getProductById(id),
   };
 }
@@ -26,6 +28,7 @@ export function getProductQueryOptions(id: string) {
 export function useCreateProduct() {
   return useMutation({
     mutationFn: (payload: ProductInsert) => createProduct(payload),
+    onSuccess: () => toast.success("Product Created 🎉"),
   });
 }
 
@@ -43,9 +46,16 @@ export const useFileTypes = () => {
   });
 };
 
+export const useFileTypeById = (id: string) => {
+  return useQuery({
+    queryKey: ["file_types", id],
+    queryFn: () => getFiletypeById(id),
+  });
+};
+
 export const useProductCategoryById = (id: string) => {
   return useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categories", id],
     queryFn: () => getCategoryById(id),
   });
 };

@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ImagesUploader } from "./images-uploader";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { FileUploadProps } from "@/components/ui/file-upload";
 import { imageUpload } from "./services";
 import { toast } from "sonner";
@@ -42,11 +42,11 @@ export const createProductSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Description is required" })
-    .max(255, { message: "Description is too long" }),
+    .max(400, { message: "Description is too long" }),
   price: z.coerce
     .number<number>()
-    .min(1, { message: "Price must be at least 1" })
-    .positive({ message: "Price cannot be negative" }),
+    .min(0)
+    .nonnegative({ message: "Price cannot be negative" }),
   file_url: z.string().min(1, { message: "File is required" }),
   file_type_id: z.string().nonempty({ message: "Please choose a file type" }),
   category_id: z.string().nonempty({ message: "Please choose a category" }),
@@ -65,13 +65,8 @@ export function ProductForm() {
     useCategories();
   const { data: fileTypes = [], isLoading: fileTypesLoading } = useFileTypes();
   const { data: user } = useUser();
-  const {
-    mutate: createProduct,
-    isPending,
-    isError,
-    isSuccess,
-  } = useCreateProduct();
-
+  const { mutate: createProduct, isPending, isError } = useCreateProduct();
+  const [resetFiles, setResetFiles] = useState(false);
   const form = useForm<CreateProductInput>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
@@ -94,8 +89,8 @@ export function ProductForm() {
 
     try {
       createProduct(newProduct);
-      if (isError) return;
-      if (isSuccess) toast.success("Product created 🎉");
+      form.reset();
+      setResetFiles(true);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Somthing went worng!";
@@ -124,7 +119,7 @@ export function ProductForm() {
             }
 
             form.setValue("thumbnail_url", url);
-            toast.success("Thumbnail uploaded successfully 🎉");
+            toast.info("Thumbnail uploaded successfully 🎉");
           } catch (error) {
             onError(
               file,
@@ -165,7 +160,7 @@ export function ProductForm() {
               imagesRef.current.setAttribute("aria-disabled", "true");
             }
 
-            toast.success(`Uploaded: ${file.name}`);
+            toast.info(`Uploaded: ${file.name}`);
           } catch (error) {
             onError(
               file,
@@ -217,7 +212,7 @@ export function ProductForm() {
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price ($)</FormLabel>
+                <FormLabel>Price</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -302,7 +297,8 @@ export function ProductForm() {
                       handleCategoryChange(value);
                     }}
                     value={field.value}
-                    disabled={categoriesLoading}>
+                    disabled={categoriesLoading}
+                  >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
@@ -313,14 +309,14 @@ export function ProductForm() {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoriesLoading ? (
-                        <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                      ) : (
+                      {categories &&
                         categories.map((category) => (
                           <SelectItem key={category.id} value={category.id}>
                             {category.name}
                           </SelectItem>
-                        ))
+                        ))}
+                      {categoriesLoading && (
+                        <Loader2 className="mr-2 w-4 h-4 animate-spin" />
                       )}
                     </SelectContent>
                   </Select>
@@ -347,16 +343,17 @@ export function ProductForm() {
                       handleFileTypeChange(value);
                     }}
                     value={field.value}
-                    disabled={fileTypesLoading}>
+                    disabled={fileTypesLoading}
+                  >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          categoriesLoading ? "Loading Types..." : "Select Type"
+                          fileTypesLoading ? "Loading Types..." : "Select Type"
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoriesLoading ? (
+                      {fileTypesLoading ? (
                         <Loader2 className="mr-2 w-4 h-4 animate-spin" />
                       ) : (
                         fileTypes.map((type) => (
@@ -387,6 +384,7 @@ export function ProductForm() {
               max={1}
               multiable={false}
               onUpload={onThumbnailUpload}
+              reset={resetFiles}
             />
           </div>
           <div className="flex-1 space-y-2" ref={imagesRef}>
@@ -396,6 +394,7 @@ export function ProductForm() {
               max={3}
               multiable
               onUpload={onImagesUpload}
+              reset={resetFiles}
             />
           </div>
         </div>
@@ -404,7 +403,8 @@ export function ProductForm() {
           type="submit"
           disabled={isPending && isError}
           size="lg"
-          className="w-full">
+          className="w-full"
+        >
           {isPending ? (
             <>
               <Loader2 className="size-5 animate-spin" />
