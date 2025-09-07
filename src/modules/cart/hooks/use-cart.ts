@@ -20,10 +20,7 @@ export const useCart = create<CartStore>()(
           if (state.items.find((i) => i.id === item.id)) {
             return state;
           }
-          toast.info("Item added to cart", {
-            position: "bottom-right",
-            richColors: false,
-          });
+          toast.info("Item added to cart");
           return { items: [...state.items, item] };
         }),
 

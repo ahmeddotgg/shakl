@@ -45,7 +45,7 @@ if (!rootElement.innerHTML) {
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
         <App />
-        <Toaster richColors position="top-center" closeButton />
+        <Toaster position="top-center" closeButton />
       </QueryClientProvider>
     </ThemeProvider>
   );
