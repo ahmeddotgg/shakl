@@ -5,8 +5,6 @@ import { Item } from "@/modules/cart/item";
 import { useCreatePaymentSession } from "@/modules/checkout/hooks/use-checkout";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Loader2, ShoppingBag } from "lucide-react";
-import { initializePaddle, type Paddle } from "@paddle/paddle-js";
-import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_app/checkout")({
   component: RouteComponent,
