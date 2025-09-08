@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  IconChartBar,
-  IconDashboard,
-  IconFolder,
-  IconListDetails,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react";
+import { IconHistory, IconSettings } from "@tabler/icons-react";
 import { NavMain } from "@/components/sidebar/nav-main";
 import {
   Sidebar,
@@ -21,29 +14,19 @@ import { Link } from "@tanstack/react-router";
 const data = {
   navMain: [
     {
+      title: "Dashboard",
+      url: "/",
+      icon: IconSettings,
+    },
+    {
       title: "Settings",
       url: "settings",
       icon: IconSettings,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Orders History",
+      url: "orders",
+      icon: IconHistory,
     },
   ],
 };

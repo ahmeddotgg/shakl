@@ -5,6 +5,8 @@ import { Item } from "@/modules/cart/item";
 import { useCreatePaymentSession } from "@/modules/checkout/hooks/use-checkout";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Loader2, ShoppingBag } from "lucide-react";
+import { initializePaddle, type Paddle } from "@paddle/paddle-js";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_app/checkout")({
   component: RouteComponent,
@@ -29,15 +31,7 @@ export const Route = createFileRoute("/_app/checkout")({
 
 function RouteComponent() {
   const { items: products } = useCart();
-  const { mutate: createPayment, isPending } = useCreatePaymentSession();
-  const total = calculateTotal(products);
-
-  const handlePayment = () => {
-    createPayment({
-      amount: total,
-      products: products,
-    });
-  };
+  const { isPending } = useCreatePaymentSession();
 
   return (
     <div className="gap-6 grid grid-cols-1 min-[688px]:grid-cols-2 container">
@@ -66,9 +60,7 @@ function RouteComponent() {
         <Button
           size="lg"
           className="w-full"
-          onClick={handlePayment}
-          disabled={isPending || !products.length}
-        >
+          disabled={isPending || !products.length}>
           {isPending ? (
             <>
               <Loader2 className="size-5 animate-spin" />

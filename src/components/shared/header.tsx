@@ -76,7 +76,7 @@ export const ProfileMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to="/dashboard/new">
+            <Link to="/dashboard/settings">
               <IconUserCircle />
               Account Settings
             </Link>

@@ -7,7 +7,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import { useNavigate } from "@tanstack/react-router";
 
 export function NavMain({
   items,
@@ -18,8 +17,6 @@ export function NavMain({
     icon?: Icon;
   }[];
 }) {
-  const navigate = useNavigate();
-
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -39,11 +36,17 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                tooltip={item.title}
-                onClick={() => navigate({ to: `/dashboard/${item.url}` })}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
+              <SidebarMenuButton asChild tooltip={item.title}>
+                <Link
+                  to={
+                    `/dashboard/${item.url}` as
+                      | "/dashboard/orders"
+                      | "/dashboard/settings"
+                  }
+                  className="flex items-center gap-2">
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
