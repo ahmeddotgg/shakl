@@ -9,7 +9,7 @@ function RouteComponent() {
   return (
     <>
       <Header />
-      <main className="flex-1 py-10 min-h-0">
+      <main className="flex-1 py-16 min-h-0">
         <Outlet />
       </main>
     </>

@@ -1,6 +1,6 @@
 import ImageCarousel_Basic, {
   type CarouselImages,
-} from "@/components/commerce-ui/image-carousel-basic";
+} from "@/components/shared/image-carousel-basic";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -53,7 +53,7 @@ function RouteComponent() {
       <div className="space-y-3">
         <h1 className="font-bold text-2xl">{product?.title}</h1>
         <p className="text-muted-foreground text-sm">{product.description}</p>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <Badge variant="secondary">
             {loadingCategory ? (
               <div className="px-6">
@@ -80,8 +80,7 @@ function RouteComponent() {
           onClick={() => addToCart(product)}
           disabled={cartItems.some((item) => item.id === product.id)}
           className="w-full"
-          size="lg"
-        >
+          size="lg">
           <ShoppingBag className="size-5" /> Add to cart
         </Button>
       </div>

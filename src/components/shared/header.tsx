@@ -7,27 +7,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Menu, User2 } from "lucide-react";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-
 import { useSession, useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
-import {
-  IconCreditCard,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react";
+import { IconLogout, IconUserCircle } from "@tabler/icons-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,8 +26,9 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-const ProfleMenu = () => {
+export const ProfileMenu = () => {
   const { data: session } = useSession();
   const { mutate: signOut } = useSignOut();
   const navigate = useNavigate();
@@ -68,7 +56,7 @@ const ProfleMenu = () => {
           <User2 className="size-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="max-w-[180px]">
+      <DropdownMenuContent className="max-w-[190px]">
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
             <Avatar className="rounded-lg w-8 h-8">
@@ -87,17 +75,11 @@ const ProfleMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <IconUserCircle />
-            Account
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <IconCreditCard />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <IconNotification />
-            Notifications
+          <DropdownMenuItem asChild>
+            <Link to="/dashboard/new">
+              <IconUserCircle />
+              Account Settings
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -115,7 +97,9 @@ export const Header = () => {
 
   return (
     <header className="items-center grid grid-cols-2 min-[640px]:grid-cols-3 py-4 container">
-      <img alt="Logo" className="size-8" src="/logoipsum.svg" />
+      <Link to="/">
+        <img alt="Logo" className="size-8" src="/logoipsum.svg" />
+      </Link>
 
       {!isMobile && <DesktopHeader />}
 
@@ -123,13 +107,13 @@ export const Header = () => {
         {isMobile ? (
           <>
             <CartAndWishlist />
-            <ProfleMenu />
+            <ProfileMenu />
             <MobileHeader />
           </>
         ) : (
           <>
             <CartAndWishlist />
-            <ProfleMenu />
+            <ProfileMenu />
             <ThemeToggle />
           </>
         )}
@@ -174,28 +158,30 @@ const MobileHeader = () => {
           <div className="[&>a]:block space-y-4 [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 py-2 [&>a]:rounded-lg font-semibold text-lg">
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/"
-            >
+              to="/">
               Home
             </Link>
             <Link
               className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/products"
-            >
+              to="/products">
               Products
             </Link>
-            {user ? null : (
+            {user ? (
+              <Link
+                className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
+                to="/dashboard">
+                Dashboard
+              </Link>
+            ) : (
               <>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/login"
-                >
+                  to="/auth/login">
                   Login
                 </Link>
                 <Link
                   className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/register"
-                >
+                  to="/auth/register">
                   Register
                 </Link>
               </>
@@ -213,39 +199,33 @@ export function DesktopHeader() {
   const { data: user } = useUser();
 
   return (
-    <NavigationMenu viewport={false}>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/">Home</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/products">Products</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        {user ? null : (
-          <>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <Link to="/auth/login">Login</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <Link to="/auth/register">Register</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </>
-        )}
-      </NavigationMenuList>
-    </NavigationMenu>
+    <div className="flex justify-self-center gap-1">
+      <Link to="/" className={cn(buttonVariants({ variant: "link" }))}>
+        Home
+      </Link>
+      <Link to="/products" className={cn(buttonVariants({ variant: "link" }))}>
+        Products
+      </Link>
+      {user ? (
+        <Link
+          to="/dashboard"
+          className={cn(buttonVariants({ variant: "link" }))}>
+          Dashboard
+        </Link>
+      ) : (
+        <>
+          <Link
+            to="/auth/login"
+            className={cn(buttonVariants({ variant: "link" }))}>
+            Login
+          </Link>
+          <Link
+            to="/auth/register"
+            className={cn(buttonVariants({ variant: "link" }))}>
+            Register
+          </Link>
+        </>
+      )}
+    </div>
   );
 }

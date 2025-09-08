@@ -1,6 +1,6 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardHeader } from "@/modules/dashboard/header";
-import { AppSidebar } from "@/modules/dashboard/sidebar";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { SiteHeader } from "@/components/sidebar/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
@@ -23,16 +23,20 @@ function RouteComponent() {
       style={
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 16)",
+          "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }>
-      <AppSidebar />
-      <div className="w-full">
-        <DashboardHeader />
-        <div className="py-16 container">
-          <Outlet />
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-col flex-1">
+          <div className="@container/main flex flex-col flex-1 gap-2">
+            <div className="flex flex-col gap-4 md:gap-6 py-4 md:py-6 container">
+              <Outlet />
+            </div>
+          </div>
         </div>
-      </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

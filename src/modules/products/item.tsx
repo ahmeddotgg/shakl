@@ -53,7 +53,7 @@ export const Item = ({ product }: { product: Product }) => {
           params={{
             id: product.id,
           }}
-          className="font-semibold text-xl">
+          className="font-semibold text-xl line-clamp-1">
           {product.title}
         </Link>
         <p className="text-muted-foreground line-clamp-1">
