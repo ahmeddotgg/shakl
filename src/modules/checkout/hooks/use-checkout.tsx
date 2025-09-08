@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { createPaymentSession } from "../services";
-import type { Product } from "@/supabase/index";
+import type { Product } from "~/supabase/index";
 
 export function useCreatePaymentSession() {
   return useMutation({

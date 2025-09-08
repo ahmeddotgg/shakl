@@ -4,7 +4,7 @@ import { useWishlist } from "../cart/hooks/use-wishlist";
 import { Heart, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import type { Product } from "@/supabase/index";
+import type { Product } from "~/supabase/index";
 import { useFileTypeById, useProductCategoryById } from "./hooks/use-products";
 import { Badge } from "@/components/ui/badge";
 

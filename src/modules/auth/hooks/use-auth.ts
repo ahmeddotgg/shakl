@@ -7,7 +7,7 @@ import {
   signOut,
   getSession,
 } from "@/modules/auth/services";
-import { supabase } from "@/supabase/index";
+import { supabase } from "~/supabase/index";
 
 const USER_KEY = ["auth", "user", "session"];
 
