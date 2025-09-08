@@ -8,3 +8,6 @@ export const supabase = createClient<Database>(
 
 export type Product = Tables<"products">;
 export type ProductInsert = Database["public"]["Tables"]["products"]["Insert"];
+
+export type Category = Tables<"product_categories">;
+export type FileType = Tables<"file_types">;

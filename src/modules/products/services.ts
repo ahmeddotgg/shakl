@@ -1,28 +1,55 @@
 import { supabase, type ProductInsert } from "~/supabase/index";
 
-export interface Filters {
-  categoryId?: string;
-  isFree?: boolean;
-  search?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  sortBy?: "price" | "created_at" | "name";
-  orderBy?: "asc" | "desc";
-  limit?: number;
-  offset?: number;
-}
-export async function getProducts(filter?: Filters) {
-  let query = supabase.from("products").select("*");
+type GetProductsParams = {
+  search: string;
+  perPage: number;
+  page: number;
+  category: string;
+  type: string;
+  sort: string;
+  categories: { id: string; name: string }[];
+  fileTypes: { id: string; extension: string }[];
+};
 
-  if (filter?.categoryId) {
-    query = query.eq("category_id", filter.categoryId);
+export async function getProducts(params: GetProductsParams) {
+  const { search, perPage, page, category, type, sort, categories, fileTypes } =
+    params;
+
+  const query = supabase.from("products").select("*", { count: "exact" });
+
+  if (search) query.ilike("title", `%${search}%`);
+
+  if (category !== "All") {
+    const catId = categories.find((c) => c.name === category)?.id;
+    if (catId) query.eq("category_id", catId);
   }
-  if (filter?.isFree) {
-    query = query.eq("price", filter.isFree && 0);
+
+  if (type !== "All") {
+    const typeId = fileTypes.find((t) => t.extension === type)?.id;
+    if (typeId) query.eq("file_type_id", typeId);
   }
-  const { data, error } = await query;
+
+  switch (sort) {
+    case "Newest":
+      query.order("created_at", { ascending: false });
+      break;
+    case "Oldest":
+      query.order("created_at", { ascending: true });
+      break;
+    case "Low to High":
+      query.order("price", { ascending: true });
+      break;
+    case "High to Low":
+      query.order("price", { ascending: false });
+      break;
+  }
+
+  query.range((page - 1) * perPage, page * perPage - 1);
+
+  const { data, count, error } = await query;
   if (error) throw error;
-  return data;
+
+  return { data, count };
 }
 
 export async function getProductById(id: string) {

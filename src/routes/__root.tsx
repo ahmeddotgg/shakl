@@ -1,3 +1,4 @@
+import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import {
   HeadContent,
   Outlet,
@@ -15,7 +16,9 @@ export const Route = createRootRouteWithContext<Context>()({
   component: () => (
     <>
       <HeadContent />
-      <Outlet />
+      <NuqsAdapter>
+        <Outlet />
+      </NuqsAdapter>
     </>
   ),
 

@@ -1,10 +1,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/modules/auth/hooks/use-auth";
-import { getProductsQueryOptions } from "@/modules/products/hooks/use-products";
 import { Item } from "@/modules/products/item";
-import type { Filters } from "@/modules/products/services";
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/")({
@@ -13,11 +10,6 @@ export const Route = createFileRoute("/_app/")({
 
 function RouteComponent() {
   const { data: user } = useSession();
-  const filters: Filters = {
-    categoryId: "bab95b7c-b1ef-416a-861e-f65ac3f1c430",
-  };
-
-  const { data: products } = useQuery(getProductsQueryOptions(filters));
 
   return (
     <div>
@@ -35,24 +27,21 @@ function RouteComponent() {
             {user ? (
               <Link
                 to="/dashboard"
-                className={cn(buttonVariants({ size: "lg" }), "px-12")}
-              >
+                className={cn(buttonVariants({ size: "lg" }), "px-12")}>
                 Dashboard
               </Link>
             ) : (
               <>
                 <Link
                   to="/auth/register"
-                  className={cn(buttonVariants({ size: "lg" }), "px-12")}
-                >
+                  className={cn(buttonVariants({ size: "lg" }), "px-12")}>
                   Register
                 </Link>
                 <Link
                   to="/auth/login"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" })
-                  )}
-                >
+                  )}>
                   Login
                 </Link>
               </>
@@ -67,13 +56,9 @@ function RouteComponent() {
           width={600}
         />
       </section>
-      <section className="mt-22 space-y-4 py-10 bg-card">
-        <h2 className="text-3xl text-center font-bold">Templates</h2>
-        <div className="container gap-4 grid grid-cols-1 min-[530px]:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-          {products?.map((product) => (
-            <Item product={product} key={product.id} />
-          ))}
-        </div>
+      <section className="space-y-4 bg-card mt-22 py-10">
+        <h2 className="font-bold text-3xl text-center">Templates</h2>
+        <div className="gap-4 grid grid-cols-1 min-[530px]:grid-cols-2 lg:grid-cols-3 auto-rows-fr container"></div>
       </section>
     </div>
   );

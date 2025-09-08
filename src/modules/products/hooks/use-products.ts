@@ -5,19 +5,29 @@ import {
   getFileTypes,
   getProductById,
   getProducts,
-  type Filters,
 } from "@/modules/products/services";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "@/modules/products/services";
 import type { ProductInsert } from "~/supabase/index";
 import { toast } from "sonner";
 
-export function getProductsQueryOptions(filters?: Filters) {
-  return {
-    queryKey: ["products", filters],
-    queryFn: () => getProducts(filters),
-    keepPreviousData: true as const,
-  };
+type UseProductsParams = {
+  search: string;
+  perPage: number;
+  page: number;
+  category: string;
+  type: string;
+  sort: string;
+  categories: { id: string; name: string }[];
+  fileTypes: { id: string; extension: string }[];
+};
+
+export function useProducts(params: UseProductsParams) {
+  return useQuery({
+    queryKey: ["products", params],
+    queryFn: () => getProducts(params),
+    enabled: params.categories.length > 0 && params.fileTypes.length > 0,
+  });
 }
 
 export function getProductQueryOptions(id: string) {

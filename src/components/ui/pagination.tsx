@@ -7,6 +7,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -39,17 +40,25 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">;
-
+  page: number; // ✅ use this instead of href
+  size?: "icon" | "default";
+  children: React.ReactNode;
+  className?: string;
+};
 function PaginationLink({
   className,
   isActive,
+  page,
   size = "icon",
-  ...props
+  children,
 }: PaginationLinkProps) {
   return (
-    <a
+    <Link
+      to="."
+      search={(prev) => ({
+        ...prev,
+        page,
+      })}
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
@@ -59,38 +68,30 @@ function PaginationLink({
           size,
         }),
         className
-      )}
-      {...props}
-    />
+      )}>
+      {children}
+    </Link>
   );
 }
 
-function PaginationPrevious({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+function PaginationPrevious({ page }: { page: number }) {
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      page={page}
       size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
-      {...props}>
+      className="gap-1 px-2.5 sm:pl-2.5">
       <ChevronLeftIcon />
       <span className="hidden sm:block">Previous</span>
     </PaginationLink>
   );
 }
 
-function PaginationNext({
-  className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) {
+function PaginationNext({ page }: { page: number }) {
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      page={page}
       size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
-      {...props}>
+      className="gap-1 px-2.5 sm:pr-2.5">
       <span className="hidden sm:block">Next</span>
       <ChevronRightIcon />
     </PaginationLink>
