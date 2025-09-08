@@ -1,7 +1,7 @@
 import { CircleX } from "lucide-react";
 import { useWishlist } from "./hooks/use-wishlist";
 import { useCart } from "./hooks/use-cart";
-import type { Product } from "@/lib/supabase-client";
+import type { Product } from "@/supabase/index";
 
 interface Props {
   product: Product;

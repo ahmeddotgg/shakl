@@ -1,4 +1,4 @@
-import { supabase, type ProductInsert } from "@/lib/supabase-client";
+import { supabase, type ProductInsert } from "@/supabase/index";
 
 export interface Filters {
   categoryId?: string;

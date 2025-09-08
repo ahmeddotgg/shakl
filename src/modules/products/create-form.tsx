@@ -32,7 +32,7 @@ import type { FileUploadProps } from "@/components/ui/file-upload";
 import { imageUpload } from "./services";
 import { toast } from "sonner";
 import { useUser } from "../auth/hooks/use-auth";
-import type { ProductInsert } from "@/lib/supabase-client";
+import type { ProductInsert } from "@/supabase/index";
 
 export const createProductSchema = z.object({
   title: z
@@ -297,8 +297,7 @@ export function ProductForm() {
                       handleCategoryChange(value);
                     }}
                     value={field.value}
-                    disabled={categoriesLoading}
-                  >
+                    disabled={categoriesLoading}>
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
@@ -343,8 +342,7 @@ export function ProductForm() {
                       handleFileTypeChange(value);
                     }}
                     value={field.value}
-                    disabled={fileTypesLoading}
-                  >
+                    disabled={fileTypesLoading}>
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
@@ -403,8 +401,7 @@ export function ProductForm() {
           type="submit"
           disabled={isPending && isError}
           size="lg"
-          className="w-full"
-        >
+          className="w-full">
           {isPending ? (
             <>
               <Loader2 className="size-5 animate-spin" />

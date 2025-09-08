@@ -1,4 +1,4 @@
-import { supabase, type Product } from "@/lib/supabase-client";
+import { supabase, type Product } from "@/supabase/index";
 
 export async function createOrder(userId: string, total: number) {
   const { data, error } = await supabase

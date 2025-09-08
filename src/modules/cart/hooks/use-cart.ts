@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
-import type { Product } from "@/lib/supabase-client";
+import type { Product } from "@/supabase/index";
 
 type CartStore = {
   items: Product[];

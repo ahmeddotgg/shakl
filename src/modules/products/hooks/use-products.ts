@@ -9,7 +9,7 @@ import {
 } from "@/modules/products/services";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "@/modules/products/services";
-import type { ProductInsert } from "@/lib/supabase-client";
+import type { ProductInsert } from "@/supabase/index";
 import { toast } from "sonner";
 
 export function getProductsQueryOptions(filters?: Filters) {
