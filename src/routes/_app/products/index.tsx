@@ -36,6 +36,7 @@ function RouteComponent() {
   return (
     <div className="space-y-6 container">
       <h1 className="font-bold text-3xl">Explore our Products</h1>
+
       <Filters categories={categoriesData} types={fileTypesData} />
 
       {isLoading && <p>Loading...</p>}

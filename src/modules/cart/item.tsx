@@ -25,7 +25,7 @@ export const Item = ({ product, type }: Props) => {
       <img
         src={product.thumbnail_url}
         alt={product.description}
-        className="rounded-xl size-24 object-cover"
+        className="rounded-xl size-28 object-cover"
       />
 
       <button
@@ -35,9 +35,13 @@ export const Item = ({ product, type }: Props) => {
       </button>
 
       <div>
-        <h2 className="text-xs min-[325px]:text-sm line-clamp-2">
+        <h2 className="font-semibold text-xs min-[325px]:text-sm md:text-lg line-clamp-2">
           {product.title}
         </h2>
+
+        <p className="my-2 font-bold text-lg">
+          {product.price === 0 ? "Free" : `$${product.price.toFixed(2)}`}
+        </p>
       </div>
     </div>
   );

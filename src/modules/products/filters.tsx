@@ -9,13 +9,26 @@ import { Input } from "@/components/ui/input";
 import {
   IconCategory,
   IconFile,
+  IconFilter,
   IconListNumbers,
   IconSortDescending,
 } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { debounce } from "nuqs";
 import { useFilters } from "./hooks/use-filters";
 import type { Category, FileType } from "~/supabase";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 
 export function Filters({
   categories,
@@ -24,12 +37,11 @@ export function Filters({
   categories?: Category[];
   types?: FileType[];
 }) {
-  const [{ search, perPage, category, type, sort }, setFilters] = useFilters();
-  const perPageOptions = [6, 12, 24];
-  const sortOptions = ["Newest", "Oldest", "Low to High", "High to Low"];
+  const [{ search }, setFilters] = useFilters();
+  const isMobile = useIsMobile({ breakpoint: 845 });
 
   return (
-    <div className="flex gap-2">
+    <div className="flex justify-between items-center gap-2">
       <Input
         className="max-w-[200px]"
         placeholder="Search..."
@@ -45,6 +57,69 @@ export function Filters({
         }
       />
 
+      {isMobile ? (
+        <Drawer>
+          <DrawerTrigger
+            asChild
+            onClick={(e) => {
+              e.currentTarget.blur();
+            }}>
+            <Button variant="outline">
+              <IconFilter /> Filters
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="container">
+            <DrawerHeader>
+              <DrawerTitle>Filters</DrawerTitle>
+              <DrawerDescription>Customise your product view</DrawerDescription>
+            </DrawerHeader>
+            <Separator />
+            <div className="flex justify-between py-12">
+              <div className="flex flex-col items-start gap-6">
+                <Label className={cn(buttonVariants({ variant: "link" }))}>
+                  Show Items:
+                </Label>
+                <Label className={cn(buttonVariants({ variant: "link" }))}>
+                  Category:
+                </Label>
+                <Label className={cn(buttonVariants({ variant: "link" }))}>
+                  File Type:
+                </Label>
+                <Label className={cn(buttonVariants({ variant: "link" }))}>
+                  Sort:
+                </Label>
+              </div>
+              <FilterOptions
+                classNames="flex flex-col gap-6 items-end"
+                categories={categories}
+                types={types}
+              />
+            </div>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <FilterOptions categories={categories} types={types} />
+      )}
+    </div>
+  );
+}
+
+function FilterOptions({
+  categories,
+  types,
+  classNames,
+}: {
+  categories?: Category[];
+  types?: FileType[];
+  classNames?: string;
+}) {
+  const [{ search, perPage, category, type, sort }, setFilters] = useFilters();
+  const perPageOptions = [6, 12, 24];
+  const sortOptions = ["Newest", "Oldest", "Low to High", "High to Low"];
+  const isMobile = useIsMobile({ breakpoint: 845 });
+
+  return (
+    <div className={cn("flex flex-wrap gap-2", classNames)}>
       <Select
         value={perPage.toString()}
         onValueChange={(value) =>
@@ -121,6 +196,7 @@ export function Filters({
           type === "All" &&
           sort === "Newest"
         }
+        className={cn("max-w-fit", isMobile && "hidden")}
         onClick={() => setFilters(null)}>
         Reset
       </Button>
