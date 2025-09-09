@@ -1,7 +1,7 @@
 import {
   getCategories,
-  getCategoryById,
-  getFiletypeById,
+  getCategoryByName,
+  getFiletypeByName,
   getFileTypes,
   getProductById,
   getProducts,
@@ -18,15 +18,12 @@ type UseProductsParams = {
   category: string;
   type: string;
   sort: string;
-  categories: { id: string; name: string }[];
-  fileTypes: { id: string; extension: string }[];
 };
 
 export function useProducts(params: UseProductsParams) {
   return useQuery({
     queryKey: ["products", params],
     queryFn: () => getProducts(params),
-    enabled: params.categories.length > 0 && params.fileTypes.length > 0,
   });
 }
 
@@ -58,16 +55,16 @@ export const useFileTypes = () => {
   });
 };
 
-export const useFileTypeById = (id: string) => {
+export const useFileTypeByName = (name: string) => {
   return useQuery({
-    queryKey: ["file_types", id],
-    queryFn: () => getFiletypeById(id),
+    queryKey: ["file_types", name],
+    queryFn: () => getFiletypeByName(name),
   });
 };
 
-export const useProductCategoryById = (id: string) => {
+export const useProductCategoryByName = (name: string) => {
   return useQuery({
-    queryKey: ["categories", id],
-    queryFn: () => getCategoryById(id),
+    queryKey: ["categories", name],
+    queryFn: () => getCategoryByName(name),
   });
 };

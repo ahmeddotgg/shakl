@@ -1,4 +1,4 @@
-import { supabase, type Product } from "~/supabase/index";
+import { supabase, type ProductView } from "~/supabase/index";
 
 export async function createOrder(userId: string, total: number) {
   const { data, error } = await supabase
@@ -14,7 +14,7 @@ export async function createOrder(userId: string, total: number) {
   return data.id as string;
 }
 
-export async function addOrderItems(orderId: string, items: Product[]) {
+export async function addOrderItems(orderId: string, items: ProductView[]) {
   const orderItems = items.map((item) => ({
     order_id: orderId,
     product_id: item.id,
@@ -23,22 +23,4 @@ export async function addOrderItems(orderId: string, items: Product[]) {
 
   const { error } = await supabase.from("order_items").insert(orderItems);
   if (error) throw new Error(error.message);
-}
-
-export async function createPaymentSession(
-  amount: number,
-  products: Product[]
-) {
-  const { data, error } = await supabase.functions.invoke("paymob", {
-    body: { amount, products },
-  });
-  if (error) {
-    throw new Error("Failed to create payment session");
-  }
-
-  if (!data?.iframeUrl) {
-    throw new Error("Missing iframeUrl from server");
-  }
-
-  return data.iframeUrl;
 }

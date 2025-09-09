@@ -12,7 +12,6 @@ export const Route = createFileRoute("/_app/unauthenticated")({
       redirect: (search.redirect as string) || "",
     };
   },
-  beforeLoad: ({ context }) => console.log(context.auth),
 });
 
 function RouteComponent() {

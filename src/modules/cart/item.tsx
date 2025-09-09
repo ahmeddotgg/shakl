@@ -1,10 +1,10 @@
 import { CircleX } from "lucide-react";
 import { useWishlist } from "./hooks/use-wishlist";
 import { useCart } from "./hooks/use-cart";
-import type { Product } from "~/supabase/index";
+import type { ProductView } from "~/supabase/index";
 
 interface Props {
-  product: Product;
+  product: ProductView;
   type: "cart" | "wishlist";
 }
 

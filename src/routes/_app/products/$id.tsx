@@ -5,11 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/modules/cart/hooks/use-cart";
-import {
-  getProductQueryOptions,
-  useFileTypeById,
-  useProductCategoryById,
-} from "@/modules/products/hooks/use-products";
+import { getProductQueryOptions } from "@/modules/products/hooks/use-products";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Loader, ShoppingBag } from "lucide-react";
@@ -28,12 +24,6 @@ export const Route = createFileRoute("/_app/products/$id")({
 function RouteComponent() {
   const id = Route.useParams().id;
   const { data: product } = useSuspenseQuery(getProductQueryOptions(id));
-  const { data: category, isPending: loadingCategory } = useProductCategoryById(
-    product.category_id
-  );
-  const { data: fileType, isPending: loadingFileType } = useFileTypeById(
-    product.file_type_id
-  );
 
   const isMobile = useIsMobile();
   const { addItem: addToCart, items: cartItems } = useCart();
@@ -55,26 +45,26 @@ function RouteComponent() {
         <p className="text-muted-foreground text-sm">{product.description}</p>
         <div className="flex items-center gap-2">
           <Badge variant="secondary">
-            {loadingCategory ? (
+            {!product ? (
               <div className="px-6">
                 <Loader className="size-[13px] animate-spin" />
               </div>
             ) : (
-              category?.name
+              product.category
             )}
           </Badge>
           <Badge variant="secondary">
-            {loadingFileType ? (
+            {!product ? (
               <div className="px-6">
                 <Loader className="size-[13px] animate-spin" />
               </div>
             ) : (
-              fileType?.name
+              product.file_type
             )}
           </Badge>
         </div>
         <h2 className="font-bold text-primary text-3xl">
-          {product.price === 0 ? "Free" : product.price}
+          {product.price === 0 ? "Free" : `$${product.price.toFixed(2)}`}
         </h2>
         <Button
           onClick={() => addToCart(product)}

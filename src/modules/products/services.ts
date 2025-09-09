@@ -1,4 +1,8 @@
-import { supabase, type ProductInsert } from "~/supabase/index";
+import {
+  supabase,
+  type ProductInsert,
+  type ProductView,
+} from "~/supabase/index";
 
 type GetProductsParams = {
   search: string;
@@ -7,26 +11,24 @@ type GetProductsParams = {
   category: string;
   type: string;
   sort: string;
-  categories: { id: string; name: string }[];
-  fileTypes: { id: string; extension: string }[];
 };
 
 export async function getProducts(params: GetProductsParams) {
-  const { search, perPage, page, category, type, sort, categories, fileTypes } =
-    params;
+  const { search, perPage, page, category, type, sort } = params;
 
-  const query = supabase.from("products").select("*", { count: "exact" });
+  const query = supabase
+    .from("public_products")
+    .select("*", { count: "exact" });
 
   if (search) query.ilike("title", `%${search}%`);
 
-  if (category !== "All") {
-    const catId = categories.find((c) => c.name === category)?.id;
-    if (catId) query.eq("category_id", catId);
+  if (category && category !== "All") {
+    query.eq("category", category);
   }
 
-  if (type !== "All") {
-    const typeId = fileTypes.find((t) => t.extension === type)?.id;
-    if (typeId) query.eq("file_type_id", typeId);
+  // Filter by file type name
+  if (type && type !== "All") {
+    query.eq("file_type", type);
   }
 
   switch (sort) {
@@ -48,18 +50,17 @@ export async function getProducts(params: GetProductsParams) {
 
   const { data, count, error } = await query;
   if (error) throw error;
-
-  return { data, count };
+  return { data: data as ProductView[], count };
 }
 
 export async function getProductById(id: string) {
   const { data, error } = await supabase
-    .from("products")
+    .from("public_products")
     .select("*")
     .eq("id", id)
     .single();
   if (error) throw error;
-  return data;
+  return data as ProductView;
 }
 
 export async function createProduct(payload: ProductInsert) {
@@ -79,28 +80,28 @@ export async function getCategories() {
   return data;
 }
 
-export async function getCategoryById(id: string) {
+export async function getFileTypes() {
+  const { data, error } = await supabase.from("file_types").select("*");
+  if (error) throw error;
+  return data;
+}
+
+export async function getCategoryByName(name: string) {
   const { data, error } = await supabase
     .from("product_categories")
     .select("*")
-    .eq("id", id)
+    .eq("name", name)
     .single();
   if (error) throw error;
   return data;
 }
 
-export async function getFiletypeById(id: string) {
+export async function getFiletypeByName(name: string) {
   const { data, error } = await supabase
     .from("file_types")
     .select("*")
-    .eq("id", id)
+    .eq("name", name)
     .single();
-  if (error) throw error;
-  return data;
-}
-
-export async function getFileTypes() {
-  const { data, error } = await supabase.from("file_types").select("*");
   if (error) throw error;
   return data;
 }

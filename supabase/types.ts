@@ -75,6 +75,13 @@ export type Database = {
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "public_products"
+            referencedColumns: ["id"]
+          },
         ]
       }
       orders: {
@@ -250,7 +257,22 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_products: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          download_count: number | null
+          file_type: string | null
+          id: string | null
+          images: string[] | null
+          price: number | null
+          thumbnail_url: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       increment_download_count: {

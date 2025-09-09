@@ -27,8 +27,6 @@ function RouteComponent() {
 
   const { data, isLoading } = useProducts({
     ...filters,
-    categories: categoriesData,
-    fileTypes: fileTypesData,
   });
 
   const products = data?.data || [];
@@ -45,9 +43,10 @@ function RouteComponent() {
       {!isLoading && data?.data?.length === 0 && <p>No products found.</p>}
 
       <div className="gap-4 grid grid-cols-1 min-[530px]:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-        {products.map((product) => (
-          <Item key={product.id} product={product} />
-        ))}
+        {products &&
+          products.map((product) => (
+            <Item key={product.id} product={product} />
+          ))}
       </div>
 
       <ProductsPagination

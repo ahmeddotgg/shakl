@@ -71,18 +71,22 @@ function RouteComponent() {
           width={600}
         />
       </section>
-      <section className="space-y-16 bg-card px-4 py-10 rounded-lg container">
+      <section className="space-y-16 bg-secondary/50 px-4 py-10 rounded-lg container">
         <div className="space-y-5 text-center">
           <h2 className="font-light text-6xl">Featured Categories</h2>
           <p className="text-muted-foreground">
             Explore our wide range of categories
           </p>
         </div>
-        <div className="gap-6 grid grid-cols-2 md:grid-cols-3 auto-rows-fr">
+        <div className="gap-2 grid grid-cols-2 md:grid-cols-3 auto-rows-fr">
           {category?.map((category) => (
-            <div className="bg-gradient-to-tl from-card to-primary/70 p-6 rounded-2xl">
+            <div
+              className="space-y-2 bg-gradient-to-tl from-card to-primary/70 hover:to-primary/60 p-4 rounded-2xl transition-colors"
+              key={category.id}>
               <div className="flex justify-between items-center gap-2">
-                <h2 className="font-semibold text-2xl">{category.name}</h2>
+                <h2 className="font-semibold sm:text-2xl textl">
+                  {category.name}
+                </h2>
                 <Link
                   to="/products"
                   search={{ category: category.name }}

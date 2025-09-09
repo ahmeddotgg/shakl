@@ -1,11 +1,11 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { Product } from "~/supabase/index";
+import type { ProductView } from "~/supabase/index";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function calculateTotal(items: Product[]): number {
+export function calculateTotal(items: ProductView[]): number {
   return items.reduce((sum, item) => sum + item.price, 0);
 }

@@ -35,8 +35,6 @@ export const LoginForm = () => {
     },
   });
 
-  console.log(redirect);
-
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     mutate(values, {
       onSuccess: async () => {

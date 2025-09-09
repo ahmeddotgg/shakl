@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
-import type { Product } from "~/supabase/index";
+import type { ProductView } from "~/supabase/index";
 
 type CartStore = {
-  items: Product[];
-  addItem: (item: Product) => void;
+  items: ProductView[];
+  addItem: (item: ProductView) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
 };

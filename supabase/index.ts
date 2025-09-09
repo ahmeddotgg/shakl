@@ -17,3 +17,17 @@ export type ProductInsert = Database["public"]["Tables"]["products"]["Insert"];
 
 export type Category = Tables<"product_categories">;
 export type FileType = Tables<"file_types">;
+
+export type ProductView = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+  thumbnail_url: string;
+  created_at: string | null;
+  updated_at: string | null;
+  download_count: number | null;
+  category: string;
+  file_type: string;
+};

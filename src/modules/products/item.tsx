@@ -4,11 +4,10 @@ import { useWishlist } from "../cart/hooks/use-wishlist";
 import { Heart, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import type { Product } from "~/supabase/index";
-import { useFileTypeById, useProductCategoryById } from "./hooks/use-products";
+import type { ProductView } from "~/supabase/index";
 import { Badge } from "@/components/ui/badge";
 
-export const Item = ({ product }: { product: Product }) => {
+export const Item = ({ product }: { product: ProductView }) => {
   const { addItem: addToCart, items: cartItems } = useCart();
   const {
     addItem: addToWishlist,
@@ -16,14 +15,7 @@ export const Item = ({ product }: { product: Product }) => {
     removeItem: removeFromWishlist,
   } = useWishlist();
 
-  const { data: category, isPending: loadingCategory } = useProductCategoryById(
-    product.category_id
-  );
-  const { data: fileType, isPending: loadingFileType } = useFileTypeById(
-    product.file_type_id
-  );
-
-  const handleAddToWishlist = (product: Product) => {
+  const handleAddToWishlist = (product: ProductView) => {
     if (wishlistItems.some((item) => item.id === product.id)) {
       removeFromWishlist(product.id);
     } else {
@@ -60,25 +52,25 @@ export const Item = ({ product }: { product: Product }) => {
           {product.description}
         </p>
         <p className="my-2 font-bold text-lg">
-          {product.price === 0 ? "Free" : product.price.toFixed(2)}
+          {product.price === 0 ? "Free" : `$${product.price.toFixed(2)}`}
         </p>
         <div className="flex items-center gap-2">
           <Badge variant="secondary">
-            {loadingCategory ? (
+            {!product ? (
               <div className="px-6">
                 <Loader className="size-[13px] animate-spin" />
               </div>
             ) : (
-              category?.name
+              product.category
             )}
           </Badge>
           <Badge variant="secondary">
-            {loadingFileType ? (
+            {!product ? (
               <div className="px-6">
                 <Loader className="size-[13px] animate-spin" />
               </div>
             ) : (
-              fileType?.name
+              product.file_type
             )}
           </Badge>
         </div>
