@@ -15,7 +15,7 @@ export function useUser() {
   const queryClient = useQueryClient();
 
   const query = useQuery({
-    queryKey: USER_KEY,
+    queryKey: ["auth", "user"],
     queryFn: getUser,
     staleTime: Infinity,
     refetchOnWindowFocus: false,

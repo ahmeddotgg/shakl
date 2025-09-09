@@ -21,6 +21,7 @@ import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AppUnauthorizedRouteImport } from './routes/_app/unauthorized'
 import { Route as AppUnauthenticatedRouteImport } from './routes/_app/unauthenticated'
+import { Route as AppThankyouRouteImport } from './routes/_app/thankyou'
 import { Route as AppCheckoutRouteImport } from './routes/_app/checkout'
 import { Route as AppProductsIndexRouteImport } from './routes/_app/products/index'
 import { Route as AppProductsNotFoundRouteImport } from './routes/_app/products/not-found'
@@ -85,6 +86,11 @@ const AppUnauthenticatedRoute = AppUnauthenticatedRouteImport.update({
   path: '/unauthenticated',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppThankyouRoute = AppThankyouRouteImport.update({
+  id: '/thankyou',
+  path: '/thankyou',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppCheckoutRoute = AppCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/checkout': typeof AppCheckoutRoute
+  '/thankyou': typeof AppThankyouRoute
   '/unauthenticated': typeof AppUnauthenticatedRoute
   '/unauthorized': typeof AppUnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/checkout': typeof AppCheckoutRoute
+  '/thankyou': typeof AppThankyouRoute
   '/unauthenticated': typeof AppUnauthenticatedRoute
   '/unauthorized': typeof AppUnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/_app/checkout': typeof AppCheckoutRoute
+  '/_app/thankyou': typeof AppThankyouRoute
   '/_app/unauthenticated': typeof AppUnauthenticatedRoute
   '/_app/unauthorized': typeof AppUnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/checkout'
+    | '/thankyou'
     | '/unauthenticated'
     | '/unauthorized'
     | '/auth/login'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
   to:
     | '/auth'
     | '/checkout'
+    | '/thankyou'
     | '/unauthenticated'
     | '/unauthorized'
     | '/auth/login'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/_app/checkout'
+    | '/_app/thankyou'
     | '/_app/unauthenticated'
     | '/_app/unauthorized'
     | '/auth/login'
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUnauthenticatedRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/thankyou': {
+      id: '/_app/thankyou'
+      path: '/thankyou'
+      fullPath: '/thankyou'
+      preLoaderRoute: typeof AppThankyouRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/checkout': {
       id: '/_app/checkout'
       path: '/checkout'
@@ -337,6 +356,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppCheckoutRoute: typeof AppCheckoutRoute
+  AppThankyouRoute: typeof AppThankyouRoute
   AppUnauthenticatedRoute: typeof AppUnauthenticatedRoute
   AppUnauthorizedRoute: typeof AppUnauthorizedRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -347,6 +367,7 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppCheckoutRoute: AppCheckoutRoute,
+  AppThankyouRoute: AppThankyouRoute,
   AppUnauthenticatedRoute: AppUnauthenticatedRoute,
   AppUnauthorizedRoute: AppUnauthorizedRoute,
   AppIndexRoute: AppIndexRoute,

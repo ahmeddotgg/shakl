@@ -2,9 +2,12 @@ import { Button } from "@/components/ui/button";
 import { calculateTotal } from "@/lib/utils";
 import { useCart } from "@/modules/cart/hooks/use-cart";
 import { Item } from "@/modules/cart/item";
-import { useCreatePaymentSession } from "@/modules/checkout/hooks/use-checkout";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Loader2, ShoppingBag } from "lucide-react";
+import { initializePaddle, type Paddle } from "@paddle/paddle-js";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useUser } from "@/modules/auth/hooks/use-auth";
 
 export const Route = createFileRoute("/_app/checkout")({
   component: RouteComponent,
@@ -29,7 +32,55 @@ export const Route = createFileRoute("/_app/checkout")({
 
 function RouteComponent() {
   const { items: products } = useCart();
-  const { isPending } = useCreatePaymentSession();
+  const [paddle, setPaddle] = useState<Paddle>();
+  const { data: user } = useUser();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    initializePaddle({
+      environment: "sandbox",
+      token: import.meta.env.VITE_PADDLE_CLIENT,
+    }).then((paddleInstance: Paddle | undefined) => {
+      if (paddleInstance) {
+        setPaddle(paddleInstance);
+      }
+    });
+  }, []);
+
+  const openCheckout = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/transaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ products }),
+      });
+
+      const data = await res.json();
+
+      paddle?.Checkout.open({
+        transactionId: data.transaction,
+        settings: {
+          theme: "dark",
+          showAddTaxId: false,
+        },
+        customer: {
+          email: user?.email as string,
+        },
+      });
+
+      if (!res.ok || data) {
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof Error) {
+        toast.error(`Error creating transaction: ${error.message}`);
+      }
+    }
+  };
 
   return (
     <div className="gap-6 grid grid-cols-1 min-[688px]:grid-cols-2 container">
@@ -58,8 +109,9 @@ function RouteComponent() {
         <Button
           size="lg"
           className="w-full"
-          disabled={isPending || !products.length}>
-          {isPending ? (
+          onClick={openCheckout}
+          disabled={loading || !products.length}>
+          {loading ? (
             <>
               <Loader2 className="size-5 animate-spin" />
               Processing...
