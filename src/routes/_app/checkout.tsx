@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { calculateTotal } from "@/lib/utils";
 import { useCart } from "@/modules/cart/hooks/use-cart";
 import { Item } from "@/modules/cart/item";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Loader2, ShoppingBag } from "lucide-react";
 import { initializePaddle, type Paddle } from "@paddle/paddle-js";
 import { useEffect, useState } from "react";
@@ -35,21 +35,43 @@ function RouteComponent() {
   const [paddle, setPaddle] = useState<Paddle>();
   const { data: user } = useUser();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  async function saveTransaction(transaction: any, userId: string) {
+    const res = await fetch("/api/save-transaction", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transaction, user_id: userId }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to save transaction");
+    return data;
+  }
 
   useEffect(() => {
     initializePaddle({
       environment: "sandbox",
       token: import.meta.env.VITE_PADDLE_CLIENT,
+      eventCallback: async (event) => {
+        const status = event.data?.status;
+        if (status === "completed") {
+          if (!user?.id) return;
+          await saveTransaction({ ...event.data }, user.id);
+          await navigate({ to: "/thankyou" });
+        }
+      },
     }).then((paddleInstance: Paddle | undefined) => {
       if (paddleInstance) {
         setPaddle(paddleInstance);
       }
     });
-  }, []);
+  }, [user]);
 
   const openCheckout = async () => {
     try {
       setLoading(true);
+
       const res = await fetch("/api/transaction", {
         method: "POST",
         headers: {
@@ -59,9 +81,10 @@ function RouteComponent() {
       });
 
       const data = await res.json();
+      const transactionId = data.transaction;
 
       paddle?.Checkout.open({
-        transactionId: data.transaction,
+        transactionId: transactionId,
         settings: {
           theme: "dark",
           showAddTaxId: false,

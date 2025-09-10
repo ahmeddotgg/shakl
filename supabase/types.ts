@@ -194,31 +194,25 @@ export type Database = {
       }
       transactions: {
         Row: {
-          amount: number
-          created_at: string
+          created_at: string | null
           id: string
-          items: Json | null
-          status: string | null
-          transaction_id: string | null
-          user_id: string | null
+          payload: Json
+          updated_at: string | null
+          user_id: string
         }
         Insert: {
-          amount: number
-          created_at?: string
-          id?: string
-          items?: Json | null
-          status?: string | null
-          transaction_id?: string | null
-          user_id?: string | null
+          created_at?: string | null
+          id: string
+          payload: Json
+          updated_at?: string | null
+          user_id: string
         }
         Update: {
-          amount?: number
-          created_at?: string
+          created_at?: string | null
           id?: string
-          items?: Json | null
-          status?: string | null
-          transaction_id?: string | null
-          user_id?: string | null
+          payload?: Json
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
