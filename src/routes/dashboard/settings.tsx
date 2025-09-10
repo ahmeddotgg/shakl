@@ -1,9 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import { PrefrencesForm } from "@/modules/prefrences/prefrences-form";
 
-export const Route = createFileRoute('/dashboard/settings')({
-  component: RouteComponent,
-})
-
-function RouteComponent() {
-  return <div>Hello "/dashboard/settings"!</div>
-}
+export const Route = createFileRoute("/dashboard/settings")({
+  component: () => <PrefrencesForm />,
+});
