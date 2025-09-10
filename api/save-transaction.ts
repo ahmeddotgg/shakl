@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../supabase/types";
 
 const supabase = createClient<Database>(
-  "https://lftazpssdwbbexxecvff.supabase.co",
-  "sb_secret_uw4rAby_UQQMfr52s79m9A_NIbeYZDH"
+  process.env.SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE || ""
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
