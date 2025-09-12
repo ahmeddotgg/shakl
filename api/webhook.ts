@@ -37,23 +37,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       signature
     );
 
-    console.log("Signature:", signature);
-    console.log("Raw body:", rawBody);
-    console.log(event.data);
-
     if (event.eventType === "transaction.paid") {
-      const { data, error } = await supabaseAdmin
+      const { data, error, statusText } = await supabaseAdmin
         .from("transactions")
         .update({ confirmed: true })
         .eq("id", event.data.id);
 
-      console.log("Supabase response:", { data, error });
+      console.log("Supabase response:", { data, error, statusText });
+      console.log("Signature:", signature);
+      console.log("Raw body:", rawBody);
+      console.log(event.data);
     }
 
     return res.status(200).send("ok");
   } catch (err) {
     console.error("Webhook error:", err);
   }
-
-  res.send("ok");
 }
