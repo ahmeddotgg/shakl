@@ -29,9 +29,6 @@ importers:
       '@paddle/paddle-node-sdk':
         specifier: ^3.2.1
         version: 3.2.1
-      '@radix-ui/react-dialog':
-        specifier: ^1.1.15
-        version: 1.1.15(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@supabase/supabase-js':
         specifier: ^2.56.1
         version: 2.56.1
@@ -50,9 +47,6 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@vercel/functions':
-        specifier: ^3.0.0
-        version: 3.0.0
       '@vercel/node':
         specifier: ^5.3.21
         version: 5.3.21(rollup@4.50.0)
@@ -1675,9 +1669,6 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/ms@2.1.0':
-    resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
-
   '@types/node@16.18.11':
     resolution: {integrity: sha512-3oJbGBUWuS6ahSnEq1eN2XrCyf4YsWI8OyCvo7c64zQJNplk3mO84t53o8lfTk+2ji59g5ycfc6qQ3fdHliHuA==}
 
@@ -1704,15 +1695,6 @@ packages:
   '@vercel/error-utils@2.0.3':
     resolution: {integrity: sha512-CqC01WZxbLUxoiVdh9B/poPbNpY9U+tO1N9oWHwTl5YAZxcqXmmWJ8KNMFItJCUUWdY3J3xv8LvAuQv2KZ5YdQ==}
 
-  '@vercel/functions@3.0.0':
-    resolution: {integrity: sha512-U7PRdjAcwirEg1u/oAbbwgWXZvZvrtuh2F1B9LB49bcXAIMXYonbFCn2euKZCyxDsANBJUY4R1QgExyKdTLhiA==}
-    engines: {node: '>= 20'}
-    peerDependencies:
-      '@aws-sdk/credential-provider-web-identity': '*'
-    peerDependenciesMeta:
-      '@aws-sdk/credential-provider-web-identity':
-        optional: true
-
   '@vercel/nft@0.30.1':
     resolution: {integrity: sha512-2mgJZv4AYBFkD/nJ4QmiX5Ymxi+AisPLPcS/KPXVqniyQNqKXX+wjieAbDXQP3HcogfEbpHoRMs49Cd4pfkk8g==}
     engines: {node: '>=18'}
@@ -1720,10 +1702,6 @@ packages:
 
   '@vercel/node@5.3.21':
     resolution: {integrity: sha512-rtyylPomqpMFQu5DcAqXYf+J3gvboakpBewpjWUgSrkSwtu0mqgpYFjys6VaXb55qePhH9K6HYARaYLEuo9OLw==}
-
-  '@vercel/oidc@3.0.0':
-    resolution: {integrity: sha512-XOoUcf/1VfGArUAfq0ELxk6TD7l4jGcrOsWjQibj4wYM74uNihzZ9gA46ywWegoqKWWdph4y5CKxGI9823deoA==}
-    engines: {node: '>= 20'}
 
   '@vercel/static-config@3.1.2':
     resolution: {integrity: sha512-2d+TXr6K30w86a+WbMbGm2W91O0UzO5VeemZYBBUJbCjk/5FLLGIi8aV6RS2+WmaRvtcqNTn2pUA7nCOK3bGcQ==}
@@ -4568,8 +4546,6 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/ms@2.1.0': {}
-
   '@types/node@16.18.11': {}
 
   '@types/node@24.3.0':
@@ -4593,10 +4569,6 @@ snapshots:
   '@vercel/build-utils@12.1.0': {}
 
   '@vercel/error-utils@2.0.3': {}
-
-  '@vercel/functions@3.0.0':
-    dependencies:
-      '@vercel/oidc': 3.0.0
 
   '@vercel/nft@0.30.1(rollup@4.50.0)':
     dependencies:
@@ -4647,11 +4619,6 @@ snapshots:
       - encoding
       - rollup
       - supports-color
-
-  '@vercel/oidc@3.0.0':
-    dependencies:
-      '@types/ms': 2.1.0
-      ms: 2.1.3
 
   '@vercel/static-config@3.1.2':
     dependencies:

@@ -2,16 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-  DialogTrigger,
-} from "@radix-ui/react-dialog";
+import { Dialog } from "radix-ui";
 import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import {
@@ -70,8 +61,8 @@ const ImageContainer: React.FC<{
         "relative bg-gray-100 rounded-lg w-full overflow-hidden",
         getAspectRatioClass(aspectRatio)
       )}>
-      <Dialog>
-        <DialogTrigger asChild>
+      <Dialog.Root>
+        <Dialog.DialogTrigger asChild>
           <div className={`cursor-pointer`}>
             <img
               src={image.url}
@@ -87,17 +78,17 @@ const ImageContainer: React.FC<{
               )}
             />
           </div>
-        </DialogTrigger>
+        </Dialog.DialogTrigger>
 
-        <DialogPortal>
-          <DialogOverlay className="z-50 fixed inset-0 bg-black/80" />
-          <DialogContent className="z-50 fixed inset-0 flex flex-col justify-center items-center bg-background p-0">
-            <DialogTitle className="sr-only">
+        <Dialog.DialogPortal>
+          <Dialog.DialogOverlay className="z-50 fixed inset-0 bg-black/80" />
+          <Dialog.DialogContent className="z-50 fixed inset-0 flex flex-col justify-center items-center bg-background p-0">
+            <Dialog.DialogTitle className="sr-only">
               {image.title || "Image"}
-            </DialogTitle>
-            <DialogDescription className="sr-only">
+            </Dialog.DialogTitle>
+            <Dialog.DialogDescription className="sr-only">
               {image.title || "Image"}
-            </DialogDescription>
+            </Dialog.DialogDescription>
 
             <div className="relative flex justify-center items-center w-screen h-screen">
               <TransformWrapper
@@ -136,17 +127,17 @@ const ImageContainer: React.FC<{
                   </>
                 )}
               </TransformWrapper>
-              <DialogClose asChild>
+              <Dialog.DialogClose asChild>
                 <button
                   className="top-4 right-4 z-10 absolute bg-black/50 hover:bg-black/70 p-2 border rounded-full text-white transition-colors cursor-pointer"
                   aria-label="Close">
                   <X className="size-6" />
                 </button>
-              </DialogClose>
+              </Dialog.DialogClose>
             </div>
-          </DialogContent>
-        </DialogPortal>
-      </Dialog>
+          </Dialog.DialogContent>
+        </Dialog.DialogPortal>
+      </Dialog.Root>
     </div>
   );
 };
