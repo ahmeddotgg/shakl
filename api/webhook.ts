@@ -47,6 +47,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log("Signature:", signature);
       console.log("Raw body:", rawBody);
       console.log(event.data);
+      console.log(event.eventType);
     }
 
     return res.status(200).send("ok");
