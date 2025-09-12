@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { data, error } = await supabaseAdmin
       .from("transactions")
       .upsert({
-        id: transaction.id,
+        id: transaction.transaction_id,
         user_id,
         payload: transaction,
         confirmed: false,

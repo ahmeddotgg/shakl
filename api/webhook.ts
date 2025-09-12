@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { Paddle, EventName, Environment } from "@paddle/paddle-node-sdk";
+import { Paddle, Environment } from "@paddle/paddle-node-sdk";
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../supabase/types";
 
@@ -20,49 +20,45 @@ export const config = {
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") return res.status(405).send("Method Not Allowed");
+
+  const signature = req.headers["paddle-signature"] as string;
+
   try {
-    const signature = req.headers["paddle-signature"] as string;
-    if (!signature) return res.status(400).send("Missing Paddle-Signature");
+    const rawBody = (req as any).body?.toString?.() || "";
+    if (!signature || !rawBody) {
+      console.error("Missing signature or raw body");
+      return res.status(400).send("Bad Request");
+    }
 
-    // Collect raw body (needed for signature verification)
-    const chunks: Uint8Array[] = [];
-    for await (const chunk of req) chunks.push(chunk as Uint8Array);
-    const rawBody = Buffer.concat(chunks).toString("utf8");
-
-    // Validate webhook
     const eventData = await paddle.webhooks.unmarshal(
       rawBody,
       WEBHOOK_SECRET_KEY,
       signature
     );
 
+    console.log(eventData.data);
+
     switch (eventData.eventType) {
-      case EventName.TransactionCompleted: {
-        const tx = eventData.data;
+      case "transaction.paid": {
+        const transactionId = eventData.data.id;
 
-        const { error } = await supabaseAdmin
+        console.log(transactionId);
+        const { data, error } = await supabaseAdmin
           .from("transactions")
-          .update({
-            confirmed: true,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", tx.id);
+          .update({ confirmed: true })
+          .eq("id", transactionId);
 
-        if (error) {
-          console.error("DB update error:", error);
-          return res.status(500).send("Failed to update transaction");
-        }
-
-        console.log("Transaction confirmed:", tx.id);
+        console.log("Supabase update:", { data, error });
         break;
       }
+
       default:
         console.log("Unhandled event:", eventData.eventType);
     }
-
-    res.status(200).send("OK");
-  } catch (err: any) {
+  } catch (err) {
     console.error("Webhook error:", err);
-    res.status(400).send("Invalid webhook");
   }
+
+  res.send("ok");
 }
