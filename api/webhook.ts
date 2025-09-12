@@ -38,20 +38,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     );
 
     if (event.eventType === "transaction.paid") {
-      const { data, error, statusText } = await supabaseAdmin
+      const txn = event.data;
+
+      // Fetch transaction from Supabase by id
+      const { data, error } = await supabaseAdmin
         .from("transactions")
-        .update({ confirmed: true })
-        .eq("id", event.data.id);
+        .select("*")
+        .eq("id", txn.id)
+        .single();
 
-      console.log("Supabase response:", { data, error, statusText });
-      console.log("Signature:", signature);
-      console.log("Raw body:", rawBody);
-      console.log(event.data);
-      console.log(event.eventType);
+      if (error) {
+        console.error("Supabase fetch error:", error);
+      } else {
+        console.log("Fetched transaction:", data);
+      }
+
+      return res
+        .status(200)
+        .json({ message: "Fetched", id: txn.id, data: data });
     }
-
-    return res.status(200).send("ok");
   } catch (err) {
     console.error("Webhook error:", err);
+    return res.status(400).json({ error: "Invalid signature or bad payload" });
   }
 }
