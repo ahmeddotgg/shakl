@@ -6,7 +6,6 @@ import { Database } from "../supabase/types";
 const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
   environment: Environment.sandbox,
 });
-const WEBHOOK_SECRET_KEY = process.env.PADDLE_WEBHOOK_SECRET || "";
 
 export const supabaseAdmin = createClient<Database>(
   process.env.SUPABASE_URL!,
@@ -23,39 +22,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") return res.status(405).send("Method Not Allowed");
 
   const signature = req.headers["paddle-signature"] as string;
+  const chunks: Buffer[] = [];
+
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+
+  const rawBody = Buffer.concat(chunks).toString("utf-8");
 
   try {
-    const rawBody = (req as any).body?.toString?.() || "";
-    if (!signature || !rawBody) {
-      console.error("Missing signature or raw body");
-      return res.status(400).send("Bad Request");
-    }
-
-    const eventData = await paddle.webhooks.unmarshal(
+    const event = await paddle.webhooks.unmarshal(
       rawBody,
-      WEBHOOK_SECRET_KEY,
+      process.env.PADDLE_WEBHOOK_SECRET!,
       signature
     );
 
-    console.log(eventData.data);
+    console.log("Signature:", signature);
+    console.log("Raw body:", rawBody);
+    console.log(event.data);
 
-    switch (eventData.eventType) {
-      case "transaction.paid": {
-        const transactionId = eventData.data.id;
+    if (event.eventType === "transaction.paid") {
+      const { data, error } = await supabaseAdmin
+        .from("transactions")
+        .update({ confirmed: true })
+        .eq("id", event.data.id);
 
-        console.log(transactionId);
-        const { data, error } = await supabaseAdmin
-          .from("transactions")
-          .update({ confirmed: true })
-          .eq("id", transactionId);
-
-        console.log("Supabase update:", { data, error });
-        break;
-      }
-
-      default:
-        console.log("Unhandled event:", eventData.eventType);
+      console.log("Supabase response:", { data, error });
     }
+
+    return res.status(200).send("ok");
   } catch (err) {
     console.error("Webhook error:", err);
   }
