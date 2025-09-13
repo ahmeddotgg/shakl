@@ -56,7 +56,12 @@ function RouteComponent() {
             }),
           });
 
-          navigate({ to: `/thankyou?checkout_id=${event.data?.id}` });
+          navigate({
+            to: "/thankyou",
+            search: {
+              checkout_id: event.data?.id,
+            },
+          });
         }
       },
     }).then((paddleInstance: Paddle | undefined) => {

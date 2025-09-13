@@ -31,3 +31,14 @@ export type ProductView = {
   category: string;
   file_type: string;
 };
+
+export type RawTransaction = Tables<"transactions">;
+export interface TransactionProduct {
+  id: string;
+  title: string;
+  file_url: string;
+  thumbnail_url: string;
+}
+export type Transaction = Omit<RawTransaction, "products"> & {
+  products: TransactionProduct[] | null;
+};
