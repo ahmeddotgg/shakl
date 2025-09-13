@@ -40,6 +40,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (event.eventType === "transaction.paid") {
       const txn = event.data;
 
+      console.log(txn);
+
       // Fetch transaction from Supabase by id
       const { data, error } = await supabaseAdmin
         .from("transactions")
