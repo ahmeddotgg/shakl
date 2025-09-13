@@ -21,11 +21,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         transaction_id,
         user_id,
         payload,
-        confirmed: false,
       })
       .select();
-
-    if (error) throw error;
 
     if (error) throw error;
 

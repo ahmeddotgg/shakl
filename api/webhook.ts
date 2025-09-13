@@ -37,21 +37,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       signature
     );
 
-    if (event.eventType === "transaction.paid") {
-      const txn = event.data;
-      const txnId = txn.id;
+    if (event.eventType === "transaction.completed") {
+      const transaction_id = event.data.id;
 
-      await supabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from("transactions")
         .update({
-          confirmed: true,
+          status: "confirmed",
         })
-        .eq("transaction_id", txnId);
+        .eq("transaction_id", transaction_id);
 
-      console.log("✅ Confirmed transaction:", txnId);
+      if (error) throw error;
+
+      console.log(data);
+      res.status(200).json({ received: true });
     }
-
-    res.status(200).json({ received: true });
   } catch (err) {
     console.error("Webhook error:", err);
     return res.status(400).json({ error: "Invalid signature or bad payload" });

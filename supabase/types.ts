@@ -225,25 +225,25 @@ export type Database = {
       transactions: {
         Row: {
           checkout_id: string
-          confirmed: boolean | null
           created_at: string | null
           payload: Json | null
+          status: string
           transaction_id: string | null
           user_id: string
         }
         Insert: {
           checkout_id: string
-          confirmed?: boolean | null
           created_at?: string | null
           payload?: Json | null
+          status?: string
           transaction_id?: string | null
           user_id: string
         }
         Update: {
           checkout_id?: string
-          confirmed?: boolean | null
           created_at?: string | null
           payload?: Json | null
+          status?: string
           transaction_id?: string | null
           user_id?: string
         }
