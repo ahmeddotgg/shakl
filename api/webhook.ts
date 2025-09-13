@@ -42,17 +42,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       console.log(txn);
 
-      // Fetch transaction from Supabase by id
       const { data, error } = await supabaseAdmin
         .from("transactions")
-        .select("*")
+        .update({ confirmed: true })
         .eq("id", txn.id)
+        .select()
         .single();
 
       if (error) {
-        console.error("Supabase fetch error:", error);
+        console.error("Supabase update error:", error);
       } else {
-        console.log("Fetched transaction:", data);
+        console.log("Transaction confirmed:", data);
       }
 
       return res
