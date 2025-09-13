@@ -49,6 +49,7 @@ function RouteComponent() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               checkout_id: event.data?.id,
+              transaction_id: event.data?.transaction_id,
               user_id: user.id,
               payload: event.data,
             }),

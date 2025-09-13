@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Paddle, Environment } from "@paddle/paddle-node-sdk";
 import { createClient } from "@supabase/supabase-js";
-import { Database, Json } from "../supabase/types";
+import { Database } from "../supabase/types";
 
 const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
   environment: Environment.sandbox,
@@ -45,7 +45,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .from("transactions")
         .update({
           confirmed: true,
-          payload: JSON.parse(JSON.stringify(event.data)) as Json,
         })
         .eq("transaction_id", txnId);
 
