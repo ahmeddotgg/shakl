@@ -5,10 +5,10 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
-import type { Session } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 
 export interface Context {
-  auth: Session | undefined | null;
+  auth: User | undefined | null;
   queryClient: QueryClient;
 }
 

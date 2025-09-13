@@ -1,12 +1,6 @@
 import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  getUser,
-  signIn,
-  signUp,
-  signOut,
-  getSession,
-} from "@/modules/auth/services";
+import { getUser, signIn, signUp, signOut } from "@/modules/auth/services";
 import { supabase } from "~/supabase/index";
 
 const USER_KEY = ["auth", "user", "session"];
@@ -31,14 +25,6 @@ export function useUser() {
   }, [queryClient]);
 
   return query;
-}
-
-export function useSession() {
-  return useQuery({
-    queryKey: USER_KEY,
-    queryFn: getSession,
-    staleTime: 5 * 60 * 1000,
-  });
 }
 
 export function useSignIn() {

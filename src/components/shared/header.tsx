@@ -12,7 +12,7 @@ import { Menu, User2 } from "lucide-react";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
-import { useSession, useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
+import { useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
 import { IconLogout, IconUserCircle } from "@tabler/icons-react";
 import {
@@ -29,12 +29,12 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export const ProfileMenu = () => {
-  const { data: session } = useSession();
+  const { data: user } = useUser();
   const { mutate: signOut } = useSignOut();
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    if (!session) return;
+    if (!user) return;
 
     signOut(undefined, {
       onSuccess: () => {
@@ -47,7 +47,7 @@ export const ProfileMenu = () => {
     });
   };
 
-  if (!session) return;
+  if (!user) return;
 
   return (
     <DropdownMenu>
@@ -65,10 +65,10 @@ export const ProfileMenu = () => {
             </Avatar>
             <div className="flex-1 grid text-sm text-left leading-tight">
               <span className="font-medium truncate capitalize">
-                {session?.user?.user_metadata.name}
+                {user?.user_metadata.name}
               </span>
               <span className="text-muted-foreground text-xs truncate">
-                {session?.user?.email}
+                {user?.email}
               </span>
             </div>
           </div>

@@ -12,7 +12,7 @@ import { useUser } from "@/modules/auth/hooks/use-auth";
 export const Route = createFileRoute("/_app/checkout")({
   component: RouteComponent,
   beforeLoad: ({ context: { auth }, location }) => {
-    if (!auth?.user) {
+    if (!auth) {
       throw redirect({
         to: "/unauthenticated",
         search: {
@@ -37,28 +37,22 @@ function RouteComponent() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  async function saveTransaction(transaction: any, userId: string) {
-    const res = await fetch("/api/save-transaction", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ transaction, user_id: userId }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to save transaction");
-    return data;
-  }
-
   useEffect(() => {
     initializePaddle({
       environment: "sandbox",
       token: import.meta.env.VITE_PADDLE_CLIENT,
       eventCallback: async (event) => {
         const status = event.data?.status;
-        if (status === "completed") {
-          if (!user?.id) return;
-          await saveTransaction({ ...event.data }, user.id);
-          await navigate({ to: "/thankyou" });
+        if (status === "completed" && user?.id) {
+          await fetch("/api/save-transaction", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ transaction: event.data, user_id: user.id }),
+          });
+
+          navigate({
+            to: `/thankyou?transaction_id=${event.data?.transaction_id}`,
+          });
         }
       },
     }).then((paddleInstance: Paddle | undefined) => {
@@ -72,7 +66,7 @@ function RouteComponent() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/transaction", {
+      const res = await fetch("/api/create-transaction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

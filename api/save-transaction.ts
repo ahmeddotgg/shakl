@@ -1,10 +1,10 @@
-import { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "../supabase/types";
+import { VercelRequest, VercelResponse } from "@vercel/node";
+import { Database } from "../supabase/types";
 
-const supabase = createClient<Database>(
-  process.env.SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE || ""
+export const supabaseAdmin = createClient<Database>(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE!
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -19,18 +19,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .status(400)
         .json({ error: "Missing transaction id or user_id" });
     }
-    const { error } = await supabase.from("transactions").upsert(
-      {
+
+    const { data, error } = await supabaseAdmin
+      .from("transactions")
+      .upsert({
         id: transaction.id,
         user_id,
         payload: transaction,
-      },
-      { onConflict: "id" }
-    );
+        confirmed: false,
+      })
+      .select();
+
     if (error) throw error;
-    return res.status(200).json({ success: true });
+
+    return res.status(200).json({ data });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ error: "Failed to create transaction" });
   }
 }

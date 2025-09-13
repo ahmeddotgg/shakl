@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useSession } from "@/modules/auth/hooks/use-auth";
+import { useUser } from "@/modules/auth/hooks/use-auth";
 import { useCategories } from "@/modules/products/hooks/use-products";
 import { IconCircleArrowUpRight } from "@tabler/icons-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_app/")({
 });
 
 function RouteComponent() {
-  const { data: user } = useSession();
+  const { data: user } = useUser();
   const { data: category } = useCategories();
 
   return (

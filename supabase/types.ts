@@ -105,6 +105,36 @@ export type Database = {
         }
         Relationships: []
       }
+      preferences: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       product_categories: {
         Row: {
           created_at: string | null
@@ -194,6 +224,7 @@ export type Database = {
       }
       transactions: {
         Row: {
+          confirmed: boolean
           created_at: string | null
           id: string
           payload: Json
@@ -201,6 +232,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          confirmed?: boolean
           created_at?: string | null
           id: string
           payload: Json
@@ -208,44 +240,12 @@ export type Database = {
           user_id: string
         }
         Update: {
+          confirmed?: boolean
           created_at?: string | null
           id?: string
           payload?: Json
           updated_at?: string | null
           user_id?: string
-        }
-        Relationships: []
-      }
-      user_preferences: {
-        Row: {
-          avatar_url: string | null
-          created_at: string | null
-          display_name: string | null
-          email_notifications: boolean | null
-          id: string
-          theme: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          display_name?: string | null
-          email_notifications?: boolean | null
-          id?: string
-          theme?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          display_name?: string | null
-          email_notifications?: boolean | null
-          id?: string
-          theme?: string | null
-          updated_at?: string | null
-          user_id?: string | null
         }
         Relationships: []
       }
