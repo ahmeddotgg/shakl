@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Paddle, Environment } from "@paddle/paddle-node-sdk";
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "../supabase/types";
+import { Database, Json } from "../supabase/types";
 
 const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
   environment: Environment.sandbox,
@@ -39,26 +39,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (event.eventType === "transaction.paid") {
       const txn = event.data;
+      const txnId = txn.id;
 
-      console.log(txn);
-
-      const { data, error } = await supabaseAdmin
+      await supabaseAdmin
         .from("transactions")
-        .update({ confirmed: true })
-        .eq("id", txn.id)
-        .select()
-        .single();
+        .update({
+          confirmed: true,
+          payload: JSON.parse(JSON.stringify(event.data)) as Json,
+        })
+        .eq("transaction_id", txnId);
 
-      if (error) {
-        console.error("Supabase update error:", error);
-      } else {
-        console.log("Transaction confirmed:", data);
-      }
-
-      return res
-        .status(200)
-        .json({ message: "Fetched", id: txn.id, data: data });
+      console.log("✅ Confirmed transaction:", txnId);
     }
+
+    res.status(200).json({ received: true });
   } catch (err) {
     console.error("Webhook error:", err);
     return res.status(400).json({ error: "Invalid signature or bad payload" });

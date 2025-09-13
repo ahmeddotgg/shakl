@@ -12,23 +12,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
-    const { transaction, user_id } = req.body;
-
-    if (!transaction?.id || !user_id) {
-      return res
-        .status(400)
-        .json({ error: "Missing transaction id or user_id" });
-    }
+    const { checkout_id, user_id, payload } = req.body;
 
     const { data, error } = await supabaseAdmin
       .from("transactions")
       .upsert({
-        id: transaction.transaction_id,
+        checkout_id,
         user_id,
-        payload: transaction,
+        payload,
         confirmed: false,
       })
       .select();
+
+    if (error) throw error;
 
     if (error) throw error;
 

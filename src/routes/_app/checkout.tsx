@@ -47,12 +47,14 @@ function RouteComponent() {
           await fetch("/api/save-transaction", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ transaction: event.data, user_id: user.id }),
+            body: JSON.stringify({
+              checkout_id: event.data?.id,
+              user_id: user.id,
+              payload: event.data,
+            }),
           });
 
-          navigate({
-            to: `/thankyou?transaction_id=${event.data?.transaction_id}`,
-          });
+          navigate({ to: `/thankyou?checkout_id=${event.data?.id}` });
         }
       },
     }).then((paddleInstance: Paddle | undefined) => {

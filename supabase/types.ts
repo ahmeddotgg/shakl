@@ -224,27 +224,27 @@ export type Database = {
       }
       transactions: {
         Row: {
-          confirmed: boolean
+          checkout_id: string
+          confirmed: boolean | null
           created_at: string | null
-          id: string
-          payload: Json
-          updated_at: string | null
+          payload: Json | null
+          transaction_id: string | null
           user_id: string
         }
         Insert: {
-          confirmed?: boolean
+          checkout_id: string
+          confirmed?: boolean | null
           created_at?: string | null
-          id: string
-          payload: Json
-          updated_at?: string | null
+          payload?: Json | null
+          transaction_id?: string | null
           user_id: string
         }
         Update: {
-          confirmed?: boolean
+          checkout_id?: string
+          confirmed?: boolean | null
           created_at?: string | null
-          id?: string
-          payload?: Json
-          updated_at?: string | null
+          payload?: Json | null
+          transaction_id?: string | null
           user_id?: string
         }
         Relationships: []
