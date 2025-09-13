@@ -43,7 +43,9 @@ export function NavMain({
                       | "/dashboard/orders"
                       | "/dashboard/settings"
                   }
-                  className="flex items-center gap-2">
+                  className="flex items-center gap-2"
+                  activeOptions={{ exact: true }}
+                  activeProps={{ className: "text-primary " }}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>

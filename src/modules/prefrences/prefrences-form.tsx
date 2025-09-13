@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ImagesUploader } from "../products/images-uploader";
+import { useUser } from "../auth/hooks/use-auth";
 
 const prefrencesFormSchema = z.object({
   firstName: z.string(),
@@ -22,10 +23,11 @@ const prefrencesFormSchema = z.object({
 type PrefrencesFormInput = z.infer<typeof prefrencesFormSchema>;
 
 export function PrefrencesForm() {
+  const { data } = useUser();
   const form = useForm<PrefrencesFormInput>({
     resolver: zodResolver(prefrencesFormSchema),
     defaultValues: {
-      firstName: "",
+      firstName: data?.user_metadata.name || "",
       lastName: "",
       avatar: "",
     },
