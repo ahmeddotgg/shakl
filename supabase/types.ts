@@ -227,6 +227,7 @@ export type Database = {
           checkout_id: string
           created_at: string | null
           payload: Json | null
+          products: Json[] | null
           status: string
           transaction_id: string | null
           user_id: string
@@ -235,6 +236,7 @@ export type Database = {
           checkout_id: string
           created_at?: string | null
           payload?: Json | null
+          products?: Json[] | null
           status?: string
           transaction_id?: string | null
           user_id: string
@@ -243,6 +245,7 @@ export type Database = {
           checkout_id?: string
           created_at?: string | null
           payload?: Json | null
+          products?: Json[] | null
           status?: string
           transaction_id?: string | null
           user_id?: string

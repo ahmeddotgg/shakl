@@ -12,7 +12,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
-    const { checkout_id, user_id, payload, transaction_id } = req.body;
+    const { checkout_id, user_id, payload, transaction_id, products } =
+      req.body;
 
     const { data, error } = await supabaseAdmin
       .from("transactions")
@@ -21,6 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         transaction_id,
         user_id,
         payload,
+        products,
       })
       .select();
 

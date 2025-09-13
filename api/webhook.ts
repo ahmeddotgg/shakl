@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { Paddle, Environment } from "@paddle/paddle-node-sdk";
+import { Paddle, Environment, EventName } from "@paddle/paddle-node-sdk";
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../supabase/types";
 
-const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
+const paddle = new Paddle(process.env.PADDLE_SECRET!, {
   environment: Environment.sandbox,
 });
 
@@ -18,42 +18,104 @@ export const config = {
   },
 };
 
+async function getRawBody(req: VercelRequest): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+    });
+    req.on("end", () => resolve(data));
+    req.on("error", (err) => reject(err));
+  });
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") return res.status(405).send("Method Not Allowed");
-
-  const signature = req.headers["paddle-signature"] as string;
-  const chunks: Buffer[] = [];
-
-  for await (const chunk of req) {
-    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
-  }
-
-  const rawBody = Buffer.concat(chunks).toString("utf-8");
+  const signature = (req.headers["paddle-signature"] as string) || "";
+  const secretKey = process.env.PADDLE_WEBHOOK_SECRET || "";
 
   try {
-    const event = await paddle.webhooks.unmarshal(
-      rawBody,
-      process.env.PADDLE_WEBHOOK_SECRET!,
-      signature
-    );
+    const rawRequestBody = await getRawBody(req);
+    if (signature && secretKey) {
+      const event = await paddle.webhooks.unmarshal(
+        rawRequestBody,
+        process.env.PADDLE_WEBHOOK_SECRET!,
+        signature
+      );
 
-    if (event.eventType === "transaction.completed") {
-      const transaction_id = event.data.id;
+      if (event.eventType === EventName.TransactionCompleted) {
+        // 1: update transaction with confirmed
+        const { error: updateError } = await supabaseAdmin
+          .from("transactions")
+          .update({ status: "confirmed" })
+          .eq("transaction_id", event.data.id);
 
-      const { data, error } = await supabaseAdmin
-        .from("transactions")
-        .update({
-          status: "confirmed",
-        })
-        .eq("transaction_id", transaction_id);
+        if (updateError) {
+          console.error("Error updating transaction status:", updateError);
+          return res
+            .status(500)
+            .json({ error: "Failed to update transaction status" });
+        }
 
-      console.log(data, event.data);
-      if (error) throw error;
+        // 2: get products from transaction
+        const { data: getTxnProducts, error: getProductsError } =
+          await supabaseAdmin
+            .from("transactions")
+            .select("products")
+            .eq("transaction_id", event.data.id)
+            .single();
 
-      res.status(200).json({ received: true });
+        if (getProductsError || !getTxnProducts) {
+          console.error(
+            "Error fetching transaction products:",
+            getProductsError
+          );
+          return res
+            .status(500)
+            .json({ error: "Failed to fetch transaction products" });
+        }
+
+        // 3: map over products and get each id
+        const productIds = (
+          (getTxnProducts?.products as { id: string }[]) ?? []
+        ).map((p) => p.id);
+
+        // 4: get the real product info based on id
+        const { data: realProducts, error: realProductsError } =
+          await supabaseAdmin
+            .from("products")
+            .select("id, title, file_url, thumbnail_url")
+            .in("id", productIds);
+
+        if (realProductsError) {
+          console.error("Error fetching real products:", realProductsError);
+          return res
+            .status(500)
+            .json({ error: "Failed to fetch real product info" });
+        }
+
+        // 5: update the transaction products with final info
+        const { error: finalUpdateError } = await supabaseAdmin
+          .from("transactions")
+          .update({ products: realProducts })
+          .eq("transaction_id", event.data.id);
+
+        if (finalUpdateError) {
+          console.error(
+            "Error updating transaction with final products:",
+            finalUpdateError
+          );
+          return res
+            .status(500)
+            .json({ error: "Failed to update transaction products" });
+        }
+
+        return res
+          .status(200)
+          .json({ message: "Transaction confirmed and products updated" });
+      }
     }
-  } catch (err) {
-    console.error("Webhook error:", err);
+  } catch (error) {
+    console.error("Webhook processing error:", error);
     return res.status(400).json({ error: "Invalid signature or bad payload" });
   }
 }

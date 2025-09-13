@@ -52,6 +52,7 @@ function RouteComponent() {
               transaction_id: event.data?.transaction_id,
               user_id: user.id,
               payload: event.data,
+              products: products,
             }),
           });
 
