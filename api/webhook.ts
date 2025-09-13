@@ -47,9 +47,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
         .eq("transaction_id", transaction_id);
 
+      console.log(data, event.data);
       if (error) throw error;
 
-      console.log(data);
       res.status(200).json({ received: true });
     }
   } catch (err) {
