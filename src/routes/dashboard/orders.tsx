@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useUser } from "@/modules/auth/hooks/use-auth";
-import { useOrdersHistory } from "@/modules/dashboard/hooks/use-orders";
+import { usePaddleTransactions } from "@/modules/dashboard/hooks/use-orders";
 import {
   type ColumnDef,
   flexRender,
@@ -22,8 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Transaction, TransactionProduct } from "~/supabase";
-import { Badge } from "@/components/ui/badge";
+import type { PaddleTransaction } from "@/modules/dashboard/services";
 
 export const Route = createFileRoute("/dashboard/orders")({
   component: RouteComponent,
@@ -31,24 +30,21 @@ export const Route = createFileRoute("/dashboard/orders")({
 
 function RouteComponent() {
   const { data: user } = useUser();
-  const { data: orders, isLoading } = useOrdersHistory(user?.id as string);
+  const { data, isLoading, error } = usePaddleTransactions(user?.id as string);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <p>Loading transactions...</p>;
+  if (error) return <p className="text-red-500">{error.message}</p>;
 
-  return <div>{orders && <TransactionsTable data={orders} />}</div>;
+  return <TransactionsTable data={data ?? []} />;
 }
 
-function getProducts(products: Transaction["products"]): TransactionProduct[] {
-  return Array.isArray(products) ? products : [];
-}
-
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<PaddleTransaction>[] = [
   {
-    accessorKey: "created_at",
+    accessorKey: "createdAt",
     header: "Date",
     cell: ({ row }) => {
-      const date = row.original.created_at
-        ? new Date(row.original.created_at).toLocaleDateString()
+      const date = row.original.createdAt
+        ? new Date(row.original.createdAt).toLocaleDateString()
         : "-";
       return <span>{date}</span>;
     },
@@ -57,7 +53,7 @@ const columns: ColumnDef<Transaction>[] = [
     id: "items",
     header: "Items",
     cell: ({ row }) => {
-      const products = getProducts(row.original.products);
+      const products = row.original.products ?? [];
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -65,26 +61,56 @@ const columns: ColumnDef<Transaction>[] = [
               {products.length} items
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
-            {products.map((p) => (
-              <DropdownMenuItem key={p.id}>{p.title}</DropdownMenuItem>
-            ))}
+            {products.length === 0 ? (
+              <DropdownMenuItem key="empty">—</DropdownMenuItem>
+            ) : (
+              products.map((p) => (
+                <DropdownMenuItem key={p.id}>
+                  {p.title}
+                  {p.quantity ? ` × ${p.quantity}` : ""}
+                </DropdownMenuItem>
+              ))
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
   {
-    id: "status",
+    id: "amount",
+    header: "Amount",
+    cell: ({ row }) => {
+      const amt = row.original.amount ?? 0;
+      const currency = row.original.currency ?? "USD";
+      return (
+        <span>
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency,
+          }).format(amt)}
+        </span>
+      );
+    },
+  },
+  {
+    id: "method",
+    header: "Method",
+    cell: ({ row }) => {
+      return <span>{row.original.method ?? "-"}</span>;
+    },
+  },
+  {
+    accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.original.status;
-      return <Badge variant="outline">{status}</Badge>;
+      return <span>{row.original.status}</span>;
     },
   },
 ];
 
-export function TransactionsTable({ data }: { data: Transaction[] }) {
+function TransactionsTable({ data }: { data: PaddleTransaction[] }) {
   const table = useReactTable({
     data,
     columns,
