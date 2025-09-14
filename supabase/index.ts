@@ -39,6 +39,7 @@ export interface TransactionProduct {
   file_url: string;
   thumbnail_url: string;
 }
+
 export type Transaction = Omit<RawTransaction, "products"> & {
   products: TransactionProduct[] | null;
 };
