@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPaddleTransactions, type PaddleTransaction } from "../services";
+import { fetchPaddleTransactions } from "../services";
 
 export function usePaddleTransactions(userId?: string) {
-  return useQuery<PaddleTransaction[], Error>({
+  return useQuery<any[], Error>({
     queryKey: ["paddle-transactions", userId],
     queryFn: () => fetchPaddleTransactions(userId!),
   });
