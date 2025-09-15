@@ -26,8 +26,6 @@ function RouteComponent() {
     refetchOnWindowFocus: false,
   });
 
-  console.log(data);
-
   if (isLoading) return <Loading />;
 
   if (data?.status !== "confirmed") {

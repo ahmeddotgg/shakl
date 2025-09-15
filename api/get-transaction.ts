@@ -37,7 +37,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (dbError) throw dbError;
     if (!dbRows || dbRows.length === 0) return res.status(200).json([]);
 
-    console.log(dbRows);
     // 2) fetch each transaction from Paddle and normalize
     const results = await Promise.all(
       dbRows.map(async (row) => {
