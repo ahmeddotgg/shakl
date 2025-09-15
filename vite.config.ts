@@ -19,6 +19,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: "0.0.0.0",
+    allowedHosts: ["united-present-hyena.ngrok-free.app"],
   },
   resolve: {
     alias: {
