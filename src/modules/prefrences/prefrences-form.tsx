@@ -120,7 +120,7 @@ export function PrefrencesForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="gap-6 grid grid-cols-2">
+        className="gap-6 grid grid-cols-1 lg:grid-cols-2">
         <section className="space-y-2 [&>*]:min-w-full bg-card/70 p-4 rounded-md">
           <FormField
             control={form.control}

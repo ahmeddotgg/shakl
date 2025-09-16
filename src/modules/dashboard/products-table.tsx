@@ -44,18 +44,15 @@ export const columns: ColumnDef<ProductView>[] = [
   {
     accessorKey: "thumbnail_url",
     header: "",
-    cell: ({ row }) => {
-      const url = row.original.thumbnail_url;
-      return url ? (
+    cell: ({ row }) => (
+      <div className="w-18">
         <img
-          src={url}
+          src={row.original.thumbnail_url}
           alt={row.original.title}
-          className="size-14 rounded object-cover"
+          className="w-full rounded object-cover"
         />
-      ) : (
-        <div className="h-12 w-12 rounded bg-muted" />
-      );
-    },
+      </div>
+    ),
     enableSorting: false,
   },
   {

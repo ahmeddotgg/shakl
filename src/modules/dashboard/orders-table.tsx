@@ -170,7 +170,11 @@ const columns: ColumnDef<Transaction>[] = [
     },
     cell: ({ row }) => {
       const { grandTotal } = row.original.totals;
-      return <span>$ {grandTotal}</span>;
+      const price = (Number(grandTotal) / 100).toLocaleString("en-us", {
+        style: "currency",
+        currency: "USD",
+      });
+      return <span>{price}</span>;
     },
   },
   {

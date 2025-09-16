@@ -8,8 +8,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { LayoutDashboard, UserRoundPen } from "lucide-react";
 
 const data = {
@@ -33,6 +34,16 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { setOpenMobile } = useSidebar();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const unsub = router.subscribe("onResolved", () => {
+      setOpenMobile(false);
+    });
+    return unsub;
+  }, [router]);
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
