@@ -43,3 +43,6 @@ export interface TransactionProduct {
 export type Transaction = Omit<RawTransaction, "products"> & {
   products: TransactionProduct[] | null;
 };
+
+export type PreferencesUpdate =
+  Database["public"]["Tables"]["preferences"]["Update"];

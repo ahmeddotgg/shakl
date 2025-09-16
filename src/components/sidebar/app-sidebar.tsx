@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IconHistory, IconSettings } from "@tabler/icons-react";
+import { IconHistory } from "@tabler/icons-react";
 import { NavMain } from "@/components/sidebar/nav-main";
 import {
   Sidebar,
@@ -10,18 +10,19 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
+import { LayoutDashboard, UserRoundPen } from "lucide-react";
 
 const data = {
   navMain: [
     {
       title: "Dashboard",
       url: "/",
-      icon: IconSettings,
+      icon: LayoutDashboard,
     },
     {
       title: "Settings",
       url: "settings",
-      icon: IconSettings,
+      icon: UserRoundPen,
     },
     {
       title: "Orders History",

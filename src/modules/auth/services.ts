@@ -11,7 +11,13 @@ export async function signUp(email: string, password: string, name: string) {
       },
     },
   });
-  if (error) throw error;
+
+  // save basic preferences
+  const { error: preferencesError } = await supabase
+    .from("preferences")
+    .insert({ first_name: name });
+
+  if (error || preferencesError) throw error;
   return { data, error };
 }
 

@@ -27,11 +27,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { usePreferences } from "@/modules/prefrences/hooks/use-preferences";
 
 export const ProfileMenu = () => {
   const { data: user } = useUser();
   const { mutate: signOut } = useSignOut();
   const navigate = useNavigate();
+  const { data } = usePreferences(user?.id as string);
 
   const handleSignOut = () => {
     if (!user) return;
@@ -60,8 +62,10 @@ export const ProfileMenu = () => {
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
             <Avatar className="rounded-lg w-8 h-8">
-              <AvatarImage src="wffwfg" alt="gregreg" />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              <AvatarImage src={data?.avatar_url as string} alt="user avatar" />
+              <AvatarFallback className="rounded-lg uppercase">
+                {data?.first_name?.substring(0, 2)}
+              </AvatarFallback>
             </Avatar>
             <div className="flex-1 grid text-sm text-left leading-tight">
               <span className="font-medium truncate capitalize">
