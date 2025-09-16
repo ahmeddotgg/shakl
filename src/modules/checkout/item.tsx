@@ -1,5 +1,5 @@
 import type { TransactionProduct } from "~/supabase/index";
-import { FileDown } from "lucide-react";
+import { FileDown, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -9,23 +9,30 @@ interface Props {
 
 export const Item = ({ product }: Props) => {
   const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleDownload = async (id: string) => {
+  const handleDownload = async () => {
+    if (disabled) return;
+
     try {
+      setLoading(true);
       const res = await fetch("/api/increment-download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: id }),
+        body: JSON.stringify({ productId: product.id }),
       });
 
       const data = await res.json();
-      if (data.success) {
-        setDisabled(true);
-      } else {
-        console.error("Error:", data.error);
+      if (!data.success) {
+        console.error("Failed to increment download count:", data.error);
+        return;
       }
+      setDisabled(true);
+      window.open(product.file_url, "_blank");
     } catch (err) {
       console.error("Request failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,19 +49,15 @@ export const Item = ({ product }: Props) => {
           {product.title}
         </h2>
 
-        <a
-          href={product.file_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-2 inline-flex items-center gap-1 text-primary font-medium">
-          <FileDown className="size-5" strokeWidth={2.2} />
+        <Button onClick={handleDownload} disabled={loading || disabled}>
+          {loading ? (
+            <Loader className="size-5 animate-spin" />
+          ) : (
+            <FileDown className="size-5" />
+          )}
           <span className="hidden min-[290px]:inline">Download</span>
-        </a>
+        </Button>
       </div>
-
-      <Button disabled={disabled} onClick={() => handleDownload(product.id)}>
-        Increment
-      </Button>
     </div>
   );
 };
