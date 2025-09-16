@@ -1,4 +1,8 @@
-export async function fetchPaddleTransactions(userId: string): Promise<any[]> {
+import type { Transaction } from "./orders-table";
+
+export async function fetchPaddleTransactions(
+  userId: string
+): Promise<{ total: number; transactions: Transaction[] }> {
   const res = await fetch(
     `/api/get-transactions?userId=${encodeURIComponent(userId)}`
   );

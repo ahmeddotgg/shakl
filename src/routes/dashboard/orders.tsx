@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useUser } from "@/modules/auth/hooks/use-auth";
 import { usePaddleTransactions } from "@/modules/dashboard/hooks/use-orders";
+import { TransactionsTable } from "@/modules/dashboard/orders-table";
 
 export const Route = createFileRoute("/dashboard/orders")({
   component: RouteComponent,
@@ -14,4 +15,8 @@ function RouteComponent() {
   if (error) return <p className="text-red-500">{error.message}</p>;
 
   console.log(data);
+
+  if (data) {
+    return <TransactionsTable data={data.transactions} />;
+  }
 }

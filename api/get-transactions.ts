@@ -27,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .from("transactions")
       .select("payload")
       .eq("user_id", userId)
-      .order("created_at", { ascending: false }) // ensure latest
+      .order("created_at", { ascending: false })
       .limit(1)
       .single();
     if (error || !data) {
