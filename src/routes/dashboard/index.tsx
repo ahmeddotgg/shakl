@@ -23,6 +23,4 @@ function RouteComponent() {
   if (products) {
     return <ProductsTable data={products as ProductView[]} />;
   }
-
-  console.log(products);
 }

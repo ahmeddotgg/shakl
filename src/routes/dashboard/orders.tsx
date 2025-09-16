@@ -14,8 +14,6 @@ function RouteComponent() {
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p className="text-red-500">{error.message}</p>;
 
-  console.log(data);
-
   if (data) {
     return <TransactionsTable data={data.transactions} />;
   }

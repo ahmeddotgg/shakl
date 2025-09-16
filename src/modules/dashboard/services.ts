@@ -23,3 +23,13 @@ export async function getProductsByUser(userId: string) {
   if (error) throw new Error(error.message);
   return data;
 }
+
+export async function deleteProduct(userId: string, ProductId: string) {
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("created_by", userId)
+    .eq("id", ProductId);
+
+  if (error) throw new Error(error.message);
+}
