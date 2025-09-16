@@ -1,11 +1,34 @@
 import type { TransactionProduct } from "~/supabase/index";
 import { FileDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 interface Props {
   product: TransactionProduct;
 }
 
 export const Item = ({ product }: Props) => {
+  const [disabled, setDisabled] = useState(false);
+
+  const handleDownload = async (id: string) => {
+    try {
+      const res = await fetch("/api/increment-download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: id }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setDisabled(true);
+      } else {
+        console.error("Error:", data.error);
+      }
+    } catch (err) {
+      console.error("Request failed:", err);
+    }
+  };
+
   return (
     <div className="relative flex gap-2 bg-secondary/60 p-2 rounded-2xl">
       <img
@@ -28,6 +51,10 @@ export const Item = ({ product }: Props) => {
           <span className="hidden min-[290px]:inline">Download</span>
         </a>
       </div>
+
+      <Button disabled={disabled} onClick={() => handleDownload(product.id)}>
+        Increment
+      </Button>
     </div>
   );
 };

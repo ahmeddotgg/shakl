@@ -125,10 +125,3 @@ export async function imageUpload(file: File) {
 
   return publicUrlData.publicUrl;
 }
-
-export async function incrementProductDownloadCount(productId: string) {
-  const { error } = await supabase.rpc("increment_download_count", {
-    product_id: productId,
-  });
-  if (error) throw new Error(error.message);
-}

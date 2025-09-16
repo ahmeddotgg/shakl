@@ -26,7 +26,6 @@ export type ProductView = {
   images: string[];
   thumbnail_url: string;
   created_at: string | null;
-  updated_at: string | null;
   download_count: number | null;
   category: string;
   file_type: string;

@@ -10,6 +10,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createProduct } from "@/modules/products/services";
 import type { ProductInsert } from "~/supabase/index";
 import { toast } from "sonner";
+import { getProductsByUser } from "@/modules/dashboard/services";
 
 type UseProductsParams = {
   search: string;
@@ -66,5 +67,12 @@ export const useProductCategoryByName = (name: string) => {
   return useQuery({
     queryKey: ["categories", name],
     queryFn: () => getCategoryByName(name),
+  });
+};
+
+export const useProductsByUser = (userId: string) => {
+  return useQuery({
+    queryKey: ["products", userId],
+    queryFn: () => getProductsByUser(userId),
   });
 };

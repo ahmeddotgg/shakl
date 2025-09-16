@@ -1,3 +1,4 @@
+import { supabase } from "~/supabase";
 import type { Transaction } from "./orders-table";
 
 export async function fetchPaddleTransactions(
@@ -11,4 +12,14 @@ export async function fetchPaddleTransactions(
     throw new Error(text || "Failed to fetch transactions");
   }
   return res.json();
+}
+
+export async function getProductsByUser(userId: string) {
+  const { data, error } = await supabase
+    .from("public_products")
+    .select("*")
+    .eq("created_by", userId);
+
+  if (error) throw new Error(error.message);
+  return data;
 }
