@@ -1,14 +1,24 @@
-import * as React from "react";
-
 import {
+  IconCirclePlusFilled,
   IconCreditCard,
   IconDotsVertical,
   IconLogout,
   IconNotification,
   IconUserCircle,
-  IconCirclePlusFilled,
 } from "@tabler/icons-react";
-
+import { Link } from "@tanstack/react-router";
+import type * as React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -20,19 +30,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 
 const data = {
   user: {
@@ -64,9 +62,10 @@ export function NavMain() {
             <Link
               to="/dashboard/new"
               className={cn(
-                "bg-primary hover:bg-primary/90 active:bg-primary/90 w-full min-w-8 text-primary-foreground hover:text-primary-foreground active:text-primary-foreground duration-200 ease-linear",
-                buttonVariants()
-              )}>
+                "w-full min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground",
+                buttonVariants(),
+              )}
+            >
               <IconCirclePlusFilled />
               <span>Create Product</span>
             </Link>
@@ -94,14 +93,15 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-              <Avatar className="grayscale rounded-lg w-8 h-8">
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
-              <div className="flex-1 grid text-sm text-left leading-tight">
-                <span className="font-medium truncate">{user.name}</span>
-                <span className="text-muted-foreground text-xs truncate">
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate text-muted-foreground text-xs">
                   {user.email}
                 </span>
               </div>
@@ -112,16 +112,17 @@ export function NavUser({
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
-            sideOffset={4}>
+            sideOffset={4}
+          >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
-                <Avatar className="rounded-lg w-8 h-8">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
-                <div className="flex-1 grid text-sm text-left leading-tight">
-                  <span className="font-medium truncate">{user.name}</span>
-                  <span className="text-muted-foreground text-xs truncate">
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate text-muted-foreground text-xs">
                     {user.email}
                   </span>
                 </div>

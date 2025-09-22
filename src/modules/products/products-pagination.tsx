@@ -36,7 +36,7 @@ export function ProductsPagination({ page, totalPages }: Props) {
                 {p}
               </PaginationLink>
             </PaginationItem>
-          )
+          ),
         )}
 
         <PaginationItem>

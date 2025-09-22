@@ -1,16 +1,16 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { createClient } from "@supabase/supabase-js";
-import { Database } from "../supabase/types";
 import {
   Environment,
   Paddle,
-  Transaction,
-  TransactionCollection,
+  type Transaction,
+  type TransactionCollection,
 } from "@paddle/paddle-node-sdk";
+import { createClient } from "@supabase/supabase-js";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { Database } from "../supabase/types";
 
 export const supabaseAdmin = createClient<Database>(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE!
+  process.env.SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE || "",
 );
 
 const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
@@ -31,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .limit(1)
       .single();
     if (error || !data) {
-      throw new Error("No transaction found for user: " + userId);
+      throw new Error(`No transaction found for user: ${userId}`);
     }
     const payload = data.payload as unknown as Transaction;
     const customerId = payload.customer?.id;
@@ -86,10 +86,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       total: transactions.length,
       transactions: minTransaction,
     });
-  } catch (err: any) {
-    console.error("get-transactions error:", err);
+  } catch (error) {
+    console.error("get-transactions error:", error);
     return res
       .status(500)
-      .json({ error: err.message ?? "Internal server error" });
+      .json(
+        error instanceof Error
+          ? error.message
+          : "Error fetching the transaction",
+      );
   }
 }

@@ -1,11 +1,11 @@
+import { Link } from "@tanstack/react-router";
+import { Heart, Loader } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { ProductView } from "~/supabase/index";
 import { useCart } from "../cart/hooks/use-cart";
 import { useWishlist } from "../cart/hooks/use-wishlist";
-import { Heart, Loader } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
-import type { ProductView } from "~/supabase/index";
-import { Badge } from "@/components/ui/badge";
 
 export const Item = ({ product }: { product: ProductView }) => {
   const { addItem: addToCart, items: cartItems } = useCart();
@@ -26,17 +26,19 @@ export const Item = ({ product }: { product: ProductView }) => {
   return (
     <div
       key={product.id}
-      className="flex flex-col gap-4 p-4 border rounded-xl h-full">
+      className="flex h-full flex-col gap-4 rounded-xl border p-4"
+    >
       <Link
         to="/products/$id"
         params={{
           id: product.id,
         }}
-        className="rounded-2xl w-full aspect-[4/3] overflow-hidden">
+        className="aspect-[4/3] w-full overflow-hidden rounded-2xl"
+      >
         <img
           src={product.thumbnail_url}
           alt={product.description}
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       </Link>
       <div className="space-y-3">
@@ -45,10 +47,11 @@ export const Item = ({ product }: { product: ProductView }) => {
           params={{
             id: product.id,
           }}
-          className="font-semibold text-xl line-clamp-1">
+          className="line-clamp-1 font-semibold text-xl"
+        >
           {product.title}
         </Link>
-        <p className="text-muted-foreground line-clamp-1">
+        <p className="line-clamp-1 text-muted-foreground">
           {product.description}
         </p>
         <p className="my-2 font-bold text-lg">
@@ -78,19 +81,21 @@ export const Item = ({ product }: { product: ProductView }) => {
           <Button
             onClick={() => addToCart(product)}
             disabled={cartItems.some((item) => item.id === product.id)}
-            className="flex-1">
+            className="flex-1"
+          >
             Add to cart
           </Button>
           <Button
             variant="outline"
             size="icon"
-            onClick={() => handleAddToWishlist(product)}>
+            onClick={() => handleAddToWishlist(product)}
+          >
             <Heart
               className={cn(
-                "fill-red-600 stroke-red-500 size-5",
+                "size-5 fill-red-600 stroke-red-500",
                 wishlistItems.some((item) => item.id === product.id)
                   ? "fill-red-400 stroke-red-400"
-                  : "stroke-primary fill-none"
+                  : "fill-none stroke-primary",
               )}
             />
           </Button>

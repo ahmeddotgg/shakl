@@ -1,6 +1,6 @@
-import * as React from "react";
 import { OTPInput, OTPInputContext } from "input-otp";
 import { MinusIcon } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -16,7 +16,7 @@ function InputOTP({
       data-slot="input-otp"
       containerClassName={cn(
         "flex items-center gap-2 has-disabled:opacity-50",
-        containerClassName
+        containerClassName,
       )}
       className={cn("disabled:cursor-not-allowed", className)}
       {...props}
@@ -49,14 +49,15 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "data-[active=true]:z-10 relative flex justify-center items-center dark:bg-input/30 shadow-xs border-input border-y data-[active=true]:aria-invalid:border-destructive aria-invalid:border-destructive border-r data-[active=true]:border-ring first:border-l last:rounded-r-md first:rounded-l-md outline-none data-[active=true]:aria-invalid:ring-destructive/20 data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 dark:data-[active=true]:aria-invalid:ring-destructive/40 w-9 h-9 text-sm transition-all",
-        className
+        "relative flex h-9 w-9 items-center justify-center border-input border-y border-r text-sm shadow-xs outline-none transition-all first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40",
+        className,
       )}
-      {...props}>
+      {...props}
+    >
       {char}
       {hasFakeCaret && (
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-          <div className="bg-foreground w-px h-4 animate-caret-blink duration-1000" />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
         </div>
       )}
     </div>
@@ -65,7 +66,7 @@ function InputOTPSlot({
 
 function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
+    <div data-slot="input-otp-separator" {...props}>
       <MinusIcon />
     </div>
   );

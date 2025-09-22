@@ -1,7 +1,7 @@
-import type { TransactionProduct } from "~/supabase/index";
 import { FileDown, Loader } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import type { TransactionProduct } from "~/supabase/index";
 
 interface Props {
   product: TransactionProduct;
@@ -37,15 +37,15 @@ export const Item = ({ product }: Props) => {
   };
 
   return (
-    <div className="relative flex gap-2 bg-secondary/60 p-2 rounded-2xl">
+    <div className="relative flex gap-2 rounded-2xl bg-secondary/60 p-2">
       <img
         src={product.thumbnail_url}
         alt={product.title}
-        className="rounded-xl size-28 object-cover"
+        className="size-28 rounded-xl object-cover"
       />
 
       <div>
-        <h2 className="font-semibold text-xs min-[325px]:text-sm md:text-lg line-clamp-2">
+        <h2 className="line-clamp-2 font-semibold text-xs md:text-lg min-[325px]:text-sm">
           {product.title}
         </h2>
 

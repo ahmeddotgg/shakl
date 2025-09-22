@@ -1,15 +1,15 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { Paddle, Environment, EventName } from "@paddle/paddle-node-sdk";
+import { Environment, EventName, Paddle } from "@paddle/paddle-node-sdk";
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "../supabase/types";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { Database } from "../supabase/types";
 
-const paddle = new Paddle(process.env.PADDLE_SECRET!, {
+const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
   environment: Environment.sandbox,
 });
 
 export const supabaseAdmin = createClient<Database>(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE!
+  process.env.SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE || "",
 );
 
 export const config = {
@@ -38,8 +38,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (signature && secretKey) {
       const event = await paddle.webhooks.unmarshal(
         rawRequestBody,
-        process.env.PADDLE_WEBHOOK_SECRET!,
-        signature
+        process.env.PADDLE_WEBHOOK_SECRET || "",
+        signature,
       );
 
       if (event.eventType === EventName.TransactionCompleted) {
@@ -67,7 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (getProductsError || !getTxnProducts) {
           console.error(
             "Error fetching transaction products:",
-            getProductsError
+            getProductsError,
           );
           return res
             .status(500)
@@ -102,7 +102,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (finalUpdateError) {
           console.error(
             "Error updating transaction with final products:",
-            finalUpdateError
+            finalUpdateError,
           );
           return res
             .status(500)
@@ -116,6 +116,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   } catch (error) {
     console.error("Webhook processing error:", error);
-    return res.status(400).json({ error: "Invalid signature or bad payload" });
+    return res
+      .status(500)
+      .json(
+        error instanceof Error
+          ? error.message
+          : "Invalid signature or bad payload",
+      );
   }
 }

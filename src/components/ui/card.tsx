@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
@@ -6,8 +6,8 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "flex flex-col gap-6 bg-card shadow-sm py-6 border rounded-xl text-card-foreground",
-        className
+        "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm",
+        className,
       )}
       {...props}
     />
@@ -19,8 +19,8 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "@container/card-header items-start gap-1.5 grid has-data-[slot=card-action]:grid-cols-[1fr_auto] grid-rows-[auto_auto] auto-rows-min px-6 [.border-b]:pb-6",
-        className
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+        className,
       )}
       {...props}
     />
@@ -52,8 +52,8 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-action"
       className={cn(
-        "justify-self-end self-start col-start-2 row-span-2 row-start-1",
-        className
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className,
       )}
       {...props}
     />

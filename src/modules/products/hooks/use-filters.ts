@@ -1,4 +1,4 @@
-import { useQueryStates, parseAsString, parseAsInteger } from "nuqs";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 export function useFilters() {
   return useQueryStates({

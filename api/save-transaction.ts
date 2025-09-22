@@ -1,10 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
-import { VercelRequest, VercelResponse } from "@vercel/node";
-import { Database } from "../supabase/types";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { Database } from "../supabase/types";
 
 export const supabaseAdmin = createClient<Database>(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE!
+  process.env.SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE || "",
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -30,6 +30,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({ data });
   } catch (error) {
-    return res.status(500).json({ error: "Failed to create transaction" });
+    return res
+      .status(500)
+      .json(
+        error instanceof Error ? error.message : "Error saving the transaction",
+      );
   }
 }

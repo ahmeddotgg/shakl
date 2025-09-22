@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { Filters } from "@/modules/products/filters";
 import { useFilters } from "@/modules/products/hooks/use-filters";
 import {
@@ -7,7 +8,6 @@ import {
 } from "@/modules/products/hooks/use-products";
 import { Item } from "@/modules/products/item";
 import { ProductsPagination } from "@/modules/products/products-pagination";
-import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/products/")({
   component: RouteComponent,
@@ -34,7 +34,7 @@ function RouteComponent() {
   const totalPages = Math.ceil(total / filters.perPage);
 
   return (
-    <div className="space-y-6 container">
+    <div className="container space-y-6">
       <h1 className="font-bold text-3xl">Explore our Products</h1>
 
       <Filters categories={categoriesData} types={fileTypesData} />
@@ -43,11 +43,10 @@ function RouteComponent() {
 
       {!isLoading && data?.data?.length === 0 && <p>No products found.</p>}
 
-      <div className="gap-4 grid grid-cols-1 min-[530px]:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-        {products &&
-          products.map((product) => (
-            <Item key={product.id} product={product} />
-          ))}
+      <div className="grid auto-rows-fr grid-cols-1 gap-4 lg:grid-cols-3 min-[530px]:grid-cols-2">
+        {products?.map((product) => (
+          <Item key={product.id} product={product} />
+        ))}
       </div>
 
       <ProductsPagination

@@ -1,4 +1,13 @@
+import { Link, useRouter } from "@tanstack/react-router";
+import {
+  BrushCleaning,
+  Heart,
+  ShoppingBag,
+  ShoppingBasket,
+} from "lucide-react";
+import { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -8,19 +17,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  BrushCleaning,
-  Heart,
-  ShoppingBag,
-  ShoppingBasket,
-} from "lucide-react";
-import { useState } from "react";
-import { useCart } from "./hooks/use-cart";
-import { Item } from "./item";
-import { useWishlist } from "./hooks/use-wishlist";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { calculateTotal } from "@/lib/utils";
-import { Link, useRouter } from "@tanstack/react-router";
+import { useCart } from "./hooks/use-cart";
+import { useWishlist } from "./hooks/use-wishlist";
+import { Item } from "./item";
 
 export const CartAndWishlist = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,13 +46,13 @@ export const CartAndWishlist = () => {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent side="right" className="w-full min-[415px]:w-[400px]">
           <SheetHeader className="min-h-svh">
-            <SheetTitle className="pb-4 border-b">
+            <SheetTitle className="border-b pb-4">
               {activeTab === "cart"
                 ? `Your Cart (${cartItems.length})`
                 : `Your Wishlist (${wishlistItems.length})`}
             </SheetTitle>
 
-            <ScrollArea className="flex-1 h-[70vh]">
+            <ScrollArea className="h-[70vh] flex-1">
               <Tabs
                 className="flex-1 px-1 py-2"
                 value={activeTab}
@@ -60,7 +60,7 @@ export const CartAndWishlist = () => {
                   setActiveTab(val as "cart" | "wishlist")
                 }
               >
-                <TabsList className="grid grid-cols-2 w-full">
+                <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="cart">Cart</TabsTrigger>
                   <TabsTrigger value="wishlist">Wishlist</TabsTrigger>
                 </TabsList>
@@ -84,7 +84,7 @@ export const CartAndWishlist = () => {
                       </Button>
                     </>
                   ) : (
-                    <p className="flex flex-col justify-center items-center gap-2 mt-10 font-semibold text-muted-foreground text-lg">
+                    <p className="mt-10 flex flex-col items-center justify-center gap-2 font-semibold text-lg text-muted-foreground">
                       <ShoppingBasket className="inline size-8" />
                       <span>Your cart is empty.</span>
                     </p>
@@ -102,7 +102,7 @@ export const CartAndWishlist = () => {
                       />
                     ))
                   ) : (
-                    <p className="flex flex-col justify-center items-center gap-2 mt-10 font-semibold text-muted-foreground text-lg">
+                    <p className="mt-10 flex flex-col items-center justify-center gap-2 font-semibold text-lg text-muted-foreground">
                       <ShoppingBasket className="inline size-8" />
                       <span>Your wishlist is empty.</span>
                     </p>
@@ -116,7 +116,7 @@ export const CartAndWishlist = () => {
               <SheetFooter className="mt-0">
                 {cartItems.length === 0 ? null : (
                   <>
-                    <p className="flex justify-between items-center">
+                    <p className="flex items-center justify-between">
                       Cart Total:
                       <span className="font-semibold text-lg">
                         {calculateTotal(cartItems)}

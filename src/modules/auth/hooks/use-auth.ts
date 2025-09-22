@@ -1,6 +1,6 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getUser, signIn, signUp, signOut } from "@/modules/auth/services";
+import { getUser, signIn, signOut, signUp } from "@/modules/auth/services";
 import { supabase } from "~/supabase/index";
 
 const USER_KEY = ["auth", "user", "session"];

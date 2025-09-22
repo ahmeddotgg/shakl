@@ -1,7 +1,7 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useUser } from "@/modules/auth/hooks/use-auth";
 import { ProductsTable } from "@/modules/dashboard/products-table";
 import { useProductsByUser } from "@/modules/products/hooks/use-products";
-import { createFileRoute } from "@tanstack/react-router";
 import type { ProductView } from "~/supabase";
 
 export const Route = createFileRoute("/dashboard/")({

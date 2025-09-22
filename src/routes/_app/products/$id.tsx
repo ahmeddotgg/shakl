@@ -1,3 +1,6 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Loader, ShoppingBag } from "lucide-react";
 import ImageCarousel_Basic, {
   type CarouselImages,
 } from "@/components/shared/image-carousel-basic";
@@ -6,9 +9,6 @@ import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/modules/cart/hooks/use-cart";
 import { getProductQueryOptions } from "@/modules/products/hooks/use-products";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Loader, ShoppingBag } from "lucide-react";
 
 export const Route = createFileRoute("/_app/products/$id")({
   component: RouteComponent,
@@ -16,6 +16,7 @@ export const Route = createFileRoute("/_app/products/$id")({
     try {
       return await queryClient.ensureQueryData(getProductQueryOptions(id));
     } catch (error) {
+      console.log(error);
       throw redirect({ to: "/products/not-found" });
     }
   },
@@ -34,7 +35,7 @@ function RouteComponent() {
   }));
 
   return (
-    <div className="gap-8 lg:grid grid-cols-2 container">
+    <div className="container grid-cols-2 gap-8 lg:grid">
       <ImageCarousel_Basic
         images={images}
         imageFit="contain"
@@ -63,14 +64,15 @@ function RouteComponent() {
             )}
           </Badge>
         </div>
-        <h2 className="font-bold text-primary text-3xl">
+        <h2 className="font-bold text-3xl text-primary">
           {product.price === 0 ? "Free" : `$${product.price.toFixed(2)}`}
         </h2>
         <Button
           onClick={() => addToCart(product)}
           disabled={cartItems.some((item) => item.id === product.id)}
           className="w-full"
-          size="lg">
+          size="lg"
+        >
           <ShoppingBag className="size-5" /> Add to cart
         </Button>
       </div>

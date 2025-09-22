@@ -1,5 +1,5 @@
-import { LoginForm } from "@/modules/auth/login-form";
 import { createFileRoute } from "@tanstack/react-router";
+import { LoginForm } from "@/modules/auth/login-form";
 import type { UnauthenticatedSearch } from "../_app/unauthenticated";
 
 export const Route = createFileRoute("/auth/login")({

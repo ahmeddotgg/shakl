@@ -1,5 +1,7 @@
-import * as React from "react";
 import { IconHistory } from "@tabler/icons-react";
+import { Link, useRouter } from "@tanstack/react-router";
+import { LayoutDashboard, UserRoundPen } from "lucide-react";
+import * as React from "react";
 import { NavMain } from "@/components/sidebar/nav-main";
 import {
   Sidebar,
@@ -10,8 +12,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Link, useRouter } from "@tanstack/react-router";
-import { LayoutDashboard, UserRoundPen } from "lucide-react";
 
 const data = {
   navMain: [
@@ -42,7 +42,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       setOpenMobile(false);
     });
     return unsub;
-  }, [router]);
+  }, [router, setOpenMobile]);
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -51,7 +51,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5">
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
               <Link to="/">
                 <img alt="Logo" className="size-6" src="/logoipsum.svg" />
                 <span className="font-semibold text-base">Ashkal</span>

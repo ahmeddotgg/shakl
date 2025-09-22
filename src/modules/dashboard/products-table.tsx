@@ -1,19 +1,12 @@
 import {
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-  type ColumnDef,
   type SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   ArrowUpDown,
   ChevronLeft,
@@ -23,8 +16,22 @@ import {
   MoreHorizontal,
   Trash,
 } from "lucide-react";
-import type { ProductView } from "~/supabase";
 import { useState } from "react";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -33,14 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import type { ProductView } from "~/supabase";
 import { DeleteProduct } from "../products/delete-product";
 
 export const columns: ColumnDef<ProductView>[] = [
@@ -63,7 +63,8 @@ export const columns: ColumnDef<ProductView>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
         Title
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
@@ -75,7 +76,8 @@ export const columns: ColumnDef<ProductView>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
         Price
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
@@ -87,7 +89,8 @@ export const columns: ColumnDef<ProductView>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
         Downloads
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
@@ -99,7 +102,8 @@ export const columns: ColumnDef<ProductView>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
         Date
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
@@ -126,7 +130,8 @@ export const columns: ColumnDef<ProductView>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent
               onCloseAutoFocus={(e) => e.preventDefault()}
-              align="end">
+              align="end"
+            >
               <AlertDialogTrigger className="w-full">
                 <DropdownMenuItem variant="destructive">
                   <Trash />
@@ -171,7 +176,7 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -186,7 +191,7 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -196,7 +201,8 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center">
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -206,7 +212,7 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center justify-center text-sm font-medium">
+          <div className="hidden items-center justify-center font-medium text-sm sm:flex">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
@@ -216,7 +222,8 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
               size="icon"
               className="hidden size-9 lg:flex"
               onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}>
+              disabled={!table.getCanPreviousPage()}
+            >
               <span className="sr-only">Go to first page</span>
               <ChevronsLeft />
             </Button>
@@ -225,7 +232,8 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
               size="icon"
               className="size-9"
               onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}>
+              disabled={!table.getCanPreviousPage()}
+            >
               <span className="sr-only">Go to previous page</span>
               <ChevronLeft />
             </Button>
@@ -234,7 +242,8 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
               size="icon"
               className="size-9"
               onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}>
+              disabled={!table.getCanNextPage()}
+            >
               <span className="sr-only">Go to next page</span>
               <ChevronRight />
             </Button>
@@ -243,7 +252,8 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
               size="icon"
               className="hidden size-9 lg:flex"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}>
+              disabled={!table.getCanNextPage()}
+            >
               <span className="sr-only">Go to last page</span>
               <ChevronsRight />
             </Button>
@@ -253,7 +263,8 @@ export function ProductsTable({ data }: { data: ProductView[] }) {
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
-              }}>
+              }}
+            >
               <SelectTrigger>
                 <SelectValue
                   placeholder={table.getState().pagination.pageSize}

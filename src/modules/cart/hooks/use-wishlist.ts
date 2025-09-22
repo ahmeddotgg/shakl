@@ -1,6 +1,6 @@
+import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { toast } from "sonner";
 import type { ProductView } from "~/supabase/index";
 
 type WishlistStore = {
@@ -33,6 +33,6 @@ export const useWishlist = create<WishlistStore>()(
     }),
     {
       name: "wishlist-storage",
-    }
-  )
+    },
+  ),
 );

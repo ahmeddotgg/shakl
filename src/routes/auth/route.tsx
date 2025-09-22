@@ -13,8 +13,8 @@ export const Route = createFileRoute("/auth")({
 
 function RouteComponent() {
   return (
-    <div className="content-center min-h-svh container">
-      <section className="bg-secondary/30 mx-auto p-8 border rounded-lg max-w-xl">
+    <div className="container min-h-svh content-center">
+      <section className="mx-auto max-w-xl rounded-lg border bg-secondary/30 p-8">
         <Outlet />
       </section>
     </div>

@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { calculateTotal } from "@/lib/utils";
-import { useCart } from "@/modules/cart/hooks/use-cart";
-import { Item } from "@/modules/cart/item";
+import { initializePaddle, type Paddle } from "@paddle/paddle-js";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Loader2, ShoppingBag } from "lucide-react";
-import { initializePaddle, type Paddle } from "@paddle/paddle-js";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { calculateTotal } from "@/lib/utils";
 import { useUser } from "@/modules/auth/hooks/use-auth";
+import { useCart } from "@/modules/cart/hooks/use-cart";
+import { Item } from "@/modules/cart/item";
 
 export const Route = createFileRoute("/_app/checkout")({
   component: RouteComponent,
@@ -69,7 +69,7 @@ function RouteComponent() {
         setPaddle(paddleInstance);
       }
     });
-  }, [user]);
+  }, [user, navigate, products]);
 
   const openCheckout = async () => {
     try {
@@ -109,7 +109,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="gap-6 grid grid-cols-1 min-[688px]:grid-cols-2 container">
+    <div className="container grid grid-cols-1 gap-6 min-[688px]:grid-cols-2">
       <div className="space-y-3">
         <h2 className="font-semibold">Order Products</h2>
         <div className="space-y-3">
@@ -122,11 +122,11 @@ function RouteComponent() {
         <h2 className="font-semibold">Order Summery</h2>
 
         <div>
-          <p className="flex justify-between items-center font-semibold text-muted-foreground">
+          <p className="flex items-center justify-between font-semibold text-muted-foreground">
             Items:
             <span>{products.length}</span>
           </p>
-          <p className="flex justify-between items-center font-bold text-2xl">
+          <p className="flex items-center justify-between font-bold text-2xl">
             Cart Total:
             <span className="text-lg">${calculateTotal(products)}</span>
           </p>
@@ -136,7 +136,8 @@ function RouteComponent() {
           size="lg"
           className="w-full"
           onClick={openCheckout}
-          disabled={loading || !products.length}>
+          disabled={loading || !products.length}
+        >
           {loading ? (
             <>
               <Loader2 className="size-5 animate-spin" />

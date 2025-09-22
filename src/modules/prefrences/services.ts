@@ -1,4 +1,4 @@
-import { supabase, type PreferencesUpdate } from "~/supabase";
+import { type PreferencesUpdate, supabase } from "~/supabase";
 
 export const getUserPreferences = async (userId: string) => {
   const { data, error } = await supabase
@@ -13,7 +13,7 @@ export const getUserPreferences = async (userId: string) => {
 
 export const updateUserPreferences = async (
   userId: string,
-  payload: PreferencesUpdate
+  payload: PreferencesUpdate,
 ) => {
   const { first_name, last_name, avatar_url } = payload;
 

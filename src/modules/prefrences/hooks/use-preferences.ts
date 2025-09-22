@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getUserPreferences, updateUserPreferences } from "../services";
-import type { PreferencesUpdate } from "~/supabase";
 import { toast } from "sonner";
+import type { PreferencesUpdate } from "~/supabase";
+import { getUserPreferences, updateUserPreferences } from "../services";
 
 export const usePreferences = (userId: string) => {
   return useQuery({

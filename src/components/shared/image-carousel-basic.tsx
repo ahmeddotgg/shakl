@@ -1,9 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Dialog } from "radix-ui";
-import { type EmblaOptionsType } from "embla-carousel";
+import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import {
   ArrowLeft,
@@ -12,8 +9,12 @@ import {
   PlusCircle,
   X,
 } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { Dialog } from "radix-ui";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type ThumbPropType = {
   selected: boolean;
@@ -58,9 +59,10 @@ const ImageContainer: React.FC<{
   return (
     <div
       className={cn(
-        "relative bg-gray-100 rounded-lg w-full overflow-hidden",
-        getAspectRatioClass(aspectRatio)
-      )}>
+        "relative w-full overflow-hidden rounded-lg bg-gray-100",
+        getAspectRatioClass(aspectRatio),
+      )}
+    >
       <Dialog.Root>
         <Dialog.DialogTrigger asChild>
           <div className={`cursor-pointer`}>
@@ -70,19 +72,19 @@ const ImageContainer: React.FC<{
               width={400}
               height={600}
               className={cn(
-                "absolute inset-0 w-full h-full",
+                "absolute inset-0 h-full w-full",
                 fit === "contain" && "object-contain",
                 fit === "cover" && "object-cover",
                 fit === "fill" && "object-fill",
-                classNameThumbnail
+                classNameThumbnail,
               )}
             />
           </div>
         </Dialog.DialogTrigger>
 
         <Dialog.DialogPortal>
-          <Dialog.DialogOverlay className="z-50 fixed inset-0 bg-black/80" />
-          <Dialog.DialogContent className="z-50 fixed inset-0 flex flex-col justify-center items-center bg-background p-0">
+          <Dialog.DialogOverlay className="fixed inset-0 z-50 bg-black/80" />
+          <Dialog.DialogContent className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background p-0">
             <Dialog.DialogTitle className="sr-only">
               {image.title || "Image"}
             </Dialog.DialogTitle>
@@ -90,11 +92,12 @@ const ImageContainer: React.FC<{
               {image.title || "Image"}
             </Dialog.DialogDescription>
 
-            <div className="relative flex justify-center items-center w-screen h-screen">
+            <div className="relative flex h-screen w-screen items-center justify-center">
               <TransformWrapper
                 initialScale={1}
                 initialPositionX={0}
-                initialPositionY={0}>
+                initialPositionY={0}
+              >
                 {({ zoomIn, zoomOut }) => (
                   <>
                     <TransformComponent>
@@ -103,23 +106,27 @@ const ImageContainer: React.FC<{
                         src={image.url}
                         alt={image.title || "Full size"}
                         className={cn(
-                          "max-w-[90vw] max-h-[90vh] object-contain",
-                          classNameImage
+                          "max-h-[90vh] max-w-[90vw] object-contain",
+                          classNameImage,
                         )}
                       />
                     </TransformComponent>
                     {showImageControls && (
-                      <div className="bottom-4 left-1/2 z-10 absolute flex gap-2 -translate-x-1/2">
+                      <div className="-translate-x-1/2 absolute bottom-4 left-1/2 z-10 flex gap-2">
                         <button
+                          type="button"
                           onClick={() => zoomOut()}
-                          className="bg-black/50 hover:bg-black/70 p-2 rounded-full text-white transition-colors cursor-pointer"
-                          aria-label="Zoom out">
+                          className="cursor-pointer rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
+                          aria-label="Zoom out"
+                        >
                           <MinusCircle className="size-6" />
                         </button>
                         <button
+                          type="button"
                           onClick={() => zoomIn()}
-                          className="bg-black/50 hover:bg-black/70 p-2 rounded-full text-white transition-colors cursor-pointer"
-                          aria-label="Zoom in">
+                          className="cursor-pointer rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
+                          aria-label="Zoom in"
+                        >
                           <PlusCircle className="size-6" />
                         </button>
                       </div>
@@ -129,8 +136,10 @@ const ImageContainer: React.FC<{
               </TransformWrapper>
               <Dialog.DialogClose asChild>
                 <button
-                  className="top-4 right-4 z-10 absolute bg-black/50 hover:bg-black/70 p-2 border rounded-full text-white transition-colors cursor-pointer"
-                  aria-label="Close">
+                  type="button"
+                  className="absolute top-4 right-4 z-10 cursor-pointer rounded-full border bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
+                  aria-label="Close"
+                >
                   <X className="size-6" />
                 </button>
               </Dialog.DialogClose>
@@ -153,23 +162,26 @@ const Thumb: React.FC<ThumbPropType> = (props) => {
         // Horizontal layout (top/bottom)
         "group-[.thumbs-horizontal]:min-w-0 group-[.thumbs-horizontal]:flex-[0_0_22%] group-[.thumbs-horizontal]:pl-3 sm:group-[.thumbs-horizontal]:flex-[0_0_15%]",
         // Vertical layout (left/right)
-        "group-[.thumbs-vertical]:w-full group-[.thumbs-vertical]:pt-3"
-      )}>
+        "group-[.thumbs-vertical]:w-full group-[.thumbs-vertical]:pt-3",
+      )}
+    >
       <button
         onClick={onClick}
-        className="relative bg-transparent p-0 border-0 rounded-md w-full overflow-hidden appearance-none touch-manipulation cursor-pointer"
-        type="button">
+        className="relative w-full cursor-pointer touch-manipulation appearance-none overflow-hidden rounded-md border-0 bg-transparent p-0"
+        type="button"
+      >
         <div
           className={cn(
-            "relative bg-gray-100 rounded-lg w-full overflow-hidden",
-            getAspectRatioClass("square")
-          )}>
+            "relative w-full overflow-hidden rounded-lg bg-gray-100",
+            getAspectRatioClass("square"),
+          )}
+        >
           <img
             src={imgUrl}
             alt={title || `Thumbnail ${index + 1}`}
             width={400}
             height={600}
-            className={cn("w-full h-full object-cover")}
+            className={cn("h-full w-full object-cover")}
           />
         </div>
       </button>
@@ -232,7 +244,7 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
           containScroll: "keepSnaps",
           dragFree: true,
         }
-      : undefined
+      : undefined,
   );
 
   const onThumbClick = useCallback(
@@ -246,7 +258,7 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
         emblaThumbsApi.scrollTo(index);
       }
     },
-    [emblaApi, emblaThumbsApi, showThumbs, isControlled, onSlideChange]
+    [emblaApi, emblaThumbsApi, showThumbs, isControlled, onSlideChange],
   );
 
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -284,7 +296,7 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
         scrollNext();
       }
     },
-    [scrollPrev, scrollNext]
+    [scrollPrev, scrollNext],
   );
 
   const onSelect = useCallback(() => {
@@ -349,16 +361,15 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
             showThumbs &&
             (thumbPosition === "left" || thumbPosition === "right"),
         },
-        className
+        className,
       )}
-      role="region"
-      aria-roledescription="carousel"
       onKeyDownCapture={handleKeyDown}
-      {...props}>
+      {...props}
+    >
       {showThumbs && thumbPosition === "top" && (
         <div className="mb-4">
           <div className="overflow-hidden" ref={emblaThumbsRef}>
-            <div className="group flex -ml-3 thumbs-horizontal">
+            <div className="group -ml-3 thumbs-horizontal flex">
               {images?.map((image, index) => (
                 <Thumb
                   key={index}
@@ -379,17 +390,16 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
           "relative",
           showThumbs &&
             (thumbPosition === "left" || thumbPosition === "right") &&
-            "flex-[1_1_75%]"
+            "flex-[1_1_75%]",
         )}
-        aria-label="Image carousel controls">
-        <div ref={emblaRef} className="rounded-lg overflow-hidden">
-          <div className="flex -ml-4">
+      >
+        <div ref={emblaRef} className="overflow-hidden rounded-lg">
+          <div className="-ml-4 flex">
             {images?.map((image, index) => (
               <div
                 key={index}
-                className="pl-4 min-w-0 shrink-0 grow-0 basis-full"
-                role="group"
-                aria-roledescription="slide">
+                className="min-w-0 shrink-0 grow-0 basis-full pl-4"
+              >
                 <ImageContainer
                   image={image}
                   alt={`Slide ${index + 1}`}
@@ -409,20 +419,22 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
             <Button
               variant="outline"
               size="icon"
-              className="top-1/2 left-[2%] z-10 absolute bg-background/80 hover:bg-background dark:bg-background/80 dark:hover:bg-background disabled:opacity-50 backdrop-blur-xs rounded-full w-8 h-8 -translate-y-1/2"
+              className="-translate-y-1/2 absolute top-1/2 left-[2%] z-10 h-8 w-8 rounded-full bg-background/80 backdrop-blur-xs hover:bg-background disabled:opacity-50 dark:bg-background/80 dark:hover:bg-background"
               disabled={!canScrollPrev}
-              onClick={scrollPrev}>
-              <ArrowLeft className="w-4 h-4" />
+              onClick={scrollPrev}
+            >
+              <ArrowLeft className="h-4 w-4" />
               <span className="sr-only">Previous slide</span>
             </Button>
 
             <Button
               variant="outline"
               size="icon"
-              className="top-1/2 right-[2%] z-10 absolute bg-background/80 hover:bg-background dark:bg-background/80 dark:hover:bg-background disabled:opacity-50 backdrop-blur-xs rounded-full w-8 h-8 -translate-y-1/2"
+              className="-translate-y-1/2 absolute top-1/2 right-[2%] z-10 h-8 w-8 rounded-full bg-background/80 backdrop-blur-xs hover:bg-background disabled:opacity-50 dark:bg-background/80 dark:hover:bg-background"
               disabled={!canScrollNext}
-              onClick={scrollNext}>
-              <ArrowRight className="w-4 h-4" />
+              onClick={scrollNext}
+            >
+              <ArrowRight className="h-4 w-4" />
               <span className="sr-only">Next slide</span>
             </Button>
           </>
@@ -437,21 +449,24 @@ const ImageCarousel_Basic: React.FC<ImageCarousel_BasicProps> = ({
             className={cn(
               thumbPosition === "left" || thumbPosition === "right"
                 ? "relative flex-[0_0_20%]"
-                : "mt-4"
-            )}>
+                : "mt-4",
+            )}
+          >
             <div
               className={cn(
                 "overflow-hidden",
                 (thumbPosition === "left" || thumbPosition === "right") &&
-                  "absolute inset-0"
+                  "absolute inset-0",
               )}
-              ref={emblaThumbsRef}>
+              ref={emblaThumbsRef}
+            >
               <div
                 className={cn(
                   thumbPosition === "bottom"
                     ? "thumbs-horizontal group -ml-3 flex"
-                    : "thumbs-vertical group -mt-3 flex h-full flex-col"
-                )}>
+                    : "thumbs-vertical group -mt-3 flex h-full flex-col",
+                )}
+              >
                 {images?.map((image, index) => (
                   <Thumb
                     key={index}

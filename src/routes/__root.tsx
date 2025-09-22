@@ -1,11 +1,11 @@
-import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
+import type { User } from "@supabase/supabase-js";
+import type { QueryClient } from "@tanstack/react-query";
 import {
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
-  createRootRouteWithContext,
 } from "@tanstack/react-router";
-import type { QueryClient } from "@tanstack/react-query";
-import type { User } from "@supabase/supabase-js";
+import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 
 export interface Context {
   auth: User | undefined | null;

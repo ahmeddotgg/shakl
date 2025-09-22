@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
-import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Card,
   CardAction,
@@ -26,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const description = "An interactive area chart";
 
@@ -166,7 +165,7 @@ export function ChartAreaInteractive() {
       <CardHeader>
         <CardTitle>Total Visitors</CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">
+          <span className="@[540px]/card:block hidden">
             Total for the last 3 months
           </span>
           <span className="@[540px]/card:hidden">Last 3 months</span>
@@ -177,16 +176,18 @@ export function ChartAreaInteractive() {
             value={timeRange}
             onValueChange={setTimeRange}
             variant="outline"
-            className="hidden @[767px]/card:flex *:data-[slot=toggle-group-item]:!px-4">
+            className="*:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex hidden"
+          >
             <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
             <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
             <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
-              className="@[767px]/card:hidden **:data-[slot=select-value]:block flex w-40 **:data-[slot=select-value]:truncate"
+              className="flex @[767px]/card:hidden w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
               size="sm"
-              aria-label="Select a value">
+              aria-label="Select a value"
+            >
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -203,10 +204,11 @@ export function ChartAreaInteractive() {
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent className="px-2 sm:px-6 pt-4 sm:pt-6">
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="w-full h-[250px] aspect-auto">
+          className="aspect-auto h-[250px] w-full"
+        >
           <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">

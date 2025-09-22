@@ -1,16 +1,16 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { deleteProduct, getProductsByUser } from "@/modules/dashboard/services";
 import {
+  createProduct,
   getCategories,
   getCategoryByName,
-  getFiletypeByName,
   getFileTypes,
+  getFiletypeByName,
   getProductById,
   getProducts,
 } from "@/modules/products/services";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createProduct } from "@/modules/products/services";
 import type { ProductInsert } from "~/supabase/index";
-import { toast } from "sonner";
-import { deleteProduct, getProductsByUser } from "@/modules/dashboard/services";
 
 type UseProductsParams = {
   search: string;

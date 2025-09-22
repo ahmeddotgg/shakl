@@ -1,9 +1,9 @@
 import {
-  CurrencyCode,
+  type CurrencyCode,
   Environment,
-  ITransactionItemWithNonCatalogPrice,
+  type ITransactionItemWithNonCatalogPrice,
   Paddle,
-  TaxCategory,
+  type TaxCategory,
 } from "@paddle/paddle-node-sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
@@ -48,14 +48,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             imageUrl: product.thumbnail_url,
           },
         },
-      })
+      }),
     );
 
     const transaction = await paddle.transactions.create({ items });
 
     return res.status(200).json({ transaction: transaction.id });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to create transaction" });
+    return res
+      .status(500)
+      .json(
+        error instanceof Error
+          ? error.message
+          : "Error creating the transaction",
+      );
   }
 }

@@ -1,7 +1,7 @@
 import {
-  supabase,
   type ProductInsert,
   type ProductView,
+  supabase,
 } from "~/supabase/index";
 
 type GetProductsParams = {

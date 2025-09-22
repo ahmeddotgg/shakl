@@ -9,7 +9,7 @@ export const supabase = createClient<Database>(
       persistSession: true,
       autoRefreshToken: true,
     },
-  }
+  },
 );
 
 export type Product = Tables<"products">;

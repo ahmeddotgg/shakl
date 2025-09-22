@@ -1,20 +1,15 @@
-import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
-import { Button, buttonVariants } from "../ui/button";
-import { Menu, User2 } from "lucide-react";
+import { IconLogout, IconUserCircle } from "@tabler/icons-react";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { Menu, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ThemeToggle } from "./theme-toggle";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 import { useSignOut, useUser } from "@/modules/auth/hooks/use-auth";
 import { CartAndWishlist } from "@/modules/cart/cart-and-wishlist";
-import { IconLogout, IconUserCircle } from "@tabler/icons-react";
+import { usePreferences } from "@/modules/prefrences/hooks/use-preferences";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button, buttonVariants } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,10 +19,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { usePreferences } from "@/modules/prefrences/hooks/use-preferences";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import { ThemeToggle } from "./theme-toggle";
 
 export const ProfileMenu = () => {
   const { data: user } = useUser();
@@ -60,18 +60,18 @@ export const ProfileMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-[190px]">
         <DropdownMenuLabel className="p-0 font-normal">
-          <div className="flex items-center gap-2 px-1 py-1.5 text-sm text-left">
-            <Avatar className="rounded-lg w-8 h-8">
+          <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+            <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage src={data?.avatar_url as string} alt="user avatar" />
               <AvatarFallback className="rounded-lg uppercase">
                 {data?.first_name?.substring(0, 2)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1 grid text-sm text-left leading-tight">
-              <span className="font-medium truncate capitalize">
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-medium capitalize">
                 {user?.user_metadata.name}
               </span>
-              <span className="text-muted-foreground text-xs truncate">
+              <span className="truncate text-muted-foreground text-xs">
                 {user?.email}
               </span>
             </div>
@@ -100,14 +100,14 @@ export const Header = () => {
   const isMobile = useIsMobile();
 
   return (
-    <header className="items-center grid grid-cols-2 min-[640px]:grid-cols-3 py-4 container">
+    <header className="container grid grid-cols-2 items-center py-4 min-[640px]:grid-cols-3">
       <Link to="/">
         <img alt="Logo" className="size-8" src="/logoipsum.svg" />
       </Link>
 
       {!isMobile && <DesktopHeader />}
 
-      <div className="flex justify-self-end gap-1">
+      <div className="flex gap-1 justify-self-end">
         {isMobile ? (
           <>
             <CartAndWishlist />
@@ -151,7 +151,7 @@ const MobileHeader = () => {
       </SheetTrigger>
       <SheetContent className="w-full">
         <SheetHeader>
-          <SheetTitle className="pb-4 border-b">
+          <SheetTitle className="border-b pb-4">
             <img
               alt="Shakl Logo"
               className="me-auto size-8"
@@ -159,33 +159,38 @@ const MobileHeader = () => {
             />
             <ThemeToggle />
           </SheetTitle>
-          <div className="[&>a]:block space-y-4 [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 py-2 [&>a]:rounded-lg font-semibold text-lg">
+          <div className="space-y-4 py-2 font-semibold text-lg [&>a.active]:bg-secondary dark:[&>a.active]:bg-secondary/30 [&>a]:block [&>a]:rounded-lg">
             <Link
-              className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/">
+              className="p-3 duration-200 hover:bg-secondary dark:hover:bg-secondary/30"
+              to="/"
+            >
               Home
             </Link>
             <Link
-              className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-              to="/products">
+              className="p-3 duration-200 hover:bg-secondary dark:hover:bg-secondary/30"
+              to="/products"
+            >
               Products
             </Link>
             {user ? (
               <Link
-                className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                to="/dashboard">
+                className="p-3 duration-200 hover:bg-secondary dark:hover:bg-secondary/30"
+                to="/dashboard"
+              >
                 Dashboard
               </Link>
             ) : (
               <>
                 <Link
-                  className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/login">
+                  className="p-3 duration-200 hover:bg-secondary dark:hover:bg-secondary/30"
+                  to="/auth/login"
+                >
                   Login
                 </Link>
                 <Link
-                  className="hover:bg-secondary dark:hover:bg-secondary/30 p-3 duration-200"
-                  to="/auth/register">
+                  className="p-3 duration-200 hover:bg-secondary dark:hover:bg-secondary/30"
+                  to="/auth/register"
+                >
                   Register
                 </Link>
               </>
@@ -203,7 +208,7 @@ export function DesktopHeader() {
   const { data: user } = useUser();
 
   return (
-    <div className="flex justify-self-center gap-1">
+    <div className="flex gap-1 justify-self-center">
       <Link to="/" className={cn(buttonVariants({ variant: "link" }))}>
         Home
       </Link>
@@ -213,19 +218,22 @@ export function DesktopHeader() {
       {user ? (
         <Link
           to="/dashboard"
-          className={cn(buttonVariants({ variant: "link" }))}>
+          className={cn(buttonVariants({ variant: "link" }))}
+        >
           Dashboard
         </Link>
       ) : (
         <>
           <Link
             to="/auth/login"
-            className={cn(buttonVariants({ variant: "link" }))}>
+            className={cn(buttonVariants({ variant: "link" }))}
+          >
             Login
           </Link>
           <Link
             to="/auth/register"
-            className={cn(buttonVariants({ variant: "link" }))}>
+            className={cn(buttonVariants({ variant: "link" }))}
+          >
             Register
           </Link>
         </>

@@ -1,3 +1,8 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,12 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useSignUp } from "@/modules/auth/hooks/use-auth";
-import { toast } from "sonner";
 
 const registerSchema = z.object({
   name: z
@@ -76,10 +76,10 @@ export const RegisterForm = () => {
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="sr-only left-0 absolute">
+                  <span className="sr-only absolute left-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}
@@ -98,10 +98,10 @@ export const RegisterForm = () => {
                   />
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="sr-only left-0 absolute">
+                  <span className="sr-only absolute left-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}
@@ -116,10 +116,10 @@ export const RegisterForm = () => {
                   <Input type="password" placeholder="*****" {...field} />
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="sr-only left-0 absolute">
+                  <span className="sr-only absolute left-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}

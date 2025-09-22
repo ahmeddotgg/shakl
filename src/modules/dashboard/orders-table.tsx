@@ -1,19 +1,12 @@
 import {
   type ColumnDef,
-  type SortingState,
   flexRender,
-  useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import {
   ArrowUpDown,
   ChevronDown,
@@ -22,6 +15,22 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -30,15 +39,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
 
 export type Transaction = {
   id: string;
@@ -75,7 +75,8 @@ const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -92,7 +93,8 @@ const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Items
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -106,18 +108,21 @@ const columns: ColumnDef<Transaction>[] = [
             <Button
               variant="outline"
               size="sm"
-              className="flex items-center gap-1">
+              className="flex items-center gap-1"
+            >
               {items.length} item{items.length !== 1 && "s"}
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="start"
-            onCloseAutoFocus={(e) => e.preventDefault()}>
+            onCloseAutoFocus={(e) => e.preventDefault()}
+          >
             {items.map((item) => (
               <DropdownMenuItem
                 key={item.id}
-                className="flex items-center gap-2">
+                className="flex items-center gap-2"
+              >
                 {item.imageUrl && (
                   <img
                     src={item.imageUrl}
@@ -141,7 +146,8 @@ const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Payment Method
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -162,7 +168,8 @@ const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Amount
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -183,7 +190,8 @@ const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -198,13 +206,14 @@ const columns: ColumnDef<Transaction>[] = [
             status === "ready"
               ? "outline"
               : status === "canceled"
-              ? "destructive"
-              : status === "billed"
-              ? "info"
-              : status === "draft"
-              ? "warn"
-              : "success"
-          }>
+                ? "destructive"
+                : status === "billed"
+                  ? "info"
+                  : status === "draft"
+                    ? "warn"
+                    : "success"
+          }
+        >
           {status}
         </Badge>
       );
@@ -240,7 +249,7 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -255,7 +264,7 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -265,7 +274,8 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center">
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -275,7 +285,7 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center justify-center text-sm font-medium">
+          <div className="hidden items-center justify-center font-medium text-sm sm:flex">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
@@ -285,7 +295,8 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
               size="icon"
               className="hidden size-9 lg:flex"
               onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}>
+              disabled={!table.getCanPreviousPage()}
+            >
               <span className="sr-only">Go to first page</span>
               <ChevronsLeft />
             </Button>
@@ -294,7 +305,8 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
               size="icon"
               className="size-9"
               onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}>
+              disabled={!table.getCanPreviousPage()}
+            >
               <span className="sr-only">Go to previous page</span>
               <ChevronLeft />
             </Button>
@@ -303,7 +315,8 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
               size="icon"
               className="size-9"
               onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}>
+              disabled={!table.getCanNextPage()}
+            >
               <span className="sr-only">Go to next page</span>
               <ChevronRight />
             </Button>
@@ -312,7 +325,8 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
               size="icon"
               className="hidden size-9 lg:flex"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}>
+              disabled={!table.getCanNextPage()}
+            >
               <span className="sr-only">Go to last page</span>
               <ChevronsRight />
             </Button>
@@ -322,7 +336,8 @@ export function TransactionsTable({ data }: { data: Transaction[] }) {
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
-              }}>
+              }}
+            >
               <SelectTrigger>
                 <SelectValue
                   placeholder={table.getState().pagination.pageSize}

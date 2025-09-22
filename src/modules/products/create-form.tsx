@@ -1,19 +1,11 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Loader2, PlusCircle } from "lucide-react";
-import {
-  useCategories,
-  useCreateProduct,
-  useFileTypes,
-} from "./hooks/use-products";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, PlusCircle } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import type { FileUploadProps } from "@/components/ui/file-upload";
 import {
   Form,
   FormControl,
@@ -24,15 +16,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { ImagesUploader } from "./images-uploader";
-import { useCallback, useRef, useState } from "react";
-import type { FileUploadProps } from "@/components/ui/file-upload";
-import { imageUpload } from "./services";
-import { toast } from "sonner";
-import { useUser } from "../auth/hooks/use-auth";
 import type { ProductInsert } from "~/supabase/index";
+import { useUser } from "../auth/hooks/use-auth";
+import {
+  useCategories,
+  useCreateProduct,
+  useFileTypes,
+} from "./hooks/use-products";
+import { ImagesUploader } from "./images-uploader";
+import { imageUpload } from "./services";
 
 export const createProductSchema = z.object({
   title: z
@@ -99,40 +99,43 @@ export function ProductForm() {
   };
 
   const onThumbnailUpload: NonNullable<FileUploadProps["onUpload"]> =
-    useCallback(async (files, { onProgress, onSuccess, onError }) => {
-      try {
-        const uploadPromises = files.map(async (file) => {
-          try {
-            onProgress(file, 20);
-            const url = await imageUpload(file);
-            if (!url) return toast.error("Error uploading!");
+    useCallback(
+      async (files, { onProgress, onSuccess, onError }) => {
+        try {
+          const uploadPromises = files.map(async (file) => {
+            try {
+              onProgress(file, 20);
+              const url = await imageUpload(file);
+              if (!url) return toast.error("Error uploading!");
 
-            onProgress(file, 100);
-            onSuccess(file);
+              onProgress(file, 100);
+              onSuccess(file);
 
-            if (thumbnailRef.current) {
-              thumbnailRef.current.classList.add(
-                "pointer-events-none",
-                "opacity-50"
+              if (thumbnailRef.current) {
+                thumbnailRef.current.classList.add(
+                  "pointer-events-none",
+                  "opacity-50",
+                );
+                thumbnailRef.current.setAttribute("aria-disabled", "true");
+              }
+
+              form.setValue("thumbnail_url", url);
+              toast.info("Thumbnail uploaded successfully 🎉");
+            } catch (error) {
+              onError(
+                file,
+                error instanceof Error ? error : new Error("Upload failed"),
               );
-              thumbnailRef.current.setAttribute("aria-disabled", "true");
             }
+          });
 
-            form.setValue("thumbnail_url", url);
-            toast.info("Thumbnail uploaded successfully 🎉");
-          } catch (error) {
-            onError(
-              file,
-              error instanceof Error ? error : new Error("Upload failed")
-            );
-          }
-        });
-
-        await Promise.all(uploadPromises);
-      } catch (error) {
-        console.error("Unexpected error during upload:", error);
-      }
-    }, []);
+          await Promise.all(uploadPromises);
+        } catch (error) {
+          console.error("Unexpected error during upload:", error);
+        }
+      },
+      [form.setValue],
+    );
 
   const onImagesUpload: NonNullable<FileUploadProps["onUpload"]> = useCallback(
     async (files, { onProgress, onSuccess, onError }) => {
@@ -155,7 +158,7 @@ export function ProductForm() {
             if (updatedImages.length >= 3 && imagesRef.current) {
               imagesRef.current.classList.add(
                 "pointer-events-none",
-                "opacity-50"
+                "opacity-50",
               );
               imagesRef.current.setAttribute("aria-disabled", "true");
             }
@@ -164,7 +167,7 @@ export function ProductForm() {
           } catch (error) {
             onError(
               file,
-              error instanceof Error ? error : new Error("Upload failed")
+              error instanceof Error ? error : new Error("Upload failed"),
             );
           }
         });
@@ -174,7 +177,7 @@ export function ProductForm() {
         console.error("Unexpected error during upload:", error);
       }
     },
-    [form]
+    [form],
   );
 
   const handleCategoryChange = (value: string) => {
@@ -188,7 +191,7 @@ export function ProductForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-        <div className="gap-2 grid grid-cols-2 [&>*]:min-w-full">
+        <div className="grid grid-cols-2 gap-2 [&>*]:min-w-full">
           <FormField
             control={form.control}
             name="title"
@@ -199,10 +202,10 @@ export function ProductForm() {
                   <Input placeholder="Enter product title" {...field} />
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="left-0 absolute opacity-0">
+                  <span className="absolute left-0 opacity-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}
@@ -227,10 +230,10 @@ export function ProductForm() {
                   />
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="left-0 absolute opacity-0">
+                  <span className="absolute left-0 opacity-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}
@@ -252,10 +255,10 @@ export function ProductForm() {
                 />
               </FormControl>
               <FormDescription className="relative">
-                <span className="left-0 absolute opacity-0">
+                <span className="absolute left-0 opacity-0">
                   This is your public display name
                 </span>
-                <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
               </FormDescription>
             </FormItem>
           )}
@@ -274,16 +277,16 @@ export function ProductForm() {
                 />
               </FormControl>
               <FormDescription className="relative">
-                <span className="left-0 absolute opacity-0">
+                <span className="absolute left-0 opacity-0">
                   This is your public display name
                 </span>
-                <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
               </FormDescription>
             </FormItem>
           )}
         />
 
-        <div className="gap-2 grid grid-cols-2 [&>*]:min-w-full">
+        <div className="grid grid-cols-2 gap-2 [&>*]:min-w-full">
           <FormField
             control={form.control}
             name="category_id"
@@ -297,7 +300,8 @@ export function ProductForm() {
                       handleCategoryChange(value);
                     }}
                     value={field.value}
-                    disabled={categoriesLoading}>
+                    disabled={categoriesLoading}
+                  >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
@@ -308,23 +312,22 @@ export function ProductForm() {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories &&
-                        categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
+                      {categories?.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
                       {categoriesLoading && (
-                        <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       )}
                     </SelectContent>
                   </Select>
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="left-0 absolute opacity-0">
+                  <span className="absolute left-0 opacity-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}
@@ -342,7 +345,8 @@ export function ProductForm() {
                       handleFileTypeChange(value);
                     }}
                     value={field.value}
-                    disabled={fileTypesLoading}>
+                    disabled={fileTypesLoading}
+                  >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
@@ -352,7 +356,7 @@ export function ProductForm() {
                     </SelectTrigger>
                     <SelectContent>
                       {fileTypesLoading ? (
-                        <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : (
                         fileTypes.map((type) => (
                           <SelectItem key={type.id} value={type.id}>
@@ -364,17 +368,17 @@ export function ProductForm() {
                   </Select>
                 </FormControl>
                 <FormDescription className="relative">
-                  <span className="left-0 absolute opacity-0">
+                  <span className="absolute left-0 opacity-0">
                     This is your public display name
                   </span>
-                  <FormMessage className="left-0 absolute text-xs min-[520px]:text-sm line-clamp-1" />
+                  <FormMessage className="absolute left-0 line-clamp-1 text-xs min-[520px]:text-sm" />
                 </FormDescription>
               </FormItem>
             )}
           />
         </div>
 
-        <div className="flex min-[1050px]:flex-row flex-col gap-2">
+        <div className="flex flex-col gap-2 min-[1050px]:flex-row">
           <div className="flex-1 space-y-2" ref={thumbnailRef}>
             <FormLabel>Thumbnail</FormLabel>
             <ImagesUploader
@@ -401,7 +405,8 @@ export function ProductForm() {
           type="submit"
           disabled={isPending && isError}
           size="lg"
-          className="w-full">
+          className="w-full"
+        >
           {isPending ? (
             <>
               <Loader2 className="size-5 animate-spin" />

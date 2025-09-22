@@ -1,24 +1,12 @@
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import {
   IconCategory,
   IconFile,
   IconFilter,
   IconListNumbers,
   IconSortDescending,
 } from "@tabler/icons-react";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { debounce } from "nuqs";
-import { useFilters } from "./hooks/use-filters";
-import type { Category, FileType } from "~/supabase";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -27,8 +15,20 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import type { Category, FileType } from "~/supabase";
+import { useFilters } from "./hooks/use-filters";
 
 export function Filters({
   categories,
@@ -41,7 +41,7 @@ export function Filters({
   const isMobile = useIsMobile({ breakpoint: 845 });
 
   return (
-    <div className="flex justify-between items-center gap-2">
+    <div className="flex items-center justify-between gap-2">
       <Input
         className="max-w-[200px]"
         placeholder="Search..."
@@ -52,7 +52,7 @@ export function Filters({
             {
               shallow: false,
               limitUrlUpdates: debounce(500),
-            }
+            },
           )
         }
       />
@@ -63,7 +63,8 @@ export function Filters({
             asChild
             onClick={(e) => {
               e.currentTarget.blur();
-            }}>
+            }}
+          >
             <Button variant="outline">
               <IconFilter /> Filters
             </Button>
@@ -124,7 +125,8 @@ function FilterOptions({
         value={perPage.toString()}
         onValueChange={(value) =>
           setFilters({ perPage: Number(value), page: 1 })
-        }>
+        }
+      >
         <SelectTrigger>
           <IconListNumbers />
           <SelectValue />
@@ -140,7 +142,8 @@ function FilterOptions({
 
       <Select
         value={category}
-        onValueChange={(value) => setFilters({ category: value })}>
+        onValueChange={(value) => setFilters({ category: value })}
+      >
         <SelectTrigger>
           <IconCategory />
           <SelectValue />
@@ -157,7 +160,8 @@ function FilterOptions({
 
       <Select
         value={type}
-        onValueChange={(value) => setFilters({ type: value })}>
+        onValueChange={(value) => setFilters({ type: value })}
+      >
         <SelectTrigger>
           <IconFile />
           <SelectValue />
@@ -174,7 +178,8 @@ function FilterOptions({
 
       <Select
         value={sort}
-        onValueChange={(value) => setFilters({ sort: value })}>
+        onValueChange={(value) => setFilters({ sort: value })}
+      >
         <SelectTrigger>
           <IconSortDescending />
           <SelectValue />
@@ -197,7 +202,8 @@ function FilterOptions({
           sort === "Newest"
         }
         className={cn("max-w-fit", isMobile && "hidden")}
-        onClick={() => setFilters(null)}>
+        onClick={() => setFilters(null)}
+      >
         Reset
       </Button>
     </div>

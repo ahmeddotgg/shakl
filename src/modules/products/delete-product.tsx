@@ -1,6 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useUser } from "../auth/hooks/use-auth";
-import { useDeleteProduct } from "./hooks/use-products";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -10,7 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../auth/hooks/use-auth";
+import { useDeleteProduct } from "./hooks/use-products";
 
 export const DeleteProduct = ({ productId }: { productId: string }) => {
   const { data: user } = useUser();
@@ -26,7 +26,7 @@ export const DeleteProduct = ({ productId }: { productId: string }) => {
             toast.success("Product deleted");
             queryClient.invalidateQueries({ queryKey: ["products"] });
           },
-        }
+        },
       );
     } catch (error) {
       console.log(error);
@@ -45,7 +45,8 @@ export const DeleteProduct = ({ productId }: { productId: string }) => {
         <AlertDialogCancel>Cancel</AlertDialogCancel>
         <AlertDialogAction
           onClick={() => handleDelete(productId)}
-          disabled={isPending}>
+          disabled={isPending}
+        >
           Continue
         </AlertDialogAction>
       </AlertDialogFooter>

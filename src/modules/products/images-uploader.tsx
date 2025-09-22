@@ -1,5 +1,6 @@
 import { Upload } from "lucide-react";
 import * as React from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   FileUpload,
@@ -12,15 +13,14 @@ import {
   type FileUploadProps,
   FileUploadTrigger,
 } from "@/components/ui/file-upload";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 import { FormDescription } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 
 interface ImagesUploaderProps {
   max: number;
   multiable: boolean;
   onUpload: NonNullable<FileUploadProps["onUpload"]>;
-  error?: any;
+  error?: string;
   reset: boolean;
 }
 
@@ -59,7 +59,7 @@ export function ImagesUploader({
     >
       <FileUploadDropzone className={cn(error && "border-destructive")}>
         <div className="flex flex-col items-center gap-1 text-center">
-          <div className="flex justify-center items-center p-2.5 border rounded-full">
+          <div className="flex items-center justify-center rounded-full border p-2.5">
             <Upload className="size-6 text-muted-foreground" />
           </div>
           <p className="font-medium text-sm">Drag & drop files here</p>
@@ -76,7 +76,7 @@ export function ImagesUploader({
       <FileUploadList>
         {files.map((file, index) => (
           <FileUploadItem key={index} value={file} className="flex-col">
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex w-full items-center gap-2">
               <FileUploadItemPreview />
               <FileUploadItemMetadata />
             </div>
@@ -85,13 +85,13 @@ export function ImagesUploader({
         ))}
       </FileUploadList>
       <FormDescription className="relative">
-        <span className="left-0 absolute opacity-0">
+        <span className="absolute left-0 opacity-0">
           This is your public display name
         </span>
         <span
           data-slot="form-message"
           className={cn(
-            "left-0 absolute text-destructive text-sm min-[520px]:text-sm line-clamp-1"
+            "absolute left-0 line-clamp-1 text-destructive text-sm min-[520px]:text-sm",
           )}
         >
           {error}
