@@ -7,6 +7,7 @@ export const usePreferences = (userId: string) => {
   return useQuery({
     queryKey: ["preferences", userId],
     queryFn: () => getUserPreferences(userId),
+    enabled: !!userId,
   });
 };
 
