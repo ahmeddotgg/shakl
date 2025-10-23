@@ -5,7 +5,7 @@ export async function signUp(email: string, password: string, name: string) {
     email,
     password,
     options: {
-      emailRedirectTo: import.meta.env.VITE_SITE_URL,
+      emailRedirectTo: process.env.SERVER_URL,
       data: {
         name: name,
       },
