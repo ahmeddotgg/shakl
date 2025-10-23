@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, User2 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -122,7 +122,7 @@ export function PrefrencesForm() {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="grid grid-cols-1 gap-6 lg:grid-cols-2"
       >
-        <section className="space-y-2 rounded-md bg-card/70 p-4 [&>*]:min-w-full">
+        <section className="space-y-2 rounded-md bg-card/70 p-4 *:min-w-full">
           <FormField
             control={form.control}
             name="first_name"
@@ -184,27 +184,27 @@ export function PrefrencesForm() {
           </Button>
         </section>
 
-        {data && (
-          <section className="flex flex-col items-center justify-center gap-6 rounded-md bg-card/70 p-4 text-center">
-            <div className="size-40 overflow-hidden rounded-full bg-secondary">
-              {data.avatar_url && (
-                <img
-                  className="block size-full object-cover"
-                  src={data.avatar_url}
-                  alt="Avatar"
-                />
-              )}
-            </div>
-            <div>
-              <h2 className="font-semibold text-2xl">
-                {data.first_name} {data.last_name}
-              </h2>
-              <h2 className="font-semibold text-muted-foreground text-sm">
-                {user.email}
-              </h2>
-            </div>
-          </section>
-        )}
+        <section className="flex flex-col items-center justify-center gap-6 rounded-md bg-card/70 p-4 text-center">
+          <div className="size-40 content-center overflow-hidden rounded-full bg-secondary">
+            {data?.avatar_url ? (
+              <img
+                className="block size-full object-cover"
+                src={data.avatar_url}
+                alt="Avatar"
+              />
+            ) : (
+              <User2 className="mx-auto size-14" />
+            )}
+          </div>
+          <div>
+            <h2 className="font-semibold text-2xl">
+              {data?.first_name} {data?.last_name}
+            </h2>
+            <h2 className="font-semibold text-muted-foreground text-sm">
+              {user.email}
+            </h2>
+          </div>
+        </section>
       </form>
     </Form>
   );

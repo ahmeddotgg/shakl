@@ -1,11 +1,12 @@
 import { IconHistory } from "@tabler/icons-react";
 import { Link, useRouter } from "@tanstack/react-router";
-import { LayoutDashboard, UserRoundPen } from "lucide-react";
+import { LayoutDashboard, PlusCircle, UserRoundPen } from "lucide-react";
 import * as React from "react";
-import { NavMain } from "@/components/sidebar/nav-main";
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -13,25 +14,28 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Settings",
-      url: "settings",
-      icon: UserRoundPen,
-    },
-    {
-      title: "Orders History",
-      url: "orders",
-      icon: IconHistory,
-    },
-  ],
-};
+const links = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "New Product",
+    url: "/dashboard/new",
+    icon: PlusCircle,
+  },
+  {
+    title: "Settings",
+    url: "/dashboard/settings",
+    icon: UserRoundPen,
+  },
+  {
+    title: "Orders History",
+    url: "/dashboard/orders",
+    icon: IconHistory,
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { setOpenMobile } = useSidebar();
@@ -51,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link to="/">
                 <img alt="Logo" className="size-6" src="/logoipsum.svg" />
@@ -62,7 +66,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {links.map((link) => (
+                <SidebarMenuItem key={link.title}>
+                  <SidebarMenuButton asChild tooltip={link.title}>
+                    <Link
+                      to={link.url}
+                      className="links-center flex gap-2"
+                      activeOptions={{ exact: true }}
+                      activeProps={{ className: "text-primary " }}
+                    >
+                      {link.icon && <link.icon />}
+                      <span>{link.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
