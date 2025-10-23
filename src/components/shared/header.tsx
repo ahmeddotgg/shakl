@@ -41,7 +41,7 @@ export const ProfileMenu = () => {
     signOut(undefined, {
       onSuccess: () => {
         toast.success("Logged out successfully");
-        navigate({ to: "/" });
+        navigate({ to: "/", reloadDocument: true });
       },
       onError: (err) => {
         console.error("Sign out failed:", err.message);
