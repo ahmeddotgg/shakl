@@ -8,7 +8,7 @@ const paddle = new Paddle(process.env.PADDLE_SECRET || "", {
 });
 
 export const supabaseAdmin = createClient<Database>(
-  process.env.SUPABASE_URL || "",
+  process.env.VITE_SUPABASE_URL || "",
   process.env.SUPABASE_SERVICE_ROLE || "",
 );
 
