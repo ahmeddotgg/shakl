@@ -64,9 +64,10 @@ export const ProfileMenu = () => {
             <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage src={data?.avatar_url as string} alt="user avatar" />
               <AvatarFallback className="rounded-lg uppercase">
-                {data?.first_name?.substring(0, 2)}
+                {user?.user_metadata.name?.substring(0, 2)}
               </AvatarFallback>
             </Avatar>
+
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium capitalize">
                 {user?.user_metadata.name}

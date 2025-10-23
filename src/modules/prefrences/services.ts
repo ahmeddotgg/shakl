@@ -5,7 +5,7 @@ export const getUserPreferences = async (userId: string) => {
     .from("preferences")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
 
   if (error) throw error;
   return data;
